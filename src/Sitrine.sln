@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitrine", "Sitrine\Sitrine.csproj", "{FE48F44D-7C79-4B58-8B9C-CE4B2D760E84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{BE9B1725-8B3B-4986-AE30-64F55269C7EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE48F44D-7C79-4B58-8B9C-CE4B2D760E84}.Debug|x86.ActiveCfg = Debug|x86
+		{FE48F44D-7C79-4B58-8B9C-CE4B2D760E84}.Debug|x86.Build.0 = Debug|x86
+		{FE48F44D-7C79-4B58-8B9C-CE4B2D760E84}.Release|x86.ActiveCfg = Release|x86
+		{FE48F44D-7C79-4B58-8B9C-CE4B2D760E84}.Release|x86.Build.0 = Release|x86
+		{BE9B1725-8B3B-4986-AE30-64F55269C7EE}.Debug|x86.ActiveCfg = Debug|x86
+		{BE9B1725-8B3B-4986-AE30-64F55269C7EE}.Debug|x86.Build.0 = Debug|x86
+		{BE9B1725-8B3B-4986-AE30-64F55269C7EE}.Release|x86.ActiveCfg = Release|x86
+		{BE9B1725-8B3B-4986-AE30-64F55269C7EE}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
