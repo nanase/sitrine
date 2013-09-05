@@ -39,6 +39,7 @@ namespace Sample
 
         private string[] messages;
         private MessageTexture message;
+        private MessageTexture message2;
         private bool waitKey;
         private int lineIndex = 0;
 
@@ -58,6 +59,9 @@ namespace Sample
             {
                 this.message.Draw(string.Join("\n", this.messages.Skip(lineIndex).Take(4)));
                 this.message.Start();
+
+                this.message2.Draw(string.Join("\n", this.messages.Skip(lineIndex).Take(4)));
+                this.message2.Start();
 
                 this.lineIndex += 4;
                 if (this.messages.Length <= this.lineIndex)
@@ -79,7 +83,18 @@ namespace Sample
             this.message.Start();
             this.message.TextureUpdate += (s, e2) => this.music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
             this.message.TextureEnd += (s, e2) => this.waitKey = true;
+
             this.textures.Add(this.message);
+
+            this.message2 = new MessageTexture(this.textOptions, new Size(320, 80));
+            this.message2.Draw(@"Enter を押してください。");
+            this.message2.Position = new Vector3(0, 0, 0);
+            this.message2.Start();
+            this.message2.TextureUpdate += (s, e2) => this.music.Connector.Master.PushHandle(new Handle(2, HandleType.NoteOn, 60, 1.0f));
+            this.message2.TextureEnd += (s, e2) => this.waitKey = true;
+            this.message2.ProgressCount = 1;
+            this.message2.Interval = 2;
+            this.textures.Add(this.message2);
 
             #region Music
             this.music.Connector.Master.PushHandle(new[]{
@@ -89,6 +104,13 @@ namespace Sample
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.S, 0.0f),
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.R, 0.0f),
               new Handle(1, HandleType.Waveform, (int)WaveformType.Square), 
+
+              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
+              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
+              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),
+              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.S, 0.0f),
+              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.R, 0.0f),
+              new Handle(2, HandleType.Waveform, (int)WaveformType.Square), 
             });
             #endregion
 

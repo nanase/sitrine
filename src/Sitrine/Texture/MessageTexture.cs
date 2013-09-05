@@ -33,18 +33,25 @@ namespace Sitrine.Texture
         private int time = 0;
         private int index = 0;
         private bool endInterval = true;
+        private int progressCount = 1;
         private readonly int fontSize;
 
         private Point forePosition;
         private Point shadowPosition;
 
-        public event EventHandler<TextUpdateEventArgs> TextureUpdate;
+        public event EventHandler TextureUpdate;
         public event EventHandler TextureEnd;
 
         public int Interval
         {
             get { return this.interval; }
             set { if (value <= 0) throw new ArgumentOutOfRangeException(); else this.interval = value; }
+        }
+
+        public int ProgressCount
+        {
+            get { return this.progressCount; }
+            set { if (value <= 0) throw new ArgumentOutOfRangeException(); else this.progressCount = value; }
         }
 
         public MessageTexture(TextTextureOptions options, Size size)
@@ -61,43 +68,51 @@ namespace Sitrine.Texture
         public bool Update()
         {
             if (this.endInterval)
-                return false;            
+                return false;
 
             if (this.time++ >= this.interval)
             {
-                char c = text[this.index++];
-                if (c == '\n')
-                {
-                    this.forePosition = new Point((int)this.forePoint.X, this.forePosition.Y + (this.options.LineHeight + 1));
-                    this.shadowPosition = new Point((int)this.shadowPoint.X, this.shadowPosition.Y + (this.options.LineHeight + 1));
-                }
-                else if (c == ' ')
-                {
-                    this.forePosition = new Point(this.forePosition.X + this.fontSize / 2, this.forePosition.Y);
-                    this.shadowPosition = new Point(this.shadowPosition.X + this.fontSize / 2, this.shadowPosition.Y);
-                }
-                else if (c == '　')
-                {
-                    this.forePosition = new Point(this.forePosition.X + this.fontSize, this.forePosition.Y);
-                    this.shadowPosition = new Point(this.shadowPosition.X + this.fontSize, this.shadowPosition.Y);
-                }
-                else
-                {
-                    string ch = c.ToString();
-                    this.g.DrawString(ch, this.options.Font, this.backBrush, this.shadowPosition, this.options.Format);
-                    this.g.DrawString(ch, this.options.Font, this.foreBrush, this.forePosition, this.options.Format);
+                bool updated = false;
+                for (int j = Math.Min(this.index + this.progressCount, this.text.Length); this.index < j; this.index++)
+                {                    
+                    char c = text[this.index];
+                    if (c == '\n')
+                    {
+                        this.forePosition = new Point((int)this.forePoint.X, this.forePosition.Y + (this.options.LineHeight + 1));
+                        this.shadowPosition = new Point((int)this.shadowPoint.X, this.shadowPosition.Y + (this.options.LineHeight + 1));
+                    }
+                    else if (c == ' ')
+                    {
+                        this.forePosition = new Point(this.forePosition.X + this.fontSize / 2, this.forePosition.Y);
+                        this.shadowPosition = new Point(this.shadowPosition.X + this.fontSize / 2, this.shadowPosition.Y);
+                    }
+                    else if (c == '　')
+                    {
+                        this.forePosition = new Point(this.forePosition.X + this.fontSize, this.forePosition.Y);
+                        this.shadowPosition = new Point(this.shadowPosition.X + this.fontSize, this.shadowPosition.Y);
+                    }
+                    else
+                    {
+                        updated = true;
+                        string ch = c.ToString();
+                        this.g.DrawString(ch, this.options.Font, this.backBrush, this.shadowPosition, this.options.Format);
+                        this.g.DrawString(ch, this.options.Font, this.foreBrush, this.forePosition, this.options.Format);
 
-                    Size charSize = this.g.MeasureString(ch, this.options.Font, this.forePosition, this.options.Format).ToSize();
+                        Size charSize = this.g.MeasureString(ch, this.options.Font, this.forePosition, this.options.Format).ToSize();
 
-                    this.forePosition = Point.Add(this.forePosition, new Size(charSize.Width, 0));
-                    this.shadowPosition = Point.Add(this.shadowPosition, new Size(charSize.Width, 0));
+                        this.forePosition = Point.Add(this.forePosition, new Size(charSize.Width, 0));
+                        this.shadowPosition = Point.Add(this.shadowPosition, new Size(charSize.Width, 0));
+                    }
+                }
 
+                if (updated)
+                {
                     this.g.Flush();
                     Texture.Update(this.id, this.bitmap);
 
                     if (this.TextureUpdate != null)
-                        this.TextureUpdate(this, new TextUpdateEventArgs(c));
-                }       
+                        this.TextureUpdate(this, new EventArgs());
+                }
 
                 if (this.index >= this.text.Length)
                 {
@@ -106,7 +121,7 @@ namespace Sitrine.Texture
                         this.TextureEnd(this, new EventArgs());
                 }
 
-                this.time = 0;              
+                this.time = 0;
 
                 return true;
             }
@@ -125,16 +140,6 @@ namespace Sitrine.Texture
 
             this.index = 0;
             this.endInterval = false;
-        }
-    }
-
-    public class TextUpdateEventArgs : EventArgs
-    {
-        public char NewChar { get; private set; }
-
-        public TextUpdateEventArgs(char newChar)
-        {
-            this.NewChar = newChar;
         }
     }
 }
