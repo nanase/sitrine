@@ -85,7 +85,7 @@ namespace Sample
             this.message.TextureUpdate += (s, e2) => this.music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
             this.message.TextureEnd += (s, e2) => this.waitKey = true;
 
-            this.textures.Add(this.message);
+            this.textures.AddLast(this.message);
 
             this.message2 = new MessageTexture(this.textOptions, new Size(320, 80));
             this.message2.Draw(@"Enter を押してください。");
@@ -95,7 +95,8 @@ namespace Sample
             this.message2.TextureEnd += (s, e2) => this.waitKey = true;
             this.message2.ProgressCount = 1;
             this.message2.Interval = 2;
-            this.textures.Add(this.message2);
+            this.message2.ForeColor = Color.Red;
+            this.textures.AddLast(this.message2);
 
             #region Music
             this.music.Connector.Master.PushHandle(new[]{

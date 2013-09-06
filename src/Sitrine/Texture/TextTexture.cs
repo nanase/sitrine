@@ -37,8 +37,8 @@ namespace Sitrine.Texture
         protected readonly PointF shadowPoint;
         protected string text;
 
-        protected SolidBrush foreBrush = (SolidBrush)Brushes.White;
-        protected SolidBrush backBrush = (SolidBrush)Brushes.Black;
+        protected SolidBrush foreBrush = new SolidBrush(System.Drawing.Color.White);
+        protected SolidBrush backBrush = new SolidBrush(System.Drawing.Color.Black);
         #endregion
 
         #region Public Property
