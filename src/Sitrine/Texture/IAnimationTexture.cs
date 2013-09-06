@@ -26,8 +26,13 @@ namespace Sitrine.Texture
 {
     public interface IAnimationTexture
     {
+        #region Property
         int Interval { get; set; }
+        #endregion
+
+        #region Method
         bool Update();
         void Start();
+        #endregion        
     }
 }

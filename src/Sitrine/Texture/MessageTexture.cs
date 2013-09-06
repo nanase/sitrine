@@ -29,6 +29,7 @@ namespace Sitrine.Texture
 {
     public class MessageTexture : TextTexture, IAnimationTexture
     {
+        #region Private Field
         private int interval = 1;
         private int time = 0;
         private int index = 0;
@@ -38,10 +39,14 @@ namespace Sitrine.Texture
 
         private Point forePosition;
         private Point shadowPosition;
+        #endregion
 
+        #region Public Event
         public event EventHandler TextureUpdate;
         public event EventHandler TextureEnd;
+        #endregion
 
+        #region Public Property
         public int Interval
         {
             get { return this.interval; }
@@ -53,13 +58,17 @@ namespace Sitrine.Texture
             get { return this.progressCount; }
             set { if (value <= 0) throw new ArgumentOutOfRangeException(); else this.progressCount = value; }
         }
+        #endregion
 
+        #region Constructor
         public MessageTexture(TextTextureOptions options, Size size)
             : base(options, size, true)
         {
             this.fontSize = (int)options.Font.Size;
         }
+        #endregion
 
+        #region Public Method
         public new void Draw(string text)
         {
             this.text = text;
@@ -74,7 +83,7 @@ namespace Sitrine.Texture
             {
                 bool updated = false;
                 for (int j = Math.Min(this.index + this.progressCount, this.text.Length); this.index < j; this.index++)
-                {                    
+                {
                     char c = text[this.index];
                     if (c == '\n')
                     {
@@ -141,5 +150,6 @@ namespace Sitrine.Texture
             this.index = 0;
             this.endInterval = false;
         }
+        #endregion
     }
 }

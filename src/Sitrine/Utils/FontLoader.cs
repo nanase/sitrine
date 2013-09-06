@@ -30,11 +30,16 @@ namespace Sitrine.Utils
 {
     public class FontLoader : IDisposable
     {
+        #region Private Field
         private readonly PrivateFontCollection fontCollection;
         private readonly FontFamily family;
+        #endregion
 
+        #region Public Property
         public FontFamily Family { get { return this.family; } }
+        #endregion
 
+        #region Constructor
         public FontLoader(string filename)
         {
             this.fontCollection = new PrivateFontCollection();
@@ -45,15 +50,14 @@ namespace Sitrine.Utils
 
             this.family = this.fontCollection.Families[0];
         }
+        #endregion
 
-        #region IDisposable メンバー
-
+        #region Public Method
         public void Dispose()
         {
             this.family.Dispose();
             this.fontCollection.Dispose();
         }
-
         #endregion
     }
 }

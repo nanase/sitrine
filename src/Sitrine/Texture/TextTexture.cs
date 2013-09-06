@@ -30,6 +30,7 @@ namespace Sitrine.Texture
 {
     public class TextTexture : Texture
     {
+        #region Protected Field
         protected readonly TextTextureOptions options;
         protected readonly Graphics g;
         protected readonly PointF forePoint;
@@ -38,7 +39,9 @@ namespace Sitrine.Texture
 
         protected SolidBrush foreBrush = (SolidBrush)Brushes.White;
         protected SolidBrush backBrush = (SolidBrush)Brushes.Black;
+        #endregion
 
+        #region Public Property
         public string Text { get { return this.text; } }
         public TextTextureOptions Options { get { return this.options; } }
 
@@ -69,7 +72,9 @@ namespace Sitrine.Texture
                 this.backBrush = new SolidBrush(value);
             }
         }
+        #endregion
 
+        #region Constructor
         public TextTexture(TextTextureOptions options, Size size, bool antialias)
             : base(new Bitmap(size.Width, size.Height))
         {
@@ -90,7 +95,9 @@ namespace Sitrine.Texture
 
             Texture.Load(this.id, this.bitmap);
         }
+        #endregion
 
+        #region Public Method
         public void Draw(string text)
         {
             if (text != this.text)
@@ -107,6 +114,15 @@ namespace Sitrine.Texture
             Texture.Update(this.id, this.bitmap);
         }
 
+        public override void Dispose()
+        {
+            this.g.Dispose();
+
+            base.Dispose();
+        }
+        #endregion
+
+        #region Protected Method
         protected void DrawString(string text)
         {
             this.g.Clear(this.clearColor);
@@ -125,12 +141,6 @@ namespace Sitrine.Texture
             this.g.Flush();
             Texture.Update(this.id, this.bitmap);
         }
-
-        public override void Dispose()
-        {
-            this.g.Dispose();
-
-            base.Dispose();
-        }
+        #endregion        
     }
 }

@@ -32,12 +32,12 @@ namespace Sitrine.Audio
 {
     public class MusicPlayer : IDisposable
     {
-        const int buffer_size = 1024;
-        const int buffer_count = 4;
-        const int smaplingFrequency = 22050;        
+        #region Private Field
+        private const int buffer_size = 1024;
+        private const int buffer_count = 4;
+        private const int smaplingFrequency = 22050;
 
         private readonly AudioContext context;
-
         private readonly int source;
         private readonly int[] buffers;
         private readonly short[] sbuf;
@@ -45,13 +45,17 @@ namespace Sitrine.Audio
 
         private volatile bool reqEnd;
         private Task Updater;
+        #endregion
 
+        #region Public Property
         public SmfConnector Connector { get; private set; }
+        #endregion
 
+        #region Constructor
         public MusicPlayer()
         {
             this.context = new AudioContext();
-            this.Connector = new SmfConnector(smaplingFrequency);            
+            this.Connector = new SmfConnector(smaplingFrequency);
 
             this.source = AL.GenSource();
             this.buffers = AL.GenBuffers(buffer_count);
@@ -66,7 +70,9 @@ namespace Sitrine.Audio
 
             this.Updater = Task.Factory.StartNew(this.Update);
         }
+        #endregion
 
+        #region Public Method
         public void Play()
         {
             this.Connector.Play();
@@ -93,7 +99,9 @@ namespace Sitrine.Audio
 
             this.context.Dispose();
         }
+        #endregion
 
+        #region Private Method        
         private void Update()
         {
             while (!this.reqEnd)
@@ -139,5 +147,6 @@ namespace Sitrine.Audio
 
             AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * buffer_size, smaplingFrequency);
         }
+        #endregion
     }
 }

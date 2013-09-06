@@ -28,10 +28,12 @@ namespace Sitrine
 {
     public class WindowOption
     {
+        #region Public Property
         public Size WindowSize { get; set; }
         public Size TargetSize { get; set; }
         public string Title { get; set; }
         public string DebugTextFontFile { get; set; }
         public int DebugTextFontSize { get; set; }
+        #endregion
     }
 }

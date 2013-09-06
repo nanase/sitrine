@@ -29,110 +29,66 @@ using System.Linq;
 
 namespace Sitrine.Texture
 {
-    public class TextureList : IEnumerable<Texture>, IDisposable
+    public class TextureList : SortedList<int, Texture>, IDisposable
     {
-        private readonly List<Tuple<Texture, int>> list;
-
-        public Texture this[int index]
-        {
-            get { return this.list[index].Item1; }
-        }
-
-        public TextureList()
-        {
-            this.list = new List<Tuple<Texture, int>>();
-        }
-
-        #region IEnumerable<Texture> メンバー
-        public IEnumerator<Texture> GetEnumerator()
-        {
-            foreach (var item in this.list)
-                yield return item.Item1;
-        }
-        #endregion
-
-        #region IEnumerable メンバー
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            foreach (var item in this.list)
-                yield return item.Item1;
-        }
-        #endregion
-
+        #region Public Method
         public void Show()
         {
-            for (int i = 0, j = this.list.Count; i < j; i++)
+            foreach (Texture item in this.Values)
             {
-                Texture tex = this.list[i].Item1;
-                if (tex is IAnimationTexture)
-                    ((IAnimationTexture)tex).Update();
+                if (item is IAnimationTexture)
+                    ((IAnimationTexture)item).Update();
 
-                tex.Show();
+                item.Show();
             }
         }
 
-        public void Add(Texture item, int zIndex)
+        public void AddLast(Texture item)
         {
-            int i = 0;
-            for (int j = this.list.Count; i < j; i++)
-                if (this.list[i].Item2 > zIndex)
-                    break;
-
-            this.list.Insert(i, new Tuple<Texture,int>(item, zIndex));
+            int count = this.Count;
+            if (count > 0)
+                this.Add(this.Keys[count - 1] + 1, item);
+            else
+                this.Add(0, item);
         }
 
-        public void Add(Texture item)
+        public void AddFirst(Texture item)
         {
-            this.list.Add(new Tuple<Texture, int>(item, this.Count));
+            int count = this.Count;
+            if (count > 0)
+                this.Add(this.Keys[0] - 1, item);
+            else
+                this.Add(0, item);
         }
 
-        public void Clear(bool dispose = false)
+        public void Clear(bool dispose)
         {
             if (dispose)
-            {
-                foreach (var item in this.list)
-                    item.Item1.Dispose();
-            }
+                foreach (var item in this.Values)
+                    item.Dispose();
 
-            this.list.Clear();
+            base.Clear();
         }
 
-        public bool Contains(Texture item)
+        public bool Remove(Texture item, bool dispose)
         {
-            return this.list.Any(t => t.Item1 == item);
+            int index = this.IndexOfValue(item);
+
+            if (index < 0)
+                return false;
+
+            this.RemoveAt(index);
+
+            if (dispose)
+                item.Dispose();
+
+            return true;
         }
-
-        public int Count
-        {
-            get { return this.list.Count; }
-        }
-
-        public bool Remove(Texture item, bool dispose = false)
-        {
-            for (int i = 0, j = this.list.Count; i < j; i++)
-            {
-                if (this.list[i].Item1 == item)
-                {
-                    this.list.RemoveAt(i);
-
-                    if (dispose)
-                        item.Dispose();
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        #region IDisposable メンバー
 
         public void Dispose()
         {
-            foreach (var item in this.list)
-                item.Item1.Dispose();
+            this.Clear(true);
         }
-
-        #endregion
+        #endregion        
     }
 }

@@ -34,15 +34,20 @@ namespace Sitrine.Texture
 {
     public class Texture : IDisposable
     {
+        #region Private Field
         private int listId = -1;
+        #endregion
 
+        #region Protected Field
         protected readonly int id;
         protected Bitmap bitmap;
         protected Color4 color = Color4.White;
         protected Vector3 position = new Vector3();
 
         protected Color clearColor = System.Drawing.Color.Transparent;
+        #endregion
 
+        #region Public Property
         public int ID { get { return this.id; } }
         public Bitmap BaseBitmap { get { return this.bitmap; } }
 
@@ -71,7 +76,9 @@ namespace Sitrine.Texture
                     GL.DeleteLists(this.listId, 1);
             }
         }
+        #endregion
 
+        #region Constructor
         public Texture(Bitmap bitmap)
         {
             this.bitmap = bitmap;
@@ -84,7 +91,9 @@ namespace Sitrine.Texture
             : this(new Bitmap(filename))
         {
         }
+        #endregion
 
+        #region Public Method
         public virtual void Dispose()
         {
             int id = this.id;
@@ -131,7 +140,9 @@ namespace Sitrine.Texture
             }
             GL.EndList();
         }
+        #endregion
 
+        #region Public Static Method
         public static void Update(int id, Bitmap bitmap)
         {
             DebugText.IncrementUpdateCount();
@@ -157,5 +168,6 @@ namespace Sitrine.Texture
             using (Bitmap bitmap = new Bitmap(filename))
                 Texture.Load(id, bitmap);
         }
+        #endregion
     }
 }

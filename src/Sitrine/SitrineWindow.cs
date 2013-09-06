@@ -35,11 +35,14 @@ namespace Sitrine
 {
     public class SitrineWindow : GameWindow
     {
+        #region Protected Field
         protected readonly TextureList textures;
         protected readonly MusicPlayer music;
         protected readonly Size targetSize;
         protected readonly DebugText debugText;
+        #endregion
 
+        #region Constructor
         public SitrineWindow(WindowOption option)
             : base(option.WindowSize.Width, option.WindowSize.Height, GraphicsMode.Default, option.Title)
         {
@@ -48,7 +51,9 @@ namespace Sitrine
             this.debugText = new DebugText(option.DebugTextFontFile, option.DebugTextFontSize, this, this.textures);
             this.targetSize = option.TargetSize;
         }
+        #endregion
 
+        #region Protected Method
         protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
         {
             if (this.Keyboard[OpenTK.Input.Key.Escape])
@@ -104,5 +109,6 @@ namespace Sitrine
             this.debugText.Update(e.Time);
             this.SwapBuffers();
         }
+        #endregion
     }
 }

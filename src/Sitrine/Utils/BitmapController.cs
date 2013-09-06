@@ -30,11 +30,14 @@ namespace Sitrine.Utils
 {
     public class BitmapController : IDisposable
     {
+        #region Private Field
         private readonly BitmapData data;
         private readonly Bitmap bitmap;
         private readonly IntPtr scan0;
         private bool isDisposed;
+        #endregion
 
+        #region Public Property
         public unsafe Color this[int x, int y]
         {
             get
@@ -51,14 +54,18 @@ namespace Sitrine.Utils
         public BitmapData BitmapData { get { return this.data; } }
         public Bitmap BaseBitmap { get { return this.bitmap; } }
         public IntPtr Scan0 { get { return this.scan0; } }
+        #endregion
 
+        #region Constructor
         public BitmapController(Bitmap bitmap, ImageLockMode flags)
         {
             this.bitmap = bitmap;
             this.data = bitmap.LockBits(new Rectangle(Point.Empty, bitmap.Size), flags, PixelFormat.Format32bppArgb);
             this.scan0 = data.Scan0;
         }
+        #endregion
 
+        #region Public Method
         public void Dispose()
         {
             if (this.isDisposed)
@@ -67,5 +74,6 @@ namespace Sitrine.Utils
             this.isDisposed = true;
             this.bitmap.UnlockBits(this.data);
         }
+        #endregion
     }
 }

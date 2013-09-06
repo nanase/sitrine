@@ -28,20 +28,26 @@ namespace Sitrine
 {
     public abstract class Storyboard
     {
+        #region Protected Property
         protected TextureEvent Texture { get; private set; }
         protected ProcessEvent Process { get; private set; }
         protected MessageEvent Message { get; private set; }
+        #endregion
 
+        #region Constructor
         public Storyboard()
         {
             this.Texture = new TextureEvent();
             this.Process = new ProcessEvent();
             this.Message = new MessageEvent();
         }
+        #endregion
 
+        #region Protected Method
         protected void Wait(double time)
         {
             this.Process.Wait(time);
         }
+        #endregion        
     } 
 }

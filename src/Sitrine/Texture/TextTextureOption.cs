@@ -29,18 +29,25 @@ namespace Sitrine.Texture
 {
     public class TextTextureOptions : IDisposable
     {
+        #region Private Static Field
         private static readonly StringFormat defaultFormat;
+        #endregion
 
+        #region Static Constructor
         static TextTextureOptions()
         {
             defaultFormat = new StringFormat(StringFormat.GenericTypographic);
             defaultFormat.FormatFlags |= StringFormatFlags.NoWrap;
         }
+        #endregion
 
+        #region Public Property
         public Font Font { get; private set; }
         public StringFormat Format { get; private set; }
         public int LineHeight { get; private set; }
+        #endregion
 
+        #region Contructor
         public TextTextureOptions(Font font, int lineHeight, StringFormat format)
         {
             this.Font = font;
@@ -52,10 +59,13 @@ namespace Sitrine.Texture
             : this(font, lineHeight, defaultFormat)
         {
         }
+        #endregion
 
+        #region Public Method
         public void Dispose()
         {
             this.Font.Dispose();
         }
+        #endregion
     }
 }

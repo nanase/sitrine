@@ -32,28 +32,38 @@ namespace Sitrine.Utils
 {
     public class DebugText : IDisposable
     {
-        readonly FontLoader font;
-        readonly TextTextureOptions textOptions;
-        readonly GameWindow window;
-        readonly TextureList textures;
+        #region Private Field
+        private readonly FontLoader font;
+        private readonly TextTextureOptions textOptions;
+        private readonly GameWindow window;
+        private readonly TextureList textures;
 
-        double elapsed = 1.0;
-        int renderCount = 0;
-        readonly TextTexture debugTexture;
-        readonly Process current;
-        TimeSpan processorTimeOld = TimeSpan.Zero;
+        private double elapsed = 1.0;
+        private int renderCount = 0;
+        private readonly TextTexture debugTexture;
+        private readonly Process current;
+        private TimeSpan processorTimeOld = TimeSpan.Zero;
 
-        long loadCountOld;
-        long updateCountOld;
+        private long loadCountOld;
+        private long updateCountOld;
+        #endregion
 
+        #region Private Static Field
         private static long loadCount;
+        private static long updateCount;
+        #endregion
+
+        #region Public static Property
         public static long LoadCount { get { return DebugText.loadCount; } }
 
-        private static long updateCount;
         public static long UpdateCount { get { return DebugText.updateCount; } }
+        #endregion
 
+        #region Public Property
         public bool ShowDebug { get; set; }
+        #endregion
 
+        #region Constructor
         public DebugText(string fontfile, int size, GameWindow window, TextureList textures)
         {
             this.font = new FontLoader(fontfile);
@@ -71,7 +81,9 @@ namespace Sitrine.Utils
             this.ShowDebug = false;
 #endif
         }
+        #endregion
 
+        #region Public Method
         public void Update(double time)
         {
             if (!this.ShowDebug)
@@ -95,16 +107,8 @@ namespace Sitrine.Utils
                 this.elapsed -= (int)this.elapsed;
                 this.renderCount = 0;
                 this.loadCountOld = DebugText.loadCount;
-                this.updateCountOld = DebugText.updateCount;                
+                this.updateCountOld = DebugText.updateCount;
             }
-        }
-
-        private double GetUsage()
-        {
-            TimeSpan now = this.current.TotalProcessorTime;
-            double usage = (now - this.processorTimeOld).TotalSeconds / this.elapsed;
-            this.processorTimeOld = now;
-            return usage;
         }
 
         public void Dispose()
@@ -114,7 +118,9 @@ namespace Sitrine.Utils
             this.debugTexture.Dispose();
             this.current.Dispose();
         }
+        #endregion
 
+        #region Public Static Method
         public static void IncrementLoadCount()
         {
             DebugText.loadCount++;
@@ -124,5 +130,16 @@ namespace Sitrine.Utils
         {
             DebugText.updateCount++;
         }
+        #endregion
+
+        #region Private Method
+        private double GetUsage()
+        {
+            TimeSpan now = this.current.TotalProcessorTime;
+            double usage = (now - this.processorTimeOld).TotalSeconds / this.elapsed;
+            this.processorTimeOld = now;
+            return usage;
+        }
+        #endregion
     }
 }
