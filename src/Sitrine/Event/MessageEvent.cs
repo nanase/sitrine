@@ -22,18 +22,52 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using OpenTK;
+using Sitrine.Texture;
 using System;
+using System.Drawing;
+using ux.Component;
 
 namespace Sitrine.Event
 {
     public class MessageEvent : StoryEvent
     {
+        #region Private Field
+        private readonly MessageTexture texture;
+        #endregion
+
+        #region Public Property
+        public MessageTexture Texture { get { return this.texture; } }
+        #endregion
+
+        #region Constructor
+        public MessageEvent(Storyboard storyboard, SitrineWindow window)
+            : base(storyboard, window)
+        {
+            this.texture = new MessageTexture(this.window.TextOptions, new Size(320, 80));
+            this.texture.Position = new Vector3(0, 160, 0);
+        }
+        #endregion
+
+        #region Public Method
         public void Show(string text)
         {
-            this.Add(() =>
+            this.storyboard.AddAction(() =>
             {
-                Console.WriteLine("{0}", text);
+                this.storyboard.Pause();
+
+                this.texture.Draw(text);
+                this.texture.TextureUpdate += (s, e2) => this.window.Music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
+                this.texture.TextureEnd += (s, e2) =>                
+                    this.storyboard.Keyboard.WaitForEnter(() =>
+                    {
+                        this.window.Textures.Remove(this.texture, false);
+                        this.storyboard.Start();
+                    });
+
+                this.window.Textures.AddLast(this.texture);
             });
         }
+        #endregion
     }
 }

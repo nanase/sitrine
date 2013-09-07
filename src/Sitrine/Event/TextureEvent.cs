@@ -28,17 +28,23 @@ namespace Sitrine.Event
 {
     public class TextureEvent : StoryEvent
     {
+        #region Constructor
+        public TextureEvent(Storyboard storyboard, SitrineWindow window)
+            : base(storyboard, window)
+        {
+        }
+        #endregion
+
+        #region Public Method
         public void Show(int id, string name)
         {
-            this.Add(() =>
-            {
-                Console.WriteLine("Texture[{0}]: {1}", id, name);
-            });
+            throw new NotImplementedException();
         }
 
         public void Hide(int id)
         {
             throw new NotImplementedException();
         }
+        #endregion        
     }
 }

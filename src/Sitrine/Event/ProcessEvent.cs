@@ -28,12 +28,18 @@ namespace Sitrine.Event
 {
     public class ProcessEvent : StoryEvent
     {
+        #region Constructor
+        public ProcessEvent(Storyboard storyboard, SitrineWindow window)
+            : base(storyboard, window)
+        {
+        }
+        #endregion
+
+        #region Public Method
         public void Wait(double time)
         {
-            this.Add(() =>
-            {
-                Console.WriteLine("Wait {0} s", time);
-            });
+            throw new NotImplementedException();
         }
+        #endregion        
     }
 }

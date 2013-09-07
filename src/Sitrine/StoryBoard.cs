@@ -23,31 +23,109 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using Sitrine.Event;
+using Sitrine.Utils;
+using System;
+using System.Collections.Generic;
 
 namespace Sitrine
 {
     public abstract class Storyboard
     {
-        #region Protected Property
-        protected TextureEvent Texture { get; private set; }
-        protected ProcessEvent Process { get; private set; }
-        protected MessageEvent Message { get; private set; }
+        #region Private Field
+        private int waitTime;
+        #endregion
+
+        #region Protected Field
+        protected readonly LinkedList<Action> actions;
+        protected readonly List<Func<bool>> listener;
+        #endregion
+
+        #region Public Property
+        public TextureEvent Texture { get; private set; }
+        public ProcessEvent Process { get; private set; }
+        public MessageEvent Message { get; private set; }
+        public KeyboardEvent Keyboard { get; private set; }
+        public int ActionCount { get { return this.actions.Count; } }
+        public int ListenerCount { get { return this.listener.Count; } }
         #endregion
 
         #region Constructor
-        public Storyboard()
+        public Storyboard(SitrineWindow window)
         {
-            this.Texture = new TextureEvent();
-            this.Process = new ProcessEvent();
-            this.Message = new MessageEvent();
+            this.actions = new LinkedList<Action>();
+            this.listener = new List<Func<bool>>();
+            
+            this.Texture = new TextureEvent(this, window);
+            this.Process = new ProcessEvent(this, window);
+            this.Message = new MessageEvent(this, window);
+            this.Keyboard = new KeyboardEvent(this, window);
+
+            this.waitTime = 0;
         }
         #endregion
 
-        #region Protected Method
-        protected void Wait(double time)
+        #region Public Method
+        public void Update()
         {
-            this.Process.Wait(time);
+            if (this.waitTime > 0)
+            {
+                this.waitTime--;
+            }
+            else if (this.waitTime == 0)
+            {
+                int count = 0;
+
+                while (this.actions.Count > 0 && this.waitTime == 0)
+                {
+                    this.actions.Last.Value();
+                    this.actions.RemoveLast();
+                    count++;
+                }
+
+                DebugText.IncrementActionCount(count);
+            }
+
+            for (int i = 0; i < this.listener.Count; i++)
+            {
+                if (this.listener[i]())
+                {
+                    this.listener.RemoveAt(i);
+                    i--;
+                }
+            }
         }
-        #endregion        
-    } 
+        #endregion
+
+        #region Internal Method
+        internal void AddAction(Action action)
+        {
+            this.actions.AddFirst(action);
+        }
+
+        internal void AddActionNow(Action action)
+        {
+            this.actions.AddLast(action);
+        }
+
+        internal void AddListener(Func<bool> listener)
+        {
+            this.listener.Add(listener);
+        }
+
+        internal void SetWait(int frame)
+        {
+            this.waitTime = frame;
+        }
+
+        internal void Pause()
+        {
+            this.waitTime = -1;
+        }
+
+        internal void Start()
+        {
+            this.waitTime = 0;
+        }
+        #endregion
+    }
 }

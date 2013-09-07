@@ -72,6 +72,9 @@ namespace Sitrine.Texture
         public new void Draw(string text)
         {
             this.text = text;
+            this.TextureEnd = null;
+            this.TextureUpdate = null;
+            this.Start();
         }
 
         public bool Update()
@@ -79,7 +82,7 @@ namespace Sitrine.Texture
             if (this.endInterval)
                 return false;
 
-            if (this.time++ >= this.interval)
+            if (this.time >= this.interval)
             {
                 bool updated = false;
                 for (int j = Math.Min(this.index + this.progressCount, this.text.Length); this.index < j; this.index++)
@@ -136,6 +139,7 @@ namespace Sitrine.Texture
             }
             else
             {
+                this.time++;
                 return false;
             }
         }
@@ -148,6 +152,7 @@ namespace Sitrine.Texture
             this.shadowPosition = new Point((int)this.shadowPoint.X, (int)this.shadowPoint.Y);
 
             this.index = 0;
+            this.time = 0;
             this.endInterval = false;
         }
         #endregion

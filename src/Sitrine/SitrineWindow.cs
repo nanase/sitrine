@@ -29,6 +29,7 @@ using Sitrine.Audio;
 using Sitrine.Texture;
 using Sitrine.Utils;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Sitrine
@@ -40,6 +41,15 @@ namespace Sitrine
         protected readonly MusicPlayer music;
         protected readonly Size targetSize;
         protected readonly DebugText debugText;
+        protected readonly List<Storyboard> stories;
+        protected readonly TextTextureOptions textOptions;
+        #endregion
+
+        #region Public Property
+        public TextTextureOptions TextOptions { get { return this.textOptions; } }
+        public MusicPlayer Music { get { return this.music; } }
+        public TextureList Textures { get { return this.textures; } }
+        public IEnumerable<Storyboard> Storyboards { get { return this.stories; } }
         #endregion
 
         #region Constructor
@@ -50,6 +60,8 @@ namespace Sitrine
             this.textures = new TextureList();
             this.debugText = new DebugText(option.DebugTextFontFile, option.DebugTextFontSize, this, this.textures);
             this.targetSize = option.TargetSize;
+            this.stories = new List<Storyboard>();
+            this.textOptions = option.TextOptions;
         }
         #endregion
 
@@ -78,6 +90,7 @@ namespace Sitrine
             this.music.Dispose();
             this.textures.Dispose();
             this.debugText.Dispose();
+            this.textOptions.Dispose();
         }
 
         protected override void OnResize(EventArgs e)
@@ -105,6 +118,9 @@ namespace Sitrine
 
         protected void ProcessAfterRender(FrameEventArgs e)
         {
+            foreach (var story in this.stories)
+                story.Update();
+
             this.textures.Show();
             this.debugText.Update(e.Time);
             this.SwapBuffers();

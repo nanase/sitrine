@@ -29,11 +29,17 @@ namespace Sitrine.Event
 {
     public abstract class StoryEvent
     {
-        public static List<Action> Actions = new List<Action>();
+        #region Protected Field
+        protected readonly SitrineWindow window;
+        protected readonly Storyboard storyboard;
+        #endregion
 
-        protected void Add(Action action)
+        #region Constructor
+        public StoryEvent(Storyboard storyboard, SitrineWindow window)
         {
-            StoryEvent.Actions.Add(action);
+            this.storyboard = storyboard;
+            this.window = window;
         }
+        #endregion        
     }
 }

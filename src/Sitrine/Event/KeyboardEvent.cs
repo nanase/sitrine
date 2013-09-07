@@ -22,20 +22,41 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Sitrine.Texture;
-using System.Drawing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Sitrine
+namespace Sitrine.Event
 {
-    public class WindowOption
+    public class KeyboardEvent : StoryEvent
     {
-        #region Public Property
-        public Size WindowSize { get; set; }
-        public Size TargetSize { get; set; }
-        public string Title { get; set; }
-        public string DebugTextFontFile { get; set; }
-        public int DebugTextFontSize { get; set; }
-        public TextTextureOptions TextOptions { get; set; }
+        #region Constructor
+        public KeyboardEvent(Storyboard storyboard, SitrineWindow window)
+            : base(storyboard, window)
+        {
+        }
+        #endregion
+
+        #region Public Method
+        public void WaitForEnter(Action callback)
+        {
+            if (callback != null)
+            {
+                this.storyboard.AddListener(() =>
+                {
+                    if (this.window.Keyboard[OpenTK.Input.Key.Enter])
+                    {
+                        callback();
+                        return true;
+                    }
+                    else
+                        return false;
+                });
+            }
+            else
+                this.storyboard.AddListener(() => this.window.Keyboard[OpenTK.Input.Key.Enter]);
+        }
         #endregion
     }
 }
