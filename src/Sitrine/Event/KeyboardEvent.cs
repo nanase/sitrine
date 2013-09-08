@@ -83,9 +83,10 @@ namespace Sitrine.Event
         #endregion
 
         #region Public Method
-        public void WaitForOK(Action callback)
+        public void WaitForOK(Action callback = null)
         {
             this.keyUpFlag = false;
+            this.storyboard.Pause();
 
             if (callback == null)
                 this.storyboard.AddListener(() => this.ListenKeys(this.okKeys));
@@ -93,9 +94,10 @@ namespace Sitrine.Event
                 this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, this.okKeys));
         }
 
-        public void WaitForCancel(Action callback)
+        public void WaitForCancel(Action callback = null)
         {
             this.keyUpFlag = false;
+            this.storyboard.Pause();
 
             if (callback == null)
                 this.storyboard.AddListener(() => this.ListenKeys(this.cancelKeys));
@@ -103,9 +105,10 @@ namespace Sitrine.Event
                 this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, this.cancelKeys));
         }
 
-        public void WaitFor(Action callback, params Key[] keys)
+        public void WaitFor(Action callback = null, params Key[] keys)
         {
             this.keyUpFlag = false;
+            this.storyboard.Pause();
 
             if (callback == null)
                 this.storyboard.AddListener(() => this.ListenKeys(keys));
@@ -124,8 +127,13 @@ namespace Sitrine.Event
 
                 return false;
             }
+            else if (this.CheckAny(keys))
+            {
+                this.storyboard.Start();
+                return true;
+            }
             else
-                return this.CheckAny(keys);
+                return false;
         }
 
         private bool ListenKeysWithCallback(Action callback, params Key[] keys)
@@ -141,6 +149,7 @@ namespace Sitrine.Event
             if (this.CheckAny(keys))
             {
                 callback();
+                this.storyboard.Start();
                 return true;
             }
             else
