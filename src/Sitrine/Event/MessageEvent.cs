@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using OpenTK;
+using OpenTK.Input;
 using Sitrine.Texture;
 using System;
 using System.Drawing;
@@ -59,7 +60,7 @@ namespace Sitrine.Event
                 this.texture.Draw(text);
                 this.texture.TextureUpdate += (s, e2) => this.window.Music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
                 this.texture.TextureEnd += (s, e2) =>                
-                    this.storyboard.Keyboard.WaitForEnter(() =>
+                    this.storyboard.Keyboard.WaitForOK(() =>
                     {
                         this.window.Textures.Remove(this.texture, false);
                         this.storyboard.Start();

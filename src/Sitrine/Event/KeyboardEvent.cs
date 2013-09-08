@@ -22,6 +22,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using OpenTK.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,47 +32,137 @@ namespace Sitrine.Event
 {
     public class KeyboardEvent : StoryEvent
     {
+        #region Private Field
+        private bool keyUpFlag;
+
+        private Key[] okKeys = new[] { Key.Enter, Key.Space, Key.Z };
+        private Key[] cancelKeys = new[] { Key.BackSpace, Key.X };
+        #endregion
+
+        #region Public Property
+        public Key[] OKKeys
+        {
+            get
+            {
+                return this.okKeys;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+                if (value.Length == 0)
+                    throw new ArgumentException();
+
+                this.okKeys = value;
+            }
+        }
+
+        public Key[] CancelKeys
+        {
+            get
+            {
+                return this.cancelKeys;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+                if (value.Length == 0)
+                    throw new ArgumentException();
+
+                this.cancelKeys = value;
+            }
+        }
+        #endregion
+
         #region Constructor
-        public KeyboardEvent (Storyboard storyboard, SitrineWindow window)
+        public KeyboardEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }
         #endregion
 
         #region Public Method
-        public void WaitForOK (Action callback)
+        public void WaitForOK(Action callback)
         {
-            throw new NotImplementedException ();
+            this.keyUpFlag = false;
+
+            if (callback == null)
+                this.storyboard.AddListener(() => this.ListenKeys(this.okKeys));
+            else
+                this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, this.okKeys));
         }
 
-        public void WaitForCancel (Action callback)
+        public void WaitForCancel(Action callback)
         {
-            throw new NotImplementedException ();
+            this.keyUpFlag = false;
+
+            if (callback == null)
+                this.storyboard.AddListener(() => this.ListenKeys(this.cancelKeys));
+            else
+                this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, this.cancelKeys));
         }
 
-        public void WaitFor (OpenTK.Input.Key key, Action callback)
+        public void WaitFor(Action callback, params Key[] keys)
         {
-            throw new NotImplementedException ();
-        }
+            this.keyUpFlag = false;
 
-        public void WaitForEnter (Action callback)
+            if (callback == null)
+                this.storyboard.AddListener(() => this.ListenKeys(keys));
+            else
+                this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, keys));
+        }
+        #endregion
+
+        #region Private Method
+        private bool ListenKeys(params Key[] keys)
         {
-            if (callback != null)
+            if (!this.keyUpFlag)
             {
-                this.storyboard.AddListener (() =>
-                {
-                    if (this.window.Keyboard [OpenTK.Input.Key.Enter])
-                    {
-                        callback ();
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-                );
+                if (!this.CheckAll(keys))
+                    this.keyUpFlag = true;
+
+                return false;
             }
             else
-                this.storyboard.AddListener (() => this.window.Keyboard [OpenTK.Input.Key.Enter]);
+                return this.CheckAny(keys);
+        }
+
+        private bool ListenKeysWithCallback(Action callback, params Key[] keys)
+        {
+            if (!this.keyUpFlag)
+            {
+                if (!this.CheckAll(keys))
+                    this.keyUpFlag = true;
+
+                return false;
+            }
+
+            if (this.CheckAny(keys))
+            {
+                callback();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private bool CheckAny(params Key[] keys)
+        {
+            for (int i = 0, j = keys.Length; i < j; i++)
+                if (this.window.Keyboard[keys[i]])
+                    return true;
+
+            return false;
+        }
+
+        private bool CheckAll(params Key[] keys)
+        {
+            for (int i = 0, j = keys.Length; i < j; i++)
+                if (!this.window.Keyboard[keys[i]])
+                    return false;
+
+            return true;
         }
         #endregion
     }

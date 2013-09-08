@@ -32,7 +32,7 @@ namespace Sample
                 };
 
                 using (SampleWindow window = new SampleWindow(option))
-                    window.Run(10.0, 60.0);
+                    window.Run(30.0, 60.0);
             }
         }
     }
