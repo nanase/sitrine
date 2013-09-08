@@ -32,14 +32,14 @@ namespace Sitrine.Texture
     public class TextureList : SortedList<int, Texture>, IDisposable
     {
         #region Public Method
-        public void Show()
+        public void Render()
         {
             foreach (Texture item in this.Values)
             {
                 if (item is IAnimationTexture)
                     ((IAnimationTexture)item).Update();
 
-                item.Show();
+                item.Render();
             }
         }
 

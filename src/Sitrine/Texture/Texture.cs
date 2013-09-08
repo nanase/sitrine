@@ -105,7 +105,7 @@ namespace Sitrine.Texture
             this.bitmap.Dispose();
         }
 
-        public void Show()
+        public void Render()
         {
             if (this.listId == -1)
                 this.Compile(ListMode.CompileAndExecute);

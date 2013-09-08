@@ -23,27 +23,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
+using System.Drawing;
+using System.IO;
 
 namespace Sitrine.Event
 {
     public class TextureEvent : StoryEvent
     {
         #region Constructor
-        public TextureEvent(Storyboard storyboard, SitrineWindow window)
+        public TextureEvent (Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }
         #endregion
 
         #region Public Method
-        public void Show(int id, string name)
+        public void Show (int id, Bitmap bitmap)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException ();
         }
 
-        public void Hide(int id)
+        public void Show (int id, Stream stream)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException ();
+        }
+
+        public void Show (int id, string filename)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void Hide (int id)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void ClearAll ()
+        {
+            throw new NotImplementedException ();
         }
         #endregion        
     }

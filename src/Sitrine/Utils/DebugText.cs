@@ -63,7 +63,7 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Property
-        public bool ShowDebug { get; set; }
+        public bool IsVisible { get; set; }
         #endregion
 
         #region Constructor
@@ -79,9 +79,9 @@ namespace Sitrine.Utils
             this.fps_old = 60.0;
 
 #if DEBUG
-            this.ShowDebug = true;
+            this.IsVisible = true;
 #else
-            this.ShowDebug = false;
+            this.IsVisible = false;
 #endif
         }
         #endregion
@@ -89,10 +89,8 @@ namespace Sitrine.Utils
         #region Public Method
         public void Update(double time)
         {
-            if (!this.ShowDebug)
-                return;
-
-            this.debugTexture.Show();
+            if (!this.IsVisible)
+                return;            
 
             this.elapsed += time;
             this.renderCount++;
@@ -121,6 +119,14 @@ namespace Sitrine.Utils
                 this.updateCountOld = DebugText.updateCount;
                 this.actionCountOld = DebugText.actionCount;
             }
+        }
+
+        public void Render()
+        {
+            if (!this.IsVisible)
+                return;
+
+            this.debugTexture.Render();
         }
 
         public void Dispose()

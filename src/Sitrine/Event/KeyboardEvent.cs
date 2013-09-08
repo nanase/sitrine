@@ -32,30 +32,46 @@ namespace Sitrine.Event
     public class KeyboardEvent : StoryEvent
     {
         #region Constructor
-        public KeyboardEvent(Storyboard storyboard, SitrineWindow window)
+        public KeyboardEvent (Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }
         #endregion
 
         #region Public Method
-        public void WaitForEnter(Action callback)
+        public void WaitForOK (Action callback)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void WaitForCancel (Action callback)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void WaitFor (OpenTK.Input.Key key, Action callback)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void WaitForEnter (Action callback)
         {
             if (callback != null)
             {
-                this.storyboard.AddListener(() =>
+                this.storyboard.AddListener (() =>
                 {
-                    if (this.window.Keyboard[OpenTK.Input.Key.Enter])
+                    if (this.window.Keyboard [OpenTK.Input.Key.Enter])
                     {
-                        callback();
+                        callback ();
                         return true;
                     }
                     else
                         return false;
-                });
+                }
+                );
             }
             else
-                this.storyboard.AddListener(() => this.window.Keyboard[OpenTK.Input.Key.Enter]);
+                this.storyboard.AddListener (() => this.window.Keyboard [OpenTK.Input.Key.Enter]);
         }
         #endregion
     }

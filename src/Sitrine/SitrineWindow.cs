@@ -108,6 +108,7 @@ namespace Sitrine
                     targetSize.Width * factor, targetSize.Height * factor);
         }
 
+
         protected void ProcessBeforeRender(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -118,12 +119,17 @@ namespace Sitrine
 
         protected void ProcessAfterRender(FrameEventArgs e)
         {
+            this.textures.Render();
+            this.debugText.Render();
+            this.SwapBuffers();
+        }
+
+        protected override void OnUpdateFrame(FrameEventArgs e)
+        {
             foreach (var story in this.stories)
                 story.Update();
 
-            this.textures.Show();
             this.debugText.Update(e.Time);
-            this.SwapBuffers();
         }
         #endregion
     }

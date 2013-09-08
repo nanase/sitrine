@@ -32,7 +32,7 @@ namespace Sample
                 };
 
                 using (SampleWindow window = new SampleWindow(option))
-                    window.Run();
+                    window.Run(10.0, 60.0);
             }
         }
     }
@@ -43,6 +43,8 @@ namespace Sample
             : base(window)
         {
             var file = File.ReadAllLines("message.txt");
+
+            Process.Wait(0.5);
 
             for (int i = 0; i < file.Length; i += 4)
                 Message.Show(String.Join("\n", file.Skip(i).Take(4)));
@@ -59,7 +61,7 @@ namespace Sample
         protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
         {
             if (this.Keyboard[OpenTK.Input.Key.Tab])
-                this.debugText.ShowDebug = !this.debugText.ShowDebug;
+                this.debugText.IsVisible = !this.debugText.IsVisible;
 
             base.OnKeyPress(e);
         }
