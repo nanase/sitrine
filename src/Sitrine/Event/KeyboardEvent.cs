@@ -85,27 +85,31 @@ namespace Sitrine.Event
         #region Public Method
         public void WaitForOK(Action callback = null)
         {
-            this.keyUpFlag = false;
-            this.storyboard.Pause();
-
-            if (callback == null)
-                this.storyboard.AddListener(() => this.ListenKeys(this.okKeys));
+            if (this.storyboard.State != StoryboardState.Started)
+                this.Listen(callback, this.okKeys);
             else
-                this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, this.okKeys));
+                this.storyboard.AddAction(() => this.Listen(callback, this.okKeys));
         }
 
         public void WaitForCancel(Action callback = null)
         {
-            this.keyUpFlag = false;
-            this.storyboard.Pause();
-
-            if (callback == null)
-                this.storyboard.AddListener(() => this.ListenKeys(this.cancelKeys));
+            if (this.storyboard.State != StoryboardState.Started)
+                this.Listen(callback, this.cancelKeys);
             else
-                this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, this.cancelKeys));
+                this.storyboard.AddAction(() => this.Listen(callback, this.cancelKeys));
         }
 
         public void WaitFor(Action callback = null, params Key[] keys)
+        {
+            if (this.storyboard.State != StoryboardState.Started)
+                this.Listen(callback, this.okKeys);
+            else
+                this.storyboard.AddAction(() => this.Listen(callback, keys));
+        }
+        #endregion
+
+        #region Private Method
+        private void Listen(Action callback, Key[] keys)
         {
             this.keyUpFlag = false;
             this.storyboard.Pause();
@@ -115,9 +119,7 @@ namespace Sitrine.Event
             else
                 this.storyboard.AddListener(() => this.ListenKeysWithCallback(callback, keys));
         }
-        #endregion
 
-        #region Private Method
         private bool ListenKeys(params Key[] keys)
         {
             if (!this.keyUpFlag)
@@ -136,7 +138,7 @@ namespace Sitrine.Event
                 return false;
         }
 
-        private bool ListenKeysWithCallback(Action callback, params Key[] keys)
+        private bool ListenKeysWithCallback(Action callback, Key[] keys)
         {
             if (!this.keyUpFlag)
             {

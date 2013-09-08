@@ -47,6 +47,17 @@ namespace Sitrine
         public KeyboardEvent Keyboard { get; private set; }
         public int ActionCount { get { return this.actions.Count; } }
         public int ListenerCount { get { return this.listener.Count; } }
+
+        public StoryboardState State { 
+            get {
+                if (this.waitTime > 0)
+                    return StoryboardState.Waiting;
+                else if (this.waitTime == 0)
+                    return StoryboardState.Started;
+                else
+                    return StoryboardState.Pausing;
+            }
+        }
         #endregion
 
         #region Constructor
@@ -127,5 +138,12 @@ namespace Sitrine
             this.waitTime = 0;
         }
         #endregion
+    }
+
+    public enum StoryboardState
+    {
+        Pausing,
+        Waiting,
+        Started,
     }
 }
