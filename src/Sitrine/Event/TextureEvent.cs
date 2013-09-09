@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -30,38 +31,102 @@ namespace Sitrine.Event
 {
     public class TextureEvent : StoryEvent
     {
+        #region Private Field
+        private readonly Dictionary<int, int> asignment;
+        #endregion
+
         #region Constructor
-        public TextureEvent (Storyboard storyboard, SitrineWindow window)
+        public TextureEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
+            this.asignment = new Dictionary<int, int>();
         }
         #endregion
 
         #region Public Method
-        public void Show (int id, Bitmap bitmap)
+        public void Create(int id, Bitmap bitmap)
         {
-            throw new NotImplementedException ();
+            this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
         }
 
-        public void Show (int id, Stream stream)
+        public void Create(int id, Stream stream)
         {
-            throw new NotImplementedException ();
+            this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
         }
 
-        public void Show (int id, string filename)
+        public void Create(int id, string filename)
         {
-            throw new NotImplementedException ();
+            this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
         }
 
-        public void Hide (int id)
+        public void Show(int id)
         {
-            throw new NotImplementedException ();
+            this.storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                    return;
+
+                var tex = this.window.Textures[this.asignment[id]];
+                var color = tex.Color;
+                color.A = 1f;
+                tex.Color = color;
+            });
         }
 
-        public void ClearAll ()
+        public void Hide(int id)
         {
-            throw new NotImplementedException ();
+            this.storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                    return;
+
+                var tex = this.window.Textures[this.asignment[id]];
+                var color = tex.Color;
+                color.A = 0f;
+                tex.Color = color;
+            });
         }
-        #endregion        
+
+        public void Clear(int id)
+        {
+            this.storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                    return;
+
+                this.window.Textures.Remove(this.asignment[id], true);
+            });
+        }
+
+        public void ClearAll()
+        {
+            this.storyboard.AddAction(() =>
+            {
+                foreach (int key in this.asignment.Values)
+                    this.window.Textures.Remove(key, true);
+
+                this.asignment.Clear();
+            });
+        }
+        #endregion
+
+        #region Private Method
+        private void AsignmentTexture(int id, Texture.Texture texture)
+        {
+            int key;
+
+            if (this.asignment.ContainsKey(id))
+            {
+                key = this.asignment[id];
+                this.window.Textures.Remove(key, true);
+                this.window.Textures.Add(key, texture);
+            }
+            else
+            {
+                key = this.window.Textures.AddLast(texture);
+                this.asignment.Add(id, key);
+            }
+        }
+        #endregion
     }
 }

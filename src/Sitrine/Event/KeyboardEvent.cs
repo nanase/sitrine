@@ -124,7 +124,7 @@ namespace Sitrine.Event
         {
             if (!this.keyUpFlag)
             {
-                if (!this.CheckAll(keys))
+                if (!this.CheckAny(keys))
                     this.keyUpFlag = true;
 
                 return false;

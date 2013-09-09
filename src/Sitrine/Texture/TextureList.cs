@@ -43,22 +43,24 @@ namespace Sitrine.Texture
             }
         }
 
-        public void AddLast(Texture item)
+        public int AddLast(Texture item)
         {
             int count = this.Count;
-            if (count > 0)
-                this.Add(this.Keys[count - 1] + 1, item);
-            else
-                this.Add(0, item);
+            int index = (count > 0) ? this.Keys[count - 1] + 1 : 0;
+
+            this.Add(index, item);
+
+            return index;
         }
 
-        public void AddFirst(Texture item)
+        public int AddFirst(Texture item)
         {
             int count = this.Count;
-            if (count > 0)
-                this.Add(this.Keys[0] - 1, item);
-            else
-                this.Add(0, item);
+            int index = (count > 0) ? this.Keys[0] - 1 : 0;
+
+            this.Add(index, item);
+
+            return index;
         }
 
         public void Clear(bool dispose)
@@ -68,6 +70,14 @@ namespace Sitrine.Texture
                     item.Dispose();
 
             base.Clear();
+        }
+
+        public bool Remove(int key, bool dispose)
+        {
+            if (dispose)
+                this[key].Dispose();
+
+            return this.Remove(key);
         }
 
         public bool Remove(Texture item, bool dispose)
@@ -89,6 +99,6 @@ namespace Sitrine.Texture
         {
             this.Clear(true);
         }
-        #endregion        
+        #endregion
     }
 }

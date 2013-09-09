@@ -29,6 +29,7 @@ using Sitrine.Utils;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace Sitrine.Texture
 {
@@ -62,7 +63,10 @@ namespace Sitrine.Texture
                 this.position = value;
 
                 if (this.listId != -1)
+                {
                     GL.DeleteLists(this.listId, 1);
+                    this.listId = -1;
+                }
             }
         }
 
@@ -72,8 +76,12 @@ namespace Sitrine.Texture
             set
             {
                 this.color = value;
+
                 if (this.listId != -1)
+                {
                     GL.DeleteLists(this.listId, 1);
+                    this.listId = -1;
+                }
             }
         }
         #endregion
@@ -89,6 +97,11 @@ namespace Sitrine.Texture
 
         public Texture(string filename)
             : this(new Bitmap(filename))
+        {
+        }
+
+        public Texture(Stream stream)
+            : this(new Bitmap(stream))
         {
         }
         #endregion
@@ -111,34 +124,6 @@ namespace Sitrine.Texture
                 this.Compile(ListMode.CompileAndExecute);
             else
                 GL.CallList(this.listId);
-        }
-
-        private void Compile(ListMode mode = ListMode.Compile)
-        {
-            if (this.listId != -1)
-                GL.DeleteLists(this.listId, 1);
-
-            this.listId = GL.GenLists(1);
-            GL.NewList(this.listId, ListMode.Compile);
-            {
-                GL.PushMatrix();
-
-                GL.BindTexture(TextureTarget.Texture2D, this.ID);
-                GL.Translate(this.position);
-                GL.Scale(this.bitmap.Width, this.bitmap.Height, 1.0);
-                GL.Color4(this.color);
-
-                GL.Begin(BeginMode.Quads);
-                {
-                    GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
-                    GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
-                    GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
-                    GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
-                }
-                GL.End();
-                GL.PopMatrix();
-            }
-            GL.EndList();
         }
         #endregion
 
@@ -167,6 +152,36 @@ namespace Sitrine.Texture
         {
             using (Bitmap bitmap = new Bitmap(filename))
                 Texture.Load(id, bitmap);
+        }
+        #endregion
+
+        #region Private Method
+        private void Compile(ListMode mode = ListMode.Compile)
+        {
+            if (this.listId != -1)
+                GL.DeleteLists(this.listId, 1);
+
+            this.listId = GL.GenLists(1);
+            GL.NewList(this.listId, mode);
+            {
+                GL.PushMatrix();
+
+                GL.BindTexture(TextureTarget.Texture2D, this.ID);
+                GL.Translate(this.position);
+                GL.Scale(this.bitmap.Width, this.bitmap.Height, 1.0);
+                GL.Color4(this.color);
+
+                GL.Begin(BeginMode.Quads);
+                {
+                    GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
+                    GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
+                    GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
+                    GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
+                }
+                GL.End();
+                GL.PopMatrix();
+            }
+            GL.EndList();
         }
         #endregion
     }
