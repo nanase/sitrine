@@ -29,14 +29,14 @@ namespace Sitrine.Event
     public class ProcessEvent : StoryEvent
     {
         #region Constructor
-        public ProcessEvent (Storyboard storyboard, SitrineWindow window)
+        public ProcessEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }
         #endregion
 
         #region Public Method
-        public void Wait (double seconds)
+        public void Wait(double seconds)
         {
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
@@ -44,13 +44,18 @@ namespace Sitrine.Event
             this.storyboard.AddAction(() => this.storyboard.SetWait((int)Math.Round(this.window.TargetUpdateFrequency * seconds)));
         }
 
-        public void WaitFrame (int frame)
+        public void WaitFrame(int frame)
         {
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("frame");
 
             this.storyboard.AddAction(() => this.storyboard.SetWait(frame));
         }
-        #endregion        
+
+        public void Break()
+        {
+            this.storyboard.AddAction(this.storyboard.Break);
+        }
+        #endregion
     }
 }

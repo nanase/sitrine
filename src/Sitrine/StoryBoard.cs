@@ -137,6 +137,13 @@ namespace Sitrine
         {
             this.waitTime = 0;
         }
+
+        internal void Break()
+        {
+            this.actions.Clear();
+            this.listener.Clear();
+            this.waitTime = 0;
+        }
         #endregion
     }
 
