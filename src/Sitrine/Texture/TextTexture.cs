@@ -38,7 +38,7 @@ namespace Sitrine.Texture
         protected string text;
 
         protected SolidBrush foreBrush = new SolidBrush(System.Drawing.Color.White);
-        protected SolidBrush backBrush = new SolidBrush(System.Drawing.Color.Black);
+        protected SolidBrush shadowBrush = new SolidBrush(System.Drawing.Color.Black);
         #endregion
 
         #region Public Property
@@ -59,17 +59,17 @@ namespace Sitrine.Texture
             }
         }
 
-        public Color BackColor
+        public Color ShadowColor
         {
             get
             {
-                return this.backBrush.Color;
+                return this.shadowBrush.Color;
             }
             set
             {
-                if (this.backBrush != null)
-                    this.backBrush.Dispose();
-                this.backBrush = new SolidBrush(value);
+                if (this.shadowBrush != null)
+                    this.shadowBrush.Dispose();
+                this.shadowBrush = new SolidBrush(value);
             }
         }
         #endregion
@@ -132,7 +132,7 @@ namespace Sitrine.Texture
             {
                 float y_offset = i * (this.options.LineHeight + 1);
 
-                this.g.DrawString(line, this.options.Font, this.backBrush, this.shadowPoint.X, this.shadowPoint.Y + y_offset, this.options.Format);
+                this.g.DrawString(line, this.options.Font, this.shadowBrush, this.shadowPoint.X, this.shadowPoint.Y + y_offset, this.options.Format);
                 this.g.DrawString(line, this.options.Font, this.foreBrush, this.forePoint.X, this.forePoint.Y + y_offset, this.options.Format);
 
                 i++;

@@ -107,7 +107,7 @@ namespace Sitrine.Texture
                     {
                         updated = true;
                         string ch = c.ToString();
-                        this.g.DrawString(ch, this.options.Font, this.backBrush, this.shadowPosition, this.options.Format);
+                        this.g.DrawString(ch, this.options.Font, this.shadowBrush, this.shadowPosition, this.options.Format);
                         this.g.DrawString(ch, this.options.Font, this.foreBrush, this.forePosition, this.options.Format);
 
                         Size charSize = this.g.MeasureString(ch, this.options.Font, this.forePosition, this.options.Format).ToSize();
