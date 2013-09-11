@@ -45,6 +45,8 @@ namespace Sample
             var file = File.ReadAllLines("message.txt");
 
             Process.Wait(0.5);
+            Message.Interval = 2;
+            Message.ProgressCount = 2;
 
             for (int i = 0; i < file.Length; i += 4)
                 Message.Show(String.Join("\n", file.Skip(i).Take(4)));

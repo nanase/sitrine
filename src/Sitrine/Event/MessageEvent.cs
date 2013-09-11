@@ -23,9 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using OpenTK;
-using OpenTK.Input;
+using OpenTK.Graphics;
 using Sitrine.Texture;
-using System;
 using System.Drawing;
 using ux.Component;
 
@@ -34,11 +33,83 @@ namespace Sitrine.Event
     public class MessageEvent : StoryEvent
     {
         #region Private Field
-        private readonly MessageTexture texture;
+        private MessageTexture texture;
         #endregion
 
         #region Public Property
         public MessageTexture Texture { get { return this.texture; } }
+
+        public Vector3 Position
+        {
+            get
+            {
+                return this.texture.Position;
+            }
+            set
+            {
+                this.storyboard.AddAction(() => this.texture.Position = value);
+            }
+        }
+
+        public Color4 Color
+        {
+            get
+            {
+                return this.texture.Color;
+            }
+            set
+            {
+                this.storyboard.AddAction(() => this.texture.Color = value);
+            }
+        }
+
+        public Color ForeColor
+        {
+            get
+            {
+                return this.texture.ForeColor;
+            }
+            set
+            {
+                this.storyboard.AddAction(() => this.texture.ForeColor = value);
+            }
+        }
+
+        public int Interval
+        {
+            get
+            {
+                return this.texture.Interval;
+            }
+            set
+            {
+                this.storyboard.AddAction(() => this.texture.Interval = value);
+            }
+        }
+
+        public int ProgressCount
+        {
+            get
+            {
+                return this.texture.ProgressCount;
+            }
+            set
+            {
+                this.storyboard.AddAction(() => this.texture.ProgressCount = value);
+            }
+        }
+
+        public Color ShadowColor
+        {
+            get
+            {
+                return this.texture.ShadowColor;
+            }
+            set
+            {
+                this.storyboard.AddAction(() => this.texture.ShadowColor = value);
+            }
+        }
         #endregion
 
         #region Constructor
