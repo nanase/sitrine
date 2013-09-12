@@ -22,7 +22,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Sitrine.Utils;
@@ -43,7 +42,7 @@ namespace Sitrine.Texture
         protected readonly int id;
         protected Bitmap bitmap;
         protected Color4 color = Color4.White;
-        protected Vector3 position = new Vector3();
+        protected PointF position = new PointF();
 
         protected Color clearColor = System.Drawing.Color.Transparent;
         #endregion
@@ -55,7 +54,7 @@ namespace Sitrine.Texture
         public int Width { get { return this.bitmap.Width; } }
         public int Height { get { return this.bitmap.Height; } }
 
-        public Vector3 Position
+        public PointF Position
         {
             get { return this.position; }
             set
@@ -167,7 +166,7 @@ namespace Sitrine.Texture
                 GL.PushMatrix();
 
                 GL.BindTexture(TextureTarget.Texture2D, this.ID);
-                GL.Translate(this.position);
+                GL.Translate(this.position.X, this.position.Y, 0.0f);
                 GL.Scale(this.bitmap.Width, this.bitmap.Height, 1.0);
                 GL.Color4(this.color);
 

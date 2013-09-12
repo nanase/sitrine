@@ -22,7 +22,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using OpenTK;
 using OpenTK.Graphics;
 using Sitrine.Texture;
 using System.Drawing;
@@ -39,7 +38,7 @@ namespace Sitrine.Event
         #region Public Property
         public MessageTexture Texture { get { return this.texture; } }
 
-        public Vector3 Position
+        public PointF Position
         {
             get
             {
@@ -117,7 +116,7 @@ namespace Sitrine.Event
             : base(storyboard, window)
         {
             this.texture = new MessageTexture(this.window.TextOptions, new Size(320, 80));
-            this.texture.Position = new Vector3(0, 160, 0);
+            this.texture.Position = new PointF(0, 160);
         }
         #endregion
 
