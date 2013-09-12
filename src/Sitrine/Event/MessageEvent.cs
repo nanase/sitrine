@@ -33,7 +33,7 @@ namespace Sitrine.Event
     public class MessageEvent : StoryEvent
     {
         #region Private Field
-        private MessageTexture texture;
+        private readonly MessageTexture texture;
         #endregion
 
         #region Public Property
