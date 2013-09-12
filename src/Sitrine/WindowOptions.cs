@@ -27,14 +27,40 @@ using System.Drawing;
 
 namespace Sitrine
 {
+    /// <summary>
+    /// ウィンドウ生成に必要なオプションを格納します。
+    /// </summary>
     public class WindowOption
     {
         #region Public Property
+        /// <summary>
+        /// ウィンドウのサイズを取得または設定します。
+        /// </summary>
         public Size WindowSize { get; set; }
+
+        /// <summary>
+        /// 描画されるサイズを取得または設定します。
+        /// </summary>
         public Size TargetSize { get; set; }
+
+        /// <summary>
+        /// ウィンドウに表示されるタイトルを取得または設定します。
+        /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// デバッグ表示に使用されるフォントファイル名を取得または設定します。
+        /// </summary>
         public string DebugTextFontFile { get; set; }
+
+        /// <summary>
+        /// デバッグ表示に使用されるフォントのサイズを取得または設定します。
+        /// </summary>
         public int DebugTextFontSize { get; set; }
+
+        /// <summary>
+        /// テキストの表示に使用されるオプションオブジェクトを取得または設定します。このオブジェクトはデバッグ表示には使用されません。
+        /// </summary>
         public TextTextureOptions TextOptions { get; set; }
         #endregion
     }
