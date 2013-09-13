@@ -30,7 +30,9 @@ using Sitrine.Texture;
 using Sitrine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 
 namespace Sitrine
 {
@@ -38,11 +40,13 @@ namespace Sitrine
     {
         #region Protected Field
         protected readonly TextureList textures;
-        protected readonly MusicPlayer music;
-        protected readonly Size targetSize;
+        protected readonly MusicPlayer music;        
         protected readonly DebugText debugText;
         protected readonly List<Storyboard> stories;
         protected readonly TextTextureOptions textOptions;
+        protected readonly TraceSource trace;
+
+        protected Size targetSize;
         #endregion
 
         #region Public Property
@@ -50,6 +54,7 @@ namespace Sitrine
         public MusicPlayer Music { get { return this.music; } }
         public TextureList Textures { get { return this.textures; } }
         public IEnumerable<Storyboard> Storyboards { get { return this.stories; } }
+        public Size TargetSize { get { return this.targetSize; } }
         #endregion
 
         #region Constructor
@@ -57,11 +62,14 @@ namespace Sitrine
             : base(option.WindowSize.Width, option.WindowSize.Height, GraphicsMode.Default, option.Title)
         {
             this.music = new MusicPlayer();
-            this.textures = new TextureList();
-            this.debugText = new DebugText(option.DebugTextFontFile, option.DebugTextFontSize, this, this.textures);
+            this.textures = new TextureList();           
             this.targetSize = option.TargetSize;
             this.stories = new List<Storyboard>();
             this.textOptions = option.TextOptions;
+
+            this.debugText = new DebugText(option.DebugTextFontFile, option.DebugTextFontSize, this, this.textures);
+            this.trace = new TraceSource("Sitrine", SourceLevels.All);            
+            this.trace.Listeners.Add(new DebugTextListener(this.debugText));     
         }
         #endregion
 
@@ -91,6 +99,7 @@ namespace Sitrine
             this.textures.Dispose();
             this.debugText.Dispose();
             this.textOptions.Dispose();
+            this.trace.Close();
         }
 
         protected override void OnResize(EventArgs e)

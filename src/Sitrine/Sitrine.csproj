@@ -71,6 +71,7 @@
     <Compile Include="Texture\TextureList.cs" />
     <Compile Include="Utils\BitmapController.cs" />
     <Compile Include="Utils\DebugText.cs" />
+    <Compile Include="Utils\DebugTextListener.cs" />
     <Compile Include="Utils\FontLoader.cs" />
     <Compile Include="WindowOptions.cs" />
   </ItemGroup>

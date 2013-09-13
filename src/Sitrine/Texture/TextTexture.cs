@@ -103,8 +103,20 @@ namespace Sitrine.Texture
             if (text != this.text)
             {
                 this.text = text;
+                this.g.Clear(this.clearColor);
                 this.DrawString(text);
+                this.g.Flush();
+                Texture.Update(this.id, this.bitmap);
             }
+        }
+
+        public void Draw(string text, float x, float y)
+        {
+            this.text = text;
+            this.g.Clear(this.clearColor);
+            this.DrawString(text, x, y);
+            this.g.Flush();
+            Texture.Update(this.id, this.bitmap);
         }
 
         public void Clear()
@@ -125,8 +137,6 @@ namespace Sitrine.Texture
         #region Protected Method
         protected void DrawString(string text)
         {
-            this.g.Clear(this.clearColor);
-
             int i = 0;
             foreach (var line in text.Split('\n'))
             {
@@ -137,10 +147,21 @@ namespace Sitrine.Texture
 
                 i++;
             }
-
-            this.g.Flush();
-            Texture.Update(this.id, this.bitmap);
         }
-        #endregion        
+
+        protected void DrawString(string text, float x, float y)
+        {
+            int i = 0;
+            foreach (var line in text.Split('\n'))
+            {
+                float y_offset = i * (this.options.LineHeight + 1) + y;
+
+                this.g.DrawString(line, this.options.Font, this.shadowBrush, this.shadowPoint.X + x, this.shadowPoint.Y + y_offset, this.options.Format);
+                this.g.DrawString(line, this.options.Font, this.foreBrush, this.forePoint.X + x, this.forePoint.Y + y_offset, this.options.Format);
+
+                i++;
+            }
+        }
+        #endregion
     }
 }

@@ -40,6 +40,7 @@ namespace Sitrine.Utils
         private double elapsed = 1.0;
         private int renderCount = 0;
         private readonly TextTexture debugTexture;
+        private readonly TextTexture debugTextTexture;
         private TimeSpan processorTimeOld = TimeSpan.Zero;
         private double fps_old = 0.0;
 
@@ -72,7 +73,8 @@ namespace Sitrine.Utils
             this.font = new FontLoader(fontfile);
             this.textOptions = new TextTextureOptions(new Font(this.font.Family, size, GraphicsUnit.Pixel), size);
 
-            this.debugTexture = new TextTexture(this.textOptions, new Size(320, 60), false);
+            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, window.TextOptions.LineHeight), false);
+            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, window.TextOptions.LineHeight), false);
 
             this.window = window;
             this.textures = textures;
@@ -90,7 +92,7 @@ namespace Sitrine.Utils
         public void Update(double time)
         {
             if (!this.IsVisible)
-                return;            
+                return;
 
             this.elapsed += time;
             this.renderCount++;
@@ -127,6 +129,7 @@ namespace Sitrine.Utils
                 return;
 
             this.debugTexture.Render();
+            this.debugTextTexture.Render();
         }
 
         public void Dispose()
@@ -134,6 +137,12 @@ namespace Sitrine.Utils
             this.font.Dispose();
             this.textOptions.Dispose();
             this.debugTexture.Dispose();
+            this.debugTextTexture.Dispose();
+        }
+
+        public void SetDebugText(string message)
+        {
+            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
         }
         #endregion
 
