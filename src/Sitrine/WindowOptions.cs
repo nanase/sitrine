@@ -30,7 +30,7 @@ namespace Sitrine
     /// <summary>
     /// ウィンドウ生成に必要なオプションを格納します。
     /// </summary>
-    public class WindowOption
+    public class WindowOptions
     {
         #region Public Property
         /// <summary>

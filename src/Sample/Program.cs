@@ -21,7 +21,7 @@ namespace Sample
 
             using (FontLoader font = new FontLoader("font/VL-Gothic-Regular.ttf"))
             {
-                WindowOption option = new WindowOption()
+                WindowOptions options = new WindowOptions()
                 {
                     Title = "Sample",
                     TargetSize = new Size(320, 240),
@@ -31,7 +31,7 @@ namespace Sample
                     TextOptions = new TextTextureOptions(new Font(font.Family, 12f, GraphicsUnit.Pixel), 17)
                 };
 
-                using (SampleWindow window = new SampleWindow(option))
+                using (SampleWindow window = new SampleWindow(options))
                     window.Run(30.0, 60.0);
             }
         }
@@ -55,8 +55,8 @@ namespace Sample
 
     class SampleWindow : SitrineWindow
     {
-        public SampleWindow(WindowOption option)
-            : base(option)
+        public SampleWindow(WindowOptions options)
+            : base(options)
         {
         }
 

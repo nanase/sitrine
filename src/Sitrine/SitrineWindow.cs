@@ -58,16 +58,16 @@ namespace Sitrine
         #endregion
 
         #region Constructor
-        public SitrineWindow(WindowOption option)
-            : base(option.WindowSize.Width, option.WindowSize.Height, GraphicsMode.Default, option.Title)
+        public SitrineWindow(WindowOptions options)
+            : base(options.WindowSize.Width, options.WindowSize.Height, GraphicsMode.Default, options.Title)
         {
             this.music = new MusicPlayer();
             this.textures = new TextureList();           
-            this.targetSize = option.TargetSize;
+            this.targetSize = options.TargetSize;
             this.stories = new List<Storyboard>();
-            this.textOptions = option.TextOptions;
+            this.textOptions = options.TextOptions;
 
-            this.debugText = new DebugText(option.DebugTextFontFile, option.DebugTextFontSize, this, this.textures);
+            this.debugText = new DebugText(options.DebugTextFontFile, options.DebugTextFontSize, this, this.textures);
             this.trace = new TraceSource("Sitrine", SourceLevels.All);            
             this.trace.Listeners.Add(new DebugTextListener(this.debugText));     
         }
