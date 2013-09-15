@@ -24,12 +24,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Drawing;
+using System.Drawing.Text;
 
 namespace Sitrine.Utils
 {
     class TextRender : IDisposable
     {
         #region Private Field
+        private static readonly PointF foreOffset;
+        private static readonly PointF shadowOffset;
+
         private readonly Graphics graphics;
         private readonly Bitmap bitmap;
         private readonly TextOptions options;
@@ -55,6 +59,20 @@ namespace Sitrine.Utils
         #endregion
 
         #region Constructor
+        static TextRender()
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                TextRender.foreOffset = new PointF(1, -1);
+                TextRender.shadowOffset = new PointF(2, 0);
+            }
+            else
+            {
+                TextRender.foreOffset = new PointF(0, -2);
+                TextRender.shadowOffset = new PointF(1, -1);
+            }
+        }
+
         public TextRender(TextOptions options, Bitmap baseBitmap)
         {
             if (bitmap == null)
@@ -78,17 +96,17 @@ namespace Sitrine.Utils
         #region DrawString(string text, float x, float y)
         public void DrawString(string text)
         {
-            this.DrawString(text, 0.0f, 0.0f);
+            this.DrawString(text, this.brushIndex, 0.0f, 0.0f);
         }
 
         public void DrawString(string text, PointF location)
         {
-            this.DrawString(text, location.X, location.Y);
+            this.DrawString(text, this.brushIndex, location.X, location.Y);
         }
 
         public void DrawString(string text, float x, float y)
         {
-            throw new NotImplementedException();
+            this.DrawString(text, this.brushIndex, x, y);
         }
         #endregion
 
@@ -105,24 +123,66 @@ namespace Sitrine.Utils
 
         public void DrawString(string text, int colorIndex, float x, float y)
         {
-            throw new NotImplementedException();
+            this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
+
+            int i = 0;
+            bool fore = (colorIndex > 0 && colorIndex < this.options.Brushes.Length);
+            bool shadow = (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length);
+
+            foreach (var line in text.Split('\n'))
+            {
+                float y_offset = i * (this.options.LineHeight + 1.0f) + y;
+
+                if (shadow)
+                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y + y_offset, this.options.Format);
+
+                if (fore)
+                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[colorIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y_offset, this.options.Format);
+
+                i++;
+            }
         }
         #endregion
 
         #region DrawChars(string text, float x, float y)
-        public void DrawChars(string text)
+        public SizeF DrawChars(string text)
         {
-            this.DrawChars(text, 0.0f, 0.0f);
+            return this.DrawChars(text, 0.0f, 0.0f);
         }
 
-        public void DrawChars(string text, PointF location)
+        public SizeF DrawChars(string text, PointF location)
         {
-            this.DrawChars(text, location.X, location.Y);
+            return this.DrawChars(text, location.X, location.Y);
         }
 
-        public void DrawChars(string text, float x, float y)
+        public SizeF DrawChars(string text, float x, float y)
         {
-            throw new NotImplementedException();
+            return this.DrawChars(text, this.brushIndex, x, y);
+        }
+        #endregion
+
+        #region DrawChars(string text, int colorIndex, float x, float y)
+        public SizeF DrawChars(string text, int colorIndex)
+        {
+            return this.DrawChars(text, colorIndex, 0.0f, 0.0f);
+        }
+
+        public SizeF DrawChars(string text, int colorIndex, PointF location)
+        {
+            return this.DrawChars(text, colorIndex, location.X, location.Y);
+        }
+
+        public SizeF DrawChars(string text, int colorIndex, float x, float y)
+        {
+            this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
+
+            if (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length)
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y, this.options.Format);
+
+            if (colorIndex > 0 && colorIndex < this.options.Brushes.Length)
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[colorIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y, this.options.Format);
+
+            return this.graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
         }
         #endregion
 

@@ -33,6 +33,8 @@ namespace Sitrine.Utils
         private float lineHeight;
         private Brush[] brushes;
         private Font font;
+        private int shadowIndex = 0;
+        private StringFormat format;
         #endregion
 
         #region Public Property
@@ -74,6 +76,23 @@ namespace Sitrine.Utils
 
         public bool Antialiasing { get; set; }
 
+        public bool DrawShadow { get; set; }
+
+        public int ShadowIndex
+        {
+            get
+            {
+                return this.shadowIndex;
+            }
+            set
+            {
+                if (value < 0 || value >= this.brushes.Length)
+                    throw new ArgumentOutOfRangeException();
+
+                this.shadowIndex = value;
+            }
+        }
+
         public Font Font
         {
             get
@@ -87,6 +106,36 @@ namespace Sitrine.Utils
 
                 this.font = value;
             }
+        }
+
+        public StringFormat Format
+        {
+            get
+            {
+                return this.format;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+
+                this.format = value;
+            }
+        }
+        #endregion
+
+        #region Constructor
+        public TextOptions(Font font, int lineHeight)
+        {
+            if (font == null)
+                throw new ArgumentNullException();
+
+            this.font = font;
+            this.LineHeight = lineHeight;
+            this.format = new StringFormat(StringFormat.GenericTypographic)
+            {
+                 FormatFlags = StringFormatFlags.NoWrap
+            };
         }
         #endregion
 
