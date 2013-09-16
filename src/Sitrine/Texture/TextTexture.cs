@@ -22,145 +22,54 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using System;
+using Sitrine.Utils;
 using System.Drawing;
-using System.Drawing.Text;
 
 namespace Sitrine.Texture
 {
     public class TextTexture : Texture
     {
-        #region Protected Field
-        protected readonly TextTextureOptions options;
-        protected readonly Graphics g;
-        protected readonly PointF forePoint;
-        protected readonly PointF shadowPoint;
-        protected string text;
-
-        protected SolidBrush foreBrush = new SolidBrush(System.Drawing.Color.White);
-        protected SolidBrush shadowBrush = new SolidBrush(System.Drawing.Color.Black);
-        #endregion
-
-        #region Public Property
-        public string Text { get { return this.text; } }
-        public TextTextureOptions Options { get { return this.options; } }
-
-        public Color ForeColor
-        {
-            get
-            {
-                return this.foreBrush.Color;
-            }
-            set
-            {
-                if (this.foreBrush != null)
-                    this.foreBrush.Dispose();
-                this.foreBrush = new SolidBrush(value);
-            }
-        }
-
-        public Color ShadowColor
-        {
-            get
-            {
-                return this.shadowBrush.Color;
-            }
-            set
-            {
-                if (this.shadowBrush != null)
-                    this.shadowBrush.Dispose();
-                this.shadowBrush = new SolidBrush(value);
-            }
-        }
+        #region Private Field
+        private readonly TextRender render;
         #endregion
 
         #region Constructor
-        public TextTexture(TextTextureOptions options, Size size, bool antialias)
-            : base(new Bitmap(size.Width, size.Height))
+        public TextTexture(TextRender render, Size size)
+            : base(size)
         {
-            this.options = options;
-            this.g = Graphics.FromImage(this.bitmap);
-            this.g.TextRenderingHint = antialias ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                this.forePoint = new PointF(1, -1);
-                this.shadowPoint = new PointF(2, 0);
-            }
-            else
-            {
-                this.forePoint = new PointF(0, -2);
-                this.shadowPoint = new PointF(1, -1);
-            }
-
-            Texture.Load(this.id, this.bitmap);
+            this.render = render;
         }
         #endregion
 
         #region Public Method
         public void Draw(string text)
         {
-            if (text != this.text)
-            {
-                this.text = text;
-                this.g.Clear(this.clearColor);
-                this.DrawString(text);
-                this.g.Flush();
-                Texture.Update(this.id, this.bitmap);
-            }
+            this.render.Clear();
+            this.render.DrawString(text, 0.0f, 0.0f);
         }
 
         public void Draw(string text, float x, float y)
         {
-            this.text = text;
-            this.g.Clear(this.clearColor);
-            this.DrawString(text, x, y);
-            this.g.Flush();
+            this.render.Clear();
+            this.render.DrawString(text, x, y);
+        }
+
+        public override void Render()
+        {
+            this.render.Flush();
             Texture.Update(this.id, this.bitmap);
+            base.Render();
         }
 
         public void Clear()
         {
-            this.g.Clear(this.clearColor);
-            this.g.Flush();
-            Texture.Update(this.id, this.bitmap);
+            this.render.Clear();
         }
 
         public override void Dispose()
         {
-            this.g.Dispose();
-
+            this.render.Dispose();
             base.Dispose();
-        }
-        #endregion
-
-        #region Protected Method
-        protected void DrawString(string text)
-        {
-            int i = 0;
-            foreach (var line in text.Split('\n'))
-            {
-                float y_offset = i * (this.options.LineHeight + 1);
-
-                this.g.DrawString(line, this.options.Font, this.shadowBrush, this.shadowPoint.X, this.shadowPoint.Y + y_offset, this.options.Format);
-                this.g.DrawString(line, this.options.Font, this.foreBrush, this.forePoint.X, this.forePoint.Y + y_offset, this.options.Format);
-
-                i++;
-            }
-        }
-
-        protected void DrawString(string text, float x, float y)
-        {
-            int i = 0;
-            foreach (var line in text.Split('\n'))
-            {
-                float y_offset = i * (this.options.LineHeight + 1) + y;
-
-                this.g.DrawString(line, this.options.Font, this.shadowBrush, this.shadowPoint.X + x, this.shadowPoint.Y + y_offset, this.options.Format);
-                this.g.DrawString(line, this.options.Font, this.foreBrush, this.forePoint.X + x, this.forePoint.Y + y_offset, this.options.Format);
-
-                i++;
-            }
         }
         #endregion
     }

@@ -43,8 +43,6 @@ namespace Sitrine.Texture
         protected Bitmap bitmap;
         protected Color4 color = Color4.White;
         protected PointF position = new PointF();
-
-        protected Color clearColor = System.Drawing.Color.Transparent;
         #endregion
 
         #region Public Property
@@ -103,6 +101,11 @@ namespace Sitrine.Texture
             : this(new Bitmap(stream))
         {
         }
+
+        public Texture(Size size)
+            : this(new Bitmap(size.Width, size.Height))
+        {
+        }
         #endregion
 
         #region Public Method
@@ -117,7 +120,7 @@ namespace Sitrine.Texture
             this.bitmap.Dispose();
         }
 
-        public void Render()
+        public virtual void Render()
         {
             if (this.listId == -1)
                 this.Compile(ListMode.CompileAndExecute);

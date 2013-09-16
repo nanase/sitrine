@@ -22,23 +22,28 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using Sitrine.Utils;
 using System;
 using System.Drawing;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Sitrine.Texture
 {
-    public class MessageTexture : TextTexture, IAnimationTexture
+    public class MessageTexture : Texture, IAnimationTexture
     {
         #region Private Field
+        private readonly TextRender render;
+
         private int interval = 1;
         private int time = 0;
         private int index = 0;
         private bool endInterval = true;
         private int progressCount = 1;
-        private readonly int fontSize;
+        private string text;
 
-        private Point forePosition;
-        private Point shadowPosition;
+        private PointF forePosition;
+        private PointF shadowPosition;
         #endregion
 
         #region Public Event
@@ -61,10 +66,10 @@ namespace Sitrine.Texture
         #endregion
 
         #region Constructor
-        public MessageTexture(TextTextureOptions options, Size size)
-            : base(options, size, true)
+        public MessageTexture(TextRender render, Size size)
+            : base(size)
         {
-            this.fontSize = (int)options.Font.Size;
+            this.render = render;
         }
         #endregion
 
@@ -146,15 +151,65 @@ namespace Sitrine.Texture
 
         public void Start()
         {
-            this.Clear();
+            this.render.Clear();
 
-            this.forePosition = new Point((int)this.forePoint.X, (int)this.forePoint.Y);
-            this.shadowPosition = new Point((int)this.shadowPoint.X, (int)this.shadowPoint.Y);
+            this.forePosition = PointF.Empty;
+            this.shadowPosition = PointF.Empty;
 
             this.index = 0;
             this.time = 0;
             this.endInterval = false;
         }
         #endregion
+
+        #region Private Method
+        private void Parse(string text)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        class ControlToken
+        {
+            #region Private Field
+            private static readonly Regex tokenizer = new Regex(@"\\(.)(\[\d+\])?", RegexOptions.Compiled);
+            #endregion
+
+            #region Public Property
+            public char Operate { get; private set; }
+            public int Parameter { get; private set; }
+            #endregion
+
+            #region Constructor
+            private ControlToken(char operate, int parameter)
+            {
+                this.Operate = operate;
+                this.Parameter = parameter;
+            }
+            #endregion
+
+            #region Public Method
+            public static bool Create(out ControlToken token, string source, ref int index)
+            {
+                char operate;
+                int parameter = 0;
+
+                token = null;
+
+                Match m = ControlToken.tokenizer.Match(source, index);
+
+                if (!m.Success || 
+                    m.Groups[2].Success && !int.TryParse(m.Groups[2].Value, out parameter))
+                    return false;
+
+                operate = m.Groups[1].Value[0];
+
+                token = new ControlToken(operate, parameter);
+                index += m.Length;
+
+                return true;
+            }
+            #endregion
+        }
     }
 }

@@ -28,7 +28,7 @@ using System.Drawing.Text;
 
 namespace Sitrine.Utils
 {
-    class TextRender : IDisposable
+    public class TextRender : IDisposable
     {
         #region Private Field
         private static readonly PointF foreOffset;
@@ -185,6 +185,11 @@ namespace Sitrine.Utils
             return this.graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
         }
         #endregion
+
+        public void Clear()
+        {
+            this.graphics.Clear(Color.Transparent);
+        }
 
         public void Flush()
         {
