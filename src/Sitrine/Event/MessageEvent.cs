@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using OpenTK.Graphics;
 using Sitrine.Texture;
+using Sitrine.Utils;
 using System.Drawing;
 using ux.Component;
 
@@ -62,18 +63,6 @@ namespace Sitrine.Event
             }
         }
 
-        public Color ForeColor
-        {
-            get
-            {
-                return this.texture.ForeColor;
-            }
-            set
-            {
-                this.storyboard.AddAction(() => this.texture.ForeColor = value);
-            }
-        }
-
         public int Interval
         {
             get
@@ -97,30 +86,23 @@ namespace Sitrine.Event
                 this.storyboard.AddAction(() => this.texture.ProgressCount = value);
             }
         }
-
-        public Color ShadowColor
-        {
-            get
-            {
-                return this.texture.ShadowColor;
-            }
-            set
-            {
-                this.storyboard.AddAction(() => this.texture.ShadowColor = value);
-            }
-        }
         #endregion
 
         #region Constructor
-        public MessageEvent(Storyboard storyboard, SitrineWindow window)
+        internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextRender render, Size size)
             : base(storyboard, window)
         {
-            this.texture = new MessageTexture(this.window.TextOptions, new Size(320, 80));
-            this.texture.Position = new PointF(0, 160);
+            this.texture = new MessageTexture(render, size);
+        }
+
+        internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextOptions options, Size size)
+            : base(storyboard, window)
+        {
+            this.texture = new MessageTexture(options, size);
         }
         #endregion
 
-        #region Public Method
+        #region Public Method        
         public void Show(string text)
         {
             this.storyboard.AddAction(() =>

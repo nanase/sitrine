@@ -56,6 +56,8 @@ namespace Sitrine.Utils
                 this.brushIndex = value;
             }
         }
+
+        public TextOptions Options { get { return this.options; } }
         #endregion
 
         #region Constructor
@@ -75,9 +77,10 @@ namespace Sitrine.Utils
 
         public TextRender(TextOptions options, Bitmap baseBitmap)
         {
-            if (bitmap == null)
+            if (baseBitmap == null)
                 throw new ArgumentNullException();
 
+            this.options = options;
             this.bitmap = baseBitmap;
             this.graphics = Graphics.FromImage(baseBitmap);
         }
@@ -87,6 +90,7 @@ namespace Sitrine.Utils
             if (texture == null)
                 throw new ArgumentNullException();
 
+            this.options = options;
             this.bitmap = texture.BaseBitmap;
             this.graphics = Graphics.FromImage(texture.BaseBitmap);
         }
@@ -126,8 +130,8 @@ namespace Sitrine.Utils
             this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             int i = 0;
-            bool fore = (colorIndex > 0 && colorIndex < this.options.Brushes.Length);
             bool shadow = (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length);
+            bool fore = (colorIndex >= 0 && colorIndex < this.options.Brushes.Length);
 
             foreach (var line in text.Split('\n'))
             {
@@ -177,10 +181,10 @@ namespace Sitrine.Utils
             this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             if (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y, this.options.Format);
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y + y, this.options.Format);
 
-            if (colorIndex > 0 && colorIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[colorIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y, this.options.Format);
+            if (colorIndex >= 0 && colorIndex < this.options.Brushes.Length)
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[colorIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y, this.options.Format);
 
             return this.graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
         }
@@ -201,7 +205,5 @@ namespace Sitrine.Utils
             this.graphics.Dispose();
         }
         #endregion
-
-
     }
 }

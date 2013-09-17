@@ -36,7 +36,7 @@ namespace Sitrine.Event
         #endregion
 
         #region Constructor
-        public TextureEvent(Storyboard storyboard, SitrineWindow window)
+        internal TextureEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
             this.asignment = new Dictionary<int, int>();

@@ -29,7 +29,7 @@ namespace Sitrine.Event
     public class ProcessEvent : StoryEvent
     {
         #region Constructor
-        public ProcessEvent(Storyboard storyboard, SitrineWindow window)
+        internal ProcessEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }

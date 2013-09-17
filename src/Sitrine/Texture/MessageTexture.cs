@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using Sitrine.Utils;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -34,16 +35,14 @@ namespace Sitrine.Texture
     {
         #region Private Field
         private readonly TextRender render;
+        private readonly Queue<object> tokenQueue;
 
         private int interval = 1;
         private int time = 0;
-        private int index = 0;
         private bool endInterval = true;
         private int progressCount = 1;
-        private string text;
-
-        private PointF forePosition;
-        private PointF shadowPosition;
+        private bool updated;
+        private PointF charPosition;
         #endregion
 
         #region Public Event
@@ -70,13 +69,26 @@ namespace Sitrine.Texture
             : base(size)
         {
             this.render = render;
+            this.tokenQueue = new Queue<object>();
+        }
+
+        public MessageTexture(TextOptions options, Size size)
+            : base(size)
+        {
+            this.render = new TextRender(options, this.bitmap);
+            this.tokenQueue = new Queue<object>();
         }
         #endregion
 
         #region Public Method
-        public new void Draw(string text)
+        public void Draw(string text)
         {
-            this.text = text;
+            if (!this.Parse(text))
+            {
+                this.tokenQueue.Clear();
+                // TODO: エラー時のメッセージ報告
+            }
+
             this.TextureEnd = null;
             this.TextureUpdate = null;
             this.Start();
@@ -89,49 +101,49 @@ namespace Sitrine.Texture
 
             if (this.time >= this.interval)
             {
-                bool updated = false;
-                for (int j = Math.Min(this.index + this.progressCount, this.text.Length); this.index < j; this.index++)
+                for (int i = 0; i < this.progressCount && this.tokenQueue.Count > 0; )
                 {
-                    char c = text[this.index];
-                    if (c == '\n')
+                    object token = this.tokenQueue.Dequeue();
+
+                    if (token is char)
                     {
-                        this.forePosition = new Point((int)this.forePoint.X, this.forePosition.Y + (this.options.LineHeight + 1));
-                        this.shadowPosition = new Point((int)this.shadowPoint.X, this.shadowPosition.Y + (this.options.LineHeight + 1));
-                    }
-                    else if (c == ' ')
-                    {
-                        this.forePosition = new Point(this.forePosition.X + this.fontSize / 2, this.forePosition.Y);
-                        this.shadowPosition = new Point(this.shadowPosition.X + this.fontSize / 2, this.shadowPosition.Y);
-                    }
-                    else if (c == '　')
-                    {
-                        this.forePosition = new Point(this.forePosition.X + this.fontSize, this.forePosition.Y);
-                        this.shadowPosition = new Point(this.shadowPosition.X + this.fontSize, this.shadowPosition.Y);
+                        char c = (char)token;
+                        if (c == '\n')
+                        {
+                            this.charPosition = new PointF(0.0f, this.charPosition.Y + this.render.Options.LineHeight + 1.0f);
+                        }
+                        else if (c == ' ')
+                        {
+                            this.charPosition = new PointF(this.charPosition.X + this.render.Options.Font.Size / 2.0f, this.charPosition.Y);
+                        }
+                        else if (c == '　')
+                        {
+                            this.charPosition = new PointF(this.charPosition.X + this.render.Options.Font.Size, this.charPosition.Y);
+                        }
+                        else
+                        {
+                            this.updated = true;
+                            string ch = c.ToString();
+                            SizeF charSize = this.render.DrawChars(c.ToString(), this.charPosition);
+                            charSize.Height = 0.0f;
+                            this.charPosition = PointF.Add(this.charPosition, charSize);
+                        }
+
+                        i++;
                     }
                     else
                     {
-                        updated = true;
-                        string ch = c.ToString();
-                        this.g.DrawString(ch, this.options.Font, this.shadowBrush, this.shadowPosition, this.options.Format);
-                        this.g.DrawString(ch, this.options.Font, this.foreBrush, this.forePosition, this.options.Format);
-
-                        Size charSize = this.g.MeasureString(ch, this.options.Font, this.forePosition, this.options.Format).ToSize();
-
-                        this.forePosition = Point.Add(this.forePosition, new Size(charSize.Width, 0));
-                        this.shadowPosition = Point.Add(this.shadowPosition, new Size(charSize.Width, 0));
+                        this.Control((ControlToken)token, ref i);
                     }
                 }
 
-                if (updated)
+                if (this.updated)
                 {
-                    this.g.Flush();
-                    Texture.Update(this.id, this.bitmap);
-
                     if (this.TextureUpdate != null)
                         this.TextureUpdate(this, new EventArgs());
                 }
 
-                if (this.index >= this.text.Length)
+                if (this.tokenQueue.Count == 0)
                 {
                     this.endInterval = true;
                     if (this.TextureEnd != null)
@@ -153,19 +165,69 @@ namespace Sitrine.Texture
         {
             this.render.Clear();
 
-            this.forePosition = PointF.Empty;
-            this.shadowPosition = PointF.Empty;
-
-            this.index = 0;
+            this.charPosition = PointF.Empty;
             this.time = 0;
             this.endInterval = false;
+        }
+
+        public override void Render()
+        {
+            if (this.updated)
+            {
+                this.updated = false;
+                this.render.Flush();
+                Texture.Update(this.id, this.bitmap);
+            }
+
+            base.Render();
         }
         #endregion
 
         #region Private Method
-        private void Parse(string text)
+        private void Control(ControlToken token, ref int i)
         {
-            throw new NotImplementedException();
+            switch (token.Operate)
+            {
+                case '\\':
+                    this.updated = true;
+                    SizeF charSize = this.render.DrawChars("\\", this.charPosition);
+                    charSize.Height = 0.0f;
+                    this.charPosition = PointF.Add(this.charPosition, charSize);
+                    break;
+
+                case 'c':
+                    if (this.render.Options.Brushes.Length >= token.Parameter)
+                    {
+                        // TODO: エラー時のメッセージ報告
+                    }
+                    else
+                        this.render.BrushIndex = token.Parameter;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private bool Parse(string text)
+        {
+            ControlToken ctoken;
+            for (int i = 0, j = text.Length; i < j; i++)
+            {
+                if (text[i] == '\\')
+                {
+                    if (!ControlToken.Create(out ctoken, text, ref i))
+                        return false;
+
+                    this.tokenQueue.Enqueue(ctoken);
+                }
+                else
+                {
+                    this.tokenQueue.Enqueue(text[i]);
+                }
+            }
+
+            return true;
         }
         #endregion
 
@@ -198,7 +260,7 @@ namespace Sitrine.Texture
 
                 Match m = ControlToken.tokenizer.Match(source, index);
 
-                if (!m.Success || 
+                if (!m.Success ||
                     m.Groups[2].Success && !int.TryParse(m.Groups[2].Value, out parameter))
                     return false;
 

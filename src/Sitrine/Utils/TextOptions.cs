@@ -132,6 +132,7 @@ namespace Sitrine.Utils
 
             this.font = font;
             this.LineHeight = lineHeight;
+            this.brushes = new Brush[0];
             this.format = new StringFormat(StringFormat.GenericTypographic)
             {
                  FormatFlags = StringFormatFlags.NoWrap

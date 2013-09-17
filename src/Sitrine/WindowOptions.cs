@@ -22,7 +22,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Sitrine.Texture;
+using Sitrine.Utils;
 using System.Drawing;
 
 namespace Sitrine
@@ -61,7 +61,7 @@ namespace Sitrine
         /// <summary>
         /// テキストの表示に使用されるオプションオブジェクトを取得または設定します。このオブジェクトはデバッグ表示には使用されません。
         /// </summary>
-        public TextTextureOptions TextOptions { get; set; }
+        public TextOptions TextOptions { get; set; }
         #endregion
     }
 }

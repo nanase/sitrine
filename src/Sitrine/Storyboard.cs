@@ -26,6 +26,7 @@ using Sitrine.Event;
 using Sitrine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Sitrine
 {
@@ -38,6 +39,7 @@ namespace Sitrine
         #region Protected Field
         protected readonly LinkedList<Action> actions;
         protected readonly List<Func<bool>> listener;
+        protected readonly SitrineWindow window;
         #endregion
 
         #region Public Property
@@ -48,8 +50,10 @@ namespace Sitrine
         public int ActionCount { get { return this.actions.Count; } }
         public int ListenerCount { get { return this.listener.Count; } }
 
-        public StoryboardState State { 
-            get {
+        public StoryboardState State
+        {
+            get
+            {
                 if (this.waitTime > 0)
                     return StoryboardState.Waiting;
                 else if (this.waitTime == 0)
@@ -65,12 +69,7 @@ namespace Sitrine
         {
             this.actions = new LinkedList<Action>();
             this.listener = new List<Func<bool>>();
-            
-            this.Texture = new TextureEvent(this, window);
-            this.Process = new ProcessEvent(this, window);
-            this.Message = new MessageEvent(this, window);
-            this.Keyboard = new KeyboardEvent(this, window);
-
+            this.window = window;
             this.waitTime = 0;
         }
         #endregion
@@ -104,6 +103,38 @@ namespace Sitrine
                     i--;
                 }
             }
+        }
+
+        public void InitalizeProcess()
+        {
+            if (this.Process != null && this.Process is IDisposable)
+                ((IDisposable)this.Process).Dispose();
+
+            this.Process = new ProcessEvent(this, this.window);
+        }
+
+        public void InitalizeTexture()
+        {
+            if (this.Texture != null && this.Texture is IDisposable)
+                ((IDisposable)this.Texture).Dispose();
+
+            this.Texture = new TextureEvent(this, this.window);
+        }
+
+        public void InitalizeMessage(TextOptions options, Size size)
+        {
+            if (this.Message != null && this.Message is IDisposable)
+                ((IDisposable)this.Message).Dispose();
+
+            this.Message = new MessageEvent(this, this.window, options, size);
+        }
+
+        public void InitalizeKeyboard()
+        {
+            if (this.Keyboard != null && this.Keyboard is IDisposable)
+                ((IDisposable)this.Keyboard).Dispose();
+
+            this.Keyboard = new KeyboardEvent(this, this.window);
         }
         #endregion
 

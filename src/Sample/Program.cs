@@ -21,6 +21,12 @@ namespace Sample
 
             using (FontLoader font = new FontLoader("font/VL-Gothic-Regular.ttf"))
             {
+                TextOptions textOptions = new TextOptions(new Font(font.Family, 12f, GraphicsUnit.Pixel), 17);
+                textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black));
+                textOptions.ShadowIndex = 1;
+                textOptions.DrawShadow = true;
+                textOptions.Antialiasing = true;
+
                 WindowOptions options = new WindowOptions()
                 {
                     Title = "Sample",
@@ -28,7 +34,7 @@ namespace Sample
                     WindowSize = new Size(640, 480),
                     DebugTextFontFile = "font/88 Zen.ttf",
                     DebugTextFontSize = 8,
-                    TextOptions = new TextTextureOptions(new Font(font.Family, 12f, GraphicsUnit.Pixel), 17)
+                    TextOptions = textOptions
                 };
 
                 using (SampleWindow window = new SampleWindow(options))
@@ -42,6 +48,13 @@ namespace Sample
         public SampleStory(SitrineWindow window)
             : base(window)
         {
+            this.InitalizeProcess();
+            this.InitalizeMessage(window.TextOptions, new Size(320, 80));
+            this.InitalizeKeyboard();
+            this.InitalizeTexture();
+
+            Message.Position = new PointF(0, 160);
+
             var file = File.ReadAllLines("message.txt");
 
             Process.Wait(0.5);
@@ -93,12 +106,10 @@ namespace Sample
             base.OnLoad(e);
         }
 
-        protected override void OnUnload(EventArgs e)
-        {
-            this.textOptions.Dispose();
-
-            base.OnUnload(e);
-        }
+        //protected override void OnUnload(EventArgs e)
+        //{
+        //    base.OnUnload(e);
+        //}
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {

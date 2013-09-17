@@ -76,7 +76,7 @@ namespace Sitrine.Event
         #endregion
 
         #region Constructor
-        public KeyboardEvent(Storyboard storyboard, SitrineWindow window)
+        internal KeyboardEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }

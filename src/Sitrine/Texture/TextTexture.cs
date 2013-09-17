@@ -34,6 +34,12 @@ namespace Sitrine.Texture
         #endregion
 
         #region Constructor
+        public TextTexture(TextOptions options, Size size)
+            : base(size)
+        {
+            this.render = new TextRender(options, this.bitmap);
+        }
+
         public TextTexture(TextRender render, Size size)
             : base(size)
         {

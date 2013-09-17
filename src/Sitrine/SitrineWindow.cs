@@ -32,7 +32,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 
 namespace Sitrine
 {
@@ -43,14 +42,14 @@ namespace Sitrine
         protected readonly MusicPlayer music;        
         protected readonly DebugText debugText;
         protected readonly List<Storyboard> stories;
-        protected readonly TextTextureOptions textOptions;
+        protected readonly TextOptions textOptions;
         protected readonly TraceSource trace;
 
         protected Size targetSize;
         #endregion
 
         #region Public Property
-        public TextTextureOptions TextOptions { get { return this.textOptions; } }
+        public TextOptions TextOptions { get { return this.textOptions; } }
         public MusicPlayer Music { get { return this.music; } }
         public TextureList Textures { get { return this.textures; } }
         public IEnumerable<Storyboard> Storyboards { get { return this.stories; } }
@@ -98,7 +97,6 @@ namespace Sitrine
             this.music.Dispose();
             this.textures.Dispose();
             this.debugText.Dispose();
-            this.textOptions.Dispose();
             this.trace.Close();
         }
 

@@ -66,7 +66,6 @@
     <Compile Include="Texture\IAnimationTexture.cs" />
     <Compile Include="Texture\MessageTexture.cs" />
     <Compile Include="Texture\TextTexture.cs" />
-    <Compile Include="Texture\TextTextureOptions.cs" />
     <Compile Include="Texture\Texture.cs" />
     <Compile Include="Texture\TextureList.cs" />
     <Compile Include="Utils\BitmapController.cs" />

@@ -33,7 +33,7 @@ namespace Sitrine.Utils
     {
         #region Private Field
         private readonly FontLoader font;
-        private readonly TextTextureOptions textOptions;
+        private readonly TextOptions textOptions;
         private readonly SitrineWindow window;
         private readonly TextureList textures;
 
@@ -71,10 +71,15 @@ namespace Sitrine.Utils
         public DebugText(string fontfile, int size, SitrineWindow window, TextureList textures)
         {
             this.font = new FontLoader(fontfile);
-            this.textOptions = new TextTextureOptions(new Font(this.font.Family, size, GraphicsUnit.Pixel), size);
 
-            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, window.TextOptions.LineHeight), false);
-            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, window.TextOptions.LineHeight), false);
+            this.textOptions = new TextOptions(new Font(this.font.Family, size, GraphicsUnit.Pixel), size);
+
+            this.textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black));
+            this.textOptions.ShadowIndex = 1;
+            this.textOptions.DrawShadow = true;
+
+            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight));
+            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight));
 
             this.window = window;
             this.textures = textures;
@@ -135,7 +140,6 @@ namespace Sitrine.Utils
         public void Dispose()
         {
             this.font.Dispose();
-            this.textOptions.Dispose();
             this.debugTexture.Dispose();
             this.debugTextTexture.Dispose();
         }
