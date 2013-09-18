@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using OpenTK.Graphics;
 using Sitrine.Texture;
 using Sitrine.Utils;
+using System;
 using System.Drawing;
 using ux.Component;
 
@@ -86,6 +87,10 @@ namespace Sitrine.Event
                 this.storyboard.AddAction(() => this.texture.ProgressCount = value);
             }
         }
+
+        public EventHandler TextureUpdate { get; set; }
+
+        public EventHandler TextureEnd { get; set; }
         #endregion
 
         #region Constructor
@@ -108,8 +113,17 @@ namespace Sitrine.Event
             this.storyboard.AddAction(() =>
             {
                 this.texture.Draw(text);
-                this.texture.TextureUpdate += (s, e2) => this.window.Music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
-                this.texture.TextureEnd += (s, e2) => this.storyboard.Keyboard.WaitForOK(() => this.window.Textures.Remove(this.texture, false));
+
+                if (this.TextureUpdate != null)
+                    this.texture.TextureUpdate += this.TextureUpdate;
+
+                this.texture.TextureEnd += (s, e2) =>
+                    {
+                        if (this.TextureEnd != null)
+                            this.TextureEnd(s, e2);
+
+                        this.storyboard.Keyboard.WaitForOK(() => this.window.Textures.Remove(this.texture, false));
+                    };
 
                 this.window.Textures.AddLast(this.texture);
                 this.storyboard.Pause();

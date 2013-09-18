@@ -33,6 +33,13 @@ namespace Sitrine
     public abstract class Storyboard
     {
         #region Private Field
+        #region Events
+        private TextureEvent texture;
+        private ProcessEvent process;
+        private MessageEvent message;
+        private KeyboardEvent keyboard;
+        #endregion
+
         private int waitTime;
         #endregion
 
@@ -43,13 +50,25 @@ namespace Sitrine
         #endregion
 
         #region Public Property
-        public TextureEvent Texture { get; private set; }
-        public ProcessEvent Process { get; private set; }
-        public MessageEvent Message { get; private set; }
-        public KeyboardEvent Keyboard { get; private set; }
+        #region Events
+        public TextureEvent Texture { get { return this.texture; } }
+        public ProcessEvent Process { get { return this.process; } }
+        public KeyboardEvent Keyboard { get { return this.keyboard; } }
+
+        public MessageEvent Message
+        {
+            get
+            {
+                if (this.message == null)
+                    throw new Exception("MessageEvent は初期化されていません。Storyboard.InitalizeMessage メソッドを呼び出して初期化してください。");
+                else
+                    return this.message;
+            }
+        }
+        #endregion
+
         public int ActionCount { get { return this.actions.Count; } }
         public int ListenerCount { get { return this.listener.Count; } }
-
         public StoryboardState State
         {
             get
@@ -71,6 +90,10 @@ namespace Sitrine
             this.listener = new List<Func<bool>>();
             this.window = window;
             this.waitTime = 0;
+
+            this.process = new ProcessEvent(this, this.window);
+            this.texture = new TextureEvent(this, this.window);
+            this.keyboard = new KeyboardEvent(this, this.window);
         }
         #endregion
 
@@ -105,36 +128,12 @@ namespace Sitrine
             }
         }
 
-        public void InitalizeProcess()
-        {
-            if (this.Process != null && this.Process is IDisposable)
-                ((IDisposable)this.Process).Dispose();
-
-            this.Process = new ProcessEvent(this, this.window);
-        }
-
-        public void InitalizeTexture()
-        {
-            if (this.Texture != null && this.Texture is IDisposable)
-                ((IDisposable)this.Texture).Dispose();
-
-            this.Texture = new TextureEvent(this, this.window);
-        }
-
         public void InitalizeMessage(TextOptions options, Size size)
         {
-            if (this.Message != null && this.Message is IDisposable)
-                ((IDisposable)this.Message).Dispose();
+            if (this.message != null && this.message is IDisposable)
+                ((IDisposable)this.message).Dispose();
 
-            this.Message = new MessageEvent(this, this.window, options, size);
-        }
-
-        public void InitalizeKeyboard()
-        {
-            if (this.Keyboard != null && this.Keyboard is IDisposable)
-                ((IDisposable)this.Keyboard).Dispose();
-
-            this.Keyboard = new KeyboardEvent(this, this.window);
+            this.message = new MessageEvent(this, this.window, options, size);
         }
         #endregion
 

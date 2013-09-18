@@ -27,7 +27,7 @@ namespace Sample
                     DrawShadow = true,
                     Antialiasing = true
                 };
-                textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black), Color.OrangeRed);
+                textOptions.SetSolidBrushes(Color.White, Color.Black, Color.OrangeRed);
 
                 WindowOptions options = new WindowOptions()
                 {
@@ -49,13 +49,11 @@ namespace Sample
     {
         public SampleStory(SitrineWindow window)
             : base(window)
-        {
-            this.InitalizeProcess();
+        {       
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
-            this.InitalizeKeyboard();
-            this.InitalizeTexture();
 
             Message.Position = new PointF(0, 160);
+            Message.TextureUpdate = (s, e2) => this.window.Music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
 
             var file = File.ReadAllLines("message.txt");
 
