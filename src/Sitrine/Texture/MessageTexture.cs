@@ -164,7 +164,9 @@ namespace Sitrine.Texture
         public void Start()
         {
             this.render.Clear();
+            this.render.Flush();
 
+            this.updated = true;
             this.charPosition = PointF.Empty;
             this.time = 0;
             this.endInterval = false;
@@ -196,7 +198,7 @@ namespace Sitrine.Texture
                     break;
 
                 case 'c':
-                    if (this.render.Options.Brushes.Length >= token.Parameter)
+                    if (this.render.Options.Brushes.Length <= token.Parameter)
                     {
                         // TODO: エラー時のメッセージ報告
                     }
@@ -234,7 +236,7 @@ namespace Sitrine.Texture
         class ControlToken
         {
             #region Private Field
-            private static readonly Regex tokenizer = new Regex(@"\\(.)(\[\d+\])?", RegexOptions.Compiled);
+            private static readonly Regex tokenizer = new Regex(@"\\(.)(?:\[(\d+)\])?", RegexOptions.Compiled);
             #endregion
 
             #region Public Property
@@ -267,7 +269,7 @@ namespace Sitrine.Texture
                 operate = m.Groups[1].Value[0];
 
                 token = new ControlToken(operate, parameter);
-                index += m.Length;
+                index += m.Length - 1;
 
                 return true;
             }

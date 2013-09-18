@@ -50,7 +50,7 @@ namespace Sitrine.Utils
             }
             set
             {
-                if (value < 0 || value >= this.options.Brushes.Length)
+                if (value < 0)
                     throw new ArgumentOutOfRangeException();
 
                 this.brushIndex = value;

@@ -102,7 +102,7 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Public Method        
+        #region Public Method
         public void Show(string text)
         {
             this.storyboard.AddAction(() =>

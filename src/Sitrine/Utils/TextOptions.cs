@@ -86,7 +86,7 @@ namespace Sitrine.Utils
             }
             set
             {
-                if (value < 0 || value >= this.brushes.Length)
+                if (value < 0)
                     throw new ArgumentOutOfRangeException();
 
                 this.shadowIndex = value;

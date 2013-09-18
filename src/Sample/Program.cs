@@ -21,11 +21,13 @@ namespace Sample
 
             using (FontLoader font = new FontLoader("font/VL-Gothic-Regular.ttf"))
             {
-                TextOptions textOptions = new TextOptions(new Font(font.Family, 12f, GraphicsUnit.Pixel), 17);
-                textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black));
-                textOptions.ShadowIndex = 1;
-                textOptions.DrawShadow = true;
-                textOptions.Antialiasing = true;
+                TextOptions textOptions = new TextOptions(new Font(font.Family, 12f, GraphicsUnit.Pixel), 17)
+                {
+                    ShadowIndex = 1,
+                    DrawShadow = true,
+                    Antialiasing = true
+                };
+                textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black), Color.OrangeRed);
 
                 WindowOptions options = new WindowOptions()
                 {
