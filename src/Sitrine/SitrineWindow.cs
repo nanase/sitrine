@@ -66,7 +66,7 @@ namespace Sitrine
             this.stories = new List<Storyboard>();
             this.textOptions = options.TextOptions;
 
-            this.debugText = new DebugText(options.DebugTextFontFile, options.DebugTextFontSize, this, this.textures);
+            this.debugText = new DebugText(options.DebugTextOptions, this, this.textures);
             this.trace = new TraceSource("Sitrine", SourceLevels.All);            
             this.trace.Listeners.Add(new DebugTextListener(this.debugText));     
         }

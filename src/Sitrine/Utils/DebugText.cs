@@ -32,7 +32,6 @@ namespace Sitrine.Utils
     public class DebugText : IDisposable
     {
         #region Private Field
-        private readonly FontLoader font;
         private readonly TextOptions textOptions;
         private readonly SitrineWindow window;
         private readonly TextureList textures;
@@ -68,11 +67,9 @@ namespace Sitrine.Utils
         #endregion
 
         #region Constructor
-        public DebugText(string fontfile, int size, SitrineWindow window, TextureList textures)
+        public DebugText(TextOptions options, SitrineWindow window, TextureList textures)
         {
-            this.font = new FontLoader(fontfile);
-
-            this.textOptions = new TextOptions(new Font(this.font.Family, size, GraphicsUnit.Pixel), size);
+            this.textOptions = options;
 
             this.textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black));
             this.textOptions.ShadowIndex = 1;
@@ -139,7 +136,6 @@ namespace Sitrine.Utils
 
         public void Dispose()
         {
-            this.font.Dispose();
             this.debugTexture.Dispose();
             this.debugTextTexture.Dispose();
         }

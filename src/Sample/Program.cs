@@ -20,6 +20,7 @@ namespace Sample
                 return;
 
             using (FontLoader font = new FontLoader("font/VL-Gothic-Regular.ttf"))
+            using (FontLoader debugFont = new FontLoader("font/88 Zen.ttf"))
             {
                 TextOptions textOptions = new TextOptions(new Font(font.Family, 12f, GraphicsUnit.Pixel), 17)
                 {
@@ -29,13 +30,19 @@ namespace Sample
                 };
                 textOptions.SetSolidBrushes(Color.White, Color.Black, Color.OrangeRed);
 
+                TextOptions debugTextOptions = new TextOptions(new Font(debugFont.Family, 8f, GraphicsUnit.Pixel), 8)
+                {
+                    ShadowIndex = 1,
+                    DrawShadow = true,
+                };
+                debugTextOptions.SetSolidBrushes(Color.White, Color.Black);
+
                 WindowOptions options = new WindowOptions()
                 {
                     Title = "Sample",
                     TargetSize = new Size(320, 240),
                     WindowSize = new Size(640, 480),
-                    DebugTextFontFile = "font/88 Zen.ttf",
-                    DebugTextFontSize = 8,
+                    DebugTextOptions = debugTextOptions,
                     TextOptions = textOptions
                 };
 

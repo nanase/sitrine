@@ -51,12 +51,7 @@ namespace Sitrine
         /// <summary>
         /// デバッグ表示に使用されるフォントファイル名を取得または設定します。
         /// </summary>
-        public string DebugTextFontFile { get; set; }
-
-        /// <summary>
-        /// デバッグ表示に使用されるフォントのサイズを取得または設定します。
-        /// </summary>
-        public int DebugTextFontSize { get; set; }
+        public TextOptions DebugTextOptions { get; set; }
 
         /// <summary>
         /// テキストの表示に使用されるオプションオブジェクトを取得または設定します。このオブジェクトはデバッグ表示には使用されません。
