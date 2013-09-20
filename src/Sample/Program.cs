@@ -1,7 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Sitrine;
-using Sitrine.Texture;
 using Sitrine.Utils;
 using System;
 using System.Diagnostics;
@@ -112,11 +111,6 @@ namespace Sample
 
             base.OnLoad(e);
         }
-
-        //protected override void OnUnload(EventArgs e)
-        //{
-        //    base.OnUnload(e);
-        //}
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {

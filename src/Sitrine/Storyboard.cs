@@ -60,7 +60,7 @@ namespace Sitrine
             get
             {
                 if (this.message == null)
-                    throw new Exception("MessageEvent は初期化されていません。Storyboard.InitalizeMessage メソッドを呼び出して初期化してください。");
+                    throw new EventNotInitalizedException("MessageEvent", "Storyboard.InitalizeMessage");
                 else
                     return this.message;
             }
