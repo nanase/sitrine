@@ -27,16 +27,22 @@ using System;
 
 namespace Sitrine.Event
 {
+    /// <summary>
+    /// キーボードに関連するイベントをスケジューリングします。
+    /// </summary>
     public class KeyboardEvent : StoryEvent
     {
         #region Private Field
         private bool keyUpFlag;
 
-        private Key[] okKeys = new[] { Key.Enter, Key.Space, Key.Z };
+        private Key[] okKeys = new[] { Key.Enter, Key.KeypadEnter, Key.Space, Key.Z };
         private Key[] cancelKeys = new[] { Key.BackSpace, Key.X };
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// OK (肯定) 入力に用いる Key 列挙体の配列を取得または設定します。
+        /// </summary>
         public Key[] OKKeys
         {
             get
@@ -54,6 +60,9 @@ namespace Sitrine.Event
             }
         }
 
+        /// <summary>
+        /// キャンセル (否定) 入力に用いる Key 列挙体の配列を取得または設定します。
+        /// </summary>
         public Key[] CancelKeys
         {
             get
@@ -80,6 +89,10 @@ namespace Sitrine.Event
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// OK キーが入力されるまでストーリーボードを停止します。
+        /// </summary>
+        /// <param name="callback">動作が再開したときに呼び出される処理。</param>
         public void WaitForOK(Action callback = null)
         {
             if (this.storyboard.State != StoryboardState.Started)
@@ -88,6 +101,10 @@ namespace Sitrine.Event
                 this.storyboard.AddAction(() => this.Listen(callback, this.okKeys));
         }
 
+        /// <summary>
+        /// キャンセル キーが入力されるまでストーリーボードを停止します。
+        /// </summary>
+        /// <param name="callback">動作が再開したときに呼び出される処理。</param>
         public void WaitForCancel(Action callback = null)
         {
             if (this.storyboard.State != StoryboardState.Started)
@@ -96,6 +113,11 @@ namespace Sitrine.Event
                 this.storyboard.AddAction(() => this.Listen(callback, this.cancelKeys));
         }
 
+        /// <summary>
+        /// 指定されたキーのいずれかが入力されるまでストーリーボードを停止します。
+        /// </summary>
+        /// <param name="callback">動作が再開した時に呼び出される処理。</param>
+        /// <param name="keys">入力を待つキー。</param>
         public void WaitFor(Action callback = null, params Key[] keys)
         {
             if (this.storyboard.State != StoryboardState.Started)

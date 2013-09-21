@@ -31,6 +31,7 @@ namespace Sitrine.Texture
     {
         #region Private Field
         private readonly TextRender render;
+        private bool updated;
         #endregion
 
         #region Constructor
@@ -52,24 +53,33 @@ namespace Sitrine.Texture
         {
             this.render.Clear();
             this.render.DrawString(text, 0.0f, 0.0f);
+
+            this.updated = true;
         }
 
         public void Draw(string text, float x, float y)
         {
             this.render.Clear();
             this.render.DrawString(text, x, y);
+            this.updated = true;
         }
 
         public override void Render()
         {
-            this.render.Flush();
-            Texture.Update(this.id, this.bitmap);
+            if (this.updated)
+            {
+                this.updated = false;
+                this.render.Flush();
+                Texture.Update(this.id, this.bitmap);
+            }
+
             base.Render();
         }
 
         public void Clear()
         {
             this.render.Clear();
+            this.updated = true;
         }
 
         public override void Dispose()

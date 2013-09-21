@@ -22,14 +22,17 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using OpenTK.Audio;
-using OpenTK.Audio.OpenAL;
 using System;
 using System.Threading.Tasks;
+using OpenTK.Audio;
+using OpenTK.Audio.OpenAL;
 using uxMidi;
 
 namespace Sitrine.Audio
 {
+    /// <summary>
+    /// 外部のシンセサイザを用いて音楽を発音、演奏する機能を提供します。
+    /// </summary>
     public class MusicPlayer : IDisposable
     {
         #region Private Field
@@ -48,10 +51,16 @@ namespace Sitrine.Audio
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// シンセサイザと接続されるコネクタオブジェクトを取得します。
+        /// </summary>
         public SmfConnector Connector { get; private set; }
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// MusicPlayer クラスの新しいインスタンスを初期化します。
+        /// </summary>
         public MusicPlayer()
         {
             this.context = new AudioContext();
@@ -73,18 +82,27 @@ namespace Sitrine.Audio
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// 再生を開始します。
+        /// </summary>
         public void Play()
         {
             this.Connector.Play();
             this.Connector.Master.Play();
         }
 
+        /// <summary>
+        /// 再生を停止します。
+        /// </summary>
         public void Stop()
         {
             this.Connector.Master.Stop();
             this.Connector.Stop();
         }
 
+        /// <summary>
+        /// このオブジェクトで使われているリソースを開放します。
+        /// </summary>
         public void Dispose()
         {
             this.reqEnd = true;
@@ -101,7 +119,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Private Method        
+        #region Private Method
         private void Update()
         {
             while (!this.reqEnd)
