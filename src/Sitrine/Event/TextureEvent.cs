@@ -28,6 +28,9 @@ using System.IO;
 
 namespace Sitrine.Event
 {
+    /// <summary>
+    /// テクスチャの管理に関わるイベントをスケジューリングします。
+    /// </summary>
     public class TextureEvent : StoryEvent
     {
         #region Private Field
@@ -43,21 +46,44 @@ namespace Sitrine.Event
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// 指定された ID とビットマップから新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         public void Create(int id, Bitmap bitmap)
         {
             this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
         }
 
+        /// <summary>
+        /// 指定された ID とビットマップデータを格納するストリームから新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
         public void Create(int id, Stream stream)
         {
             this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
         }
 
+        /// <summary>
+        /// 指定された ID とビットマップファイルから新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="filename">ビットマップデータを格納したファイル名。</param>
         public void Create(int id, string filename)
         {
             this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
         }
 
+        /// <summary>
+        /// 指定された ID のテクスチャを不透明にし、画面上に表示されるようにします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
         public void Show(int id)
         {
             this.storyboard.AddAction(() =>
@@ -72,6 +98,11 @@ namespace Sitrine.Event
             });
         }
 
+        /// <summary>
+        /// 指定された ID のテクスチャを完全不透明にし、画面上から隠します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
         public void Hide(int id)
         {
             this.storyboard.AddAction(() =>
@@ -86,6 +117,11 @@ namespace Sitrine.Event
             });
         }
 
+        /// <summary>
+        /// 指定された ID のテクスチャのリソースを解放し画面上から消去します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
         public void Clear(int id)
         {
             this.storyboard.AddAction(() =>
@@ -97,6 +133,10 @@ namespace Sitrine.Event
             });
         }
 
+        /// <summary>
+        /// 画面上のテクスチャをすべて解放します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
         public void ClearAll()
         {
             this.storyboard.AddAction(() =>

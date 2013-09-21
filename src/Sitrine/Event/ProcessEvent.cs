@@ -26,6 +26,9 @@ using System;
 
 namespace Sitrine.Event
 {
+    /// <summary>
+    /// ストーリーボードの進行に関わるイベントをスケジューリングします。
+    /// </summary>
     public class ProcessEvent : StoryEvent
     {
         #region Constructor
@@ -36,14 +39,27 @@ namespace Sitrine.Event
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// 指定された秒数だけストーリーボードの動作を停止します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="seconds"></param>
         public void Wait(double seconds)
         {
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
 
+            if (this.window.TargetUpdateFrequency < 0.0)
+                throw new Exception("TargetUpdateFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'updates_per_second' に値を指定してください。");
+
             this.storyboard.AddAction(() => this.storyboard.SetWait((int)Math.Round(this.window.TargetUpdateFrequency * seconds)));
         }
 
+        /// <summary>
+        /// 指定されたフレーム数だけストーリーボードの動作を停止します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="frame"></param>
         public void WaitFrame(int frame)
         {
             if (frame < 0)
@@ -52,6 +68,10 @@ namespace Sitrine.Event
             this.storyboard.AddAction(() => this.storyboard.SetWait(frame));
         }
 
+        /// <summary>
+        /// ストーリーボードの直後のイベントをすべて無視し、ストーリーボードを終了させます。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
         public void Break()
         {
             this.storyboard.AddAction(this.storyboard.Break);

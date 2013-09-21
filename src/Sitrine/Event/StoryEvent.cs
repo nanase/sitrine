@@ -22,11 +22,11 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using System;
-using System.Collections.Generic;
-
 namespace Sitrine.Event
 {
+    /// <summary>
+    /// ストーリーボードに追加されるイベントの抽象クラスです。
+    /// </summary>
     public abstract class StoryEvent
     {
         #region Protected Field
@@ -35,11 +35,16 @@ namespace Sitrine.Event
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// ストーリーボードオブジェクトとそれが実行されるウィンドウオブジェクトを指定して Storyboard クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storyboard">対象となる Storyboard オブジェクト。</param>
+        /// <param name="window">ストーリーボードが実行される SitrineWindow オブジェクト。</param>
         public StoryEvent(Storyboard storyboard, SitrineWindow window)
         {
             this.storyboard = storyboard;
             this.window = window;
         }
-        #endregion        
+        #endregion
     }
 }

@@ -1,12 +1,12 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using Sitrine;
-using Sitrine.Utils;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using Sitrine;
+using Sitrine.Utils;
 using ux.Component;
 
 namespace Sample
@@ -55,7 +55,7 @@ namespace Sample
     {
         public SampleStory(SitrineWindow window)
             : base(window)
-        {       
+        {
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
             Message.Position = new PointF(0, 160);

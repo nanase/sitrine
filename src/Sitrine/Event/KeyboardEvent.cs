@@ -22,8 +22,8 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using OpenTK.Input;
 using System;
+using OpenTK.Input;
 
 namespace Sitrine.Event
 {
@@ -91,6 +91,7 @@ namespace Sitrine.Event
         #region Public Method
         /// <summary>
         /// OK キーが入力されるまでストーリーボードを停止します。
+        /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
         /// </summary>
         /// <param name="callback">動作が再開したときに呼び出される処理。</param>
         public void WaitForOK(Action callback = null)
@@ -103,6 +104,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// キャンセル キーが入力されるまでストーリーボードを停止します。
+        /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
         /// </summary>
         /// <param name="callback">動作が再開したときに呼び出される処理。</param>
         public void WaitForCancel(Action callback = null)
@@ -115,6 +117,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// 指定されたキーのいずれかが入力されるまでストーリーボードを停止します。
+        /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
         /// </summary>
         /// <param name="callback">動作が再開した時に呼び出される処理。</param>
         /// <param name="keys">入力を待つキー。</param>

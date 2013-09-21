@@ -101,7 +101,7 @@ namespace Sitrine.Audio
         }
 
         /// <summary>
-        /// このオブジェクトで使われているリソースを開放します。
+        /// このオブジェクトで使われているリソースを解放します。
         /// </summary>
         public void Dispose()
         {

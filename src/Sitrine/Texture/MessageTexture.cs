@@ -31,6 +31,9 @@ using System.Text.RegularExpressions;
 
 namespace Sitrine.Texture
 {
+    /// <summary>
+    /// 文字列をアニメーション表示するためのテクスチャクラスです。
+    /// </summary>
     public class MessageTexture : Texture, IAnimationTexture
     {
         #region Private Field
@@ -46,17 +49,30 @@ namespace Sitrine.Texture
         #endregion
 
         #region Public Event
+        /// <summary>
+        /// テクスチャが更新されるたびに発生します。
+        /// </summary>
         public event EventHandler TextureUpdate;
+
+        /// <summary>
+        /// テクスチャの更新が終了したときに発生します。
+        /// </summary>
         public event EventHandler TextureEnd;
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// メッセージの更新フレーム間隔を取得または設定します。
+        /// </summary>
         public int Interval
         {
             get { return this.interval; }
             set { if (value <= 0) throw new ArgumentOutOfRangeException(); else this.interval = value; }
         }
 
+        /// <summary>
+        /// メッセージの更新時の文字数を取得または設定します。
+        /// </summary>
         public int ProgressCount
         {
             get { return this.progressCount; }

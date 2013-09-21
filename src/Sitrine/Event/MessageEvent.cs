@@ -22,15 +22,17 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using System;
+using System.Drawing;
 using OpenTK.Graphics;
 using Sitrine.Texture;
 using Sitrine.Utils;
-using System;
-using System.Drawing;
-using ux.Component;
 
 namespace Sitrine.Event
 {
+    /// <summary>
+    /// メッセージ表示に関するイベントをスケジューリングします。
+    /// </summary>
     public class MessageEvent : StoryEvent
     {
         #region Private Field
@@ -38,8 +40,14 @@ namespace Sitrine.Event
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// メッセージ表示に関連付けられている Texture オブジェクトを取得します。
+        /// </summary>
         public MessageTexture Texture { get { return this.texture; } }
 
+        /// <summary>
+        /// 画面左上を原点にしたメッセージの座標を取得または設定します。設定は遅延実行されます。
+        /// </summary>
         public PointF Position
         {
             get
@@ -52,6 +60,9 @@ namespace Sitrine.Event
             }
         }
 
+        /// <summary>
+        /// メッセージの反射色 (ベースとなる色) を取得または設定します。設定は遅延実行されます。
+        /// </summary>
         public Color4 Color
         {
             get
@@ -64,6 +75,9 @@ namespace Sitrine.Event
             }
         }
 
+        /// <summary>
+        /// メッセージの文字が更新されるフレーム間隔を取得または設定します。設定は遅延実行されます。
+        /// </summary>
         public int Interval
         {
             get
@@ -76,6 +90,9 @@ namespace Sitrine.Event
             }
         }
 
+        /// <summary>
+        /// メッセージの文字が更新されるたびに描画される文字数を取得または設定します。設定は遅延実行されます。
+        /// </summary>
         public int ProgressCount
         {
             get
@@ -88,8 +105,14 @@ namespace Sitrine.Event
             }
         }
 
+        /// <summary>
+        /// メッセージが更新されるたびに実行されるイベントを取得または設定します。
+        /// </summary>
         public EventHandler TextureUpdate { get; set; }
 
+        /// <summary>
+        /// メッセージの更新が終了したときに実行されるイベントを取得または設定します。
+        /// </summary>
         public EventHandler TextureEnd { get; set; }
         #endregion
 
@@ -108,6 +131,11 @@ namespace Sitrine.Event
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// 指定された文字列の描画を開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="text"></param>
         public void Show(string text)
         {
             this.storyboard.AddAction(() =>

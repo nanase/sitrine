@@ -24,14 +24,28 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace Sitrine.Texture
 {
+    /// <summary>
+    /// アニメーション動作するテクスチャが実装すべき機能を定義します。
+    /// </summary>
     public interface IAnimationTexture
     {
         #region Property
+        /// <summary>
+        /// アニメーションが更新されるフレーム間隔を取得または設定します。
+        /// </summary>
         int Interval { get; set; }
         #endregion
 
         #region Method
+        /// <summary>
+        /// テクスチャの更新を実行します。
+        /// </summary>
+        /// <returns>テクスチャが更新された時 true、それ以外の時 false。</returns>
         bool Update();
+
+        /// <summary>
+        /// アニメーションを開始します。
+        /// </summary>
         void Start();
         #endregion        
     }
