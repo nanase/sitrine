@@ -26,7 +26,6 @@ using Sitrine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Sitrine.Texture
@@ -81,6 +80,11 @@ namespace Sitrine.Texture
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// テキストレンダラと描画サイズを指定して新しい MessegeTexture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="render">テキストレンダラ。</param>
+        /// <param name="size">描画サイズ。</param>
         public MessageTexture(TextRender render, Size size)
             : base(size)
         {
@@ -88,6 +92,11 @@ namespace Sitrine.Texture
             this.tokenQueue = new Queue<object>();
         }
 
+        /// <summary>
+        /// テキストオプションと描画サイズを指定して新しい MessageTexture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="options">テキストオプション。</param>
+        /// <param name="size">描画サイズ。</param>
         public MessageTexture(TextOptions options, Size size)
             : base(size)
         {
@@ -97,6 +106,10 @@ namespace Sitrine.Texture
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// 指定された文字を解析し、描画を予約します。
+        /// </summary>
+        /// <param name="text">表示される文字列およびコマンド。</param>
         public void Draw(string text)
         {
             if (!this.Parse(text))
@@ -110,6 +123,10 @@ namespace Sitrine.Texture
             this.Start();
         }
 
+        /// <summary>
+        /// 予約された文字列を指定された文字数だけ描画します。
+        /// </summary>
+        /// <returns>ビットマップに変更が加わりフラッシュの必要があるときは true、それ以外のとき false。</returns>
         public bool Update()
         {
             if (this.endInterval)
@@ -168,7 +185,7 @@ namespace Sitrine.Texture
 
                 this.time = 0;
 
-                return true;
+                return this.updated;
             }
             else
             {
@@ -177,6 +194,9 @@ namespace Sitrine.Texture
             }
         }
 
+        /// <summary>
+        /// ビットマップをクリアし、文字列描画を開始します。
+        /// </summary>
         public void Start()
         {
             this.render.Clear();
@@ -188,6 +208,9 @@ namespace Sitrine.Texture
             this.endInterval = false;
         }
 
+        /// <summary>
+        /// ビットマップに変更を確定させ、画面上にメッセージを表示します。
+        /// </summary>
         public override void Render()
         {
             if (this.updated)

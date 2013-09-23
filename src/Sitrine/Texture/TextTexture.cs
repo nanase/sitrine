@@ -27,6 +27,9 @@ using System.Drawing;
 
 namespace Sitrine.Texture
 {
+    /// <summary>
+    /// 変化を伴わない単純な文字列を描画するテクスチャです。
+    /// </summary>
     public class TextTexture : Texture
     {
         #region Private Field
@@ -35,20 +38,34 @@ namespace Sitrine.Texture
         #endregion
 
         #region Constructor
-        public TextTexture(TextOptions options, Size size)
-            : base(size)
-        {
-            this.render = new TextRender(options, this.bitmap);
-        }
-
+        /// <summary>
+        /// テキストレンダラと描画サイズを指定して新しい TextTexture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="render">テキストレンダラ。</param>
+        /// <param name="size">描画サイズ。</param>
         public TextTexture(TextRender render, Size size)
             : base(size)
         {
             this.render = render;
         }
+
+        /// <summary>
+        /// テキストオプションと描画サイズを指定して新しい TextTexture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="options">テキストオプション。</param>
+        /// <param name="size">描画サイズ。</param>
+        public TextTexture(TextOptions options, Size size)
+            : base(size)
+        {
+            this.render = new TextRender(options, this.bitmap);
+        }        
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// 指定された文字列を描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
         public void Draw(string text)
         {
             this.render.Clear();
@@ -57,6 +74,12 @@ namespace Sitrine.Texture
             this.updated = true;
         }
 
+        /// <summary>
+        /// 文字列を指定された座標に描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="x">描画位置の X 座標。</param>
+        /// <param name="y">描画位置の Y 座標。</param>
         public void Draw(string text, float x, float y)
         {
             this.render.Clear();
@@ -64,6 +87,9 @@ namespace Sitrine.Texture
             this.updated = true;
         }
 
+        /// <summary>
+        /// 描画を確定させ、画面上に文字列を表示します。
+        /// </summary>
         public override void Render()
         {
             if (this.updated)
@@ -76,12 +102,18 @@ namespace Sitrine.Texture
             base.Render();
         }
 
+        /// <summary>
+        /// ビットマップをクリアします。
+        /// </summary>
         public void Clear()
         {
             this.render.Clear();
             this.updated = true;
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
         public override void Dispose()
         {
             this.render.Dispose();

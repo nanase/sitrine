@@ -32,6 +32,9 @@ using System.IO;
 
 namespace Sitrine.Texture
 {
+    /// <summary>
+    /// ビットマップを画面上に描画するためのテクスチャクラスです。
+    /// </summary>
     public class Texture : IDisposable
     {
         #region Private Field
@@ -46,12 +49,29 @@ namespace Sitrine.Texture
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// OpenGL で使われているテクスチャの ID を取得します。
+        /// </summary>
         public int ID { get { return this.id; } }
+
+        /// <summary>
+        /// 表示されるビットマップオブジェクトを取得します。
+        /// </summary>
         public Bitmap BaseBitmap { get { return this.bitmap; } }
 
+        /// <summary>
+        /// ビットマップの幅を取得します。
+        /// </summary>
         public int Width { get { return this.bitmap.Width; } }
+
+        /// <summary>
+        /// ビットマップの高さを取得します。
+        /// </summary>
         public int Height { get { return this.bitmap.Height; } }
 
+        /// <summary>
+        /// ビットマップの画面上の位置を取得または設定します。
+        /// </summary>
         public PointF Position
         {
             get { return this.position; }
@@ -67,6 +87,9 @@ namespace Sitrine.Texture
             }
         }
 
+        /// <summary>
+        /// テクスチャの反射光 (ポリゴンのカラー) を取得または設定します。
+        /// </summary>
         public Color4 Color
         {
             get { return this.color; }
@@ -84,6 +107,10 @@ namespace Sitrine.Texture
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// ビットマップを指定して新しい Texture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="bitmap">関連付けられるビットマップ。</param>
         public Texture(Bitmap bitmap)
         {
             this.bitmap = bitmap;
@@ -92,16 +119,28 @@ namespace Sitrine.Texture
             Texture.Load(this.id, bitmap);
         }
 
+        /// <summary>
+        /// ビットマップを格納するファイル名を指定して新しい Texture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="filename">読み込まれるファイル。</param>
         public Texture(string filename)
             : this(new Bitmap(filename))
         {
         }
 
+        /// <summary>
+        /// ビットマップを格納するストリームを指定して新しい Texture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="stream">読み取り可能なストリーム。</param>
         public Texture(Stream stream)
             : this(new Bitmap(stream))
         {
         }
 
+        /// <summary>
+        /// サイズを指定して空のビットマップに関連付けられた新しい Texture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="size">ビットマップのサイズ。</param>
         public Texture(Size size)
             : this(new Bitmap(size.Width, size.Height))
         {
@@ -109,6 +148,9 @@ namespace Sitrine.Texture
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
         public virtual void Dispose()
         {
             int id = this.id;
@@ -120,6 +162,9 @@ namespace Sitrine.Texture
             this.bitmap.Dispose();
         }
 
+        /// <summary>
+        /// 画面上にテクスチャを表示します。
+        /// </summary>
         public virtual void Render()
         {
             if (this.listId == -1)
@@ -130,6 +175,11 @@ namespace Sitrine.Texture
         #endregion
 
         #region Public Static Method
+        /// <summary>
+        /// 指定されたテクスチャ ID にビットマップを差し替えます。
+        /// </summary>
+        /// <param name="id">テクスチャ ID。</param>
+        /// <param name="bitmap">差し替えるビットマップ。</param>
         public static void Update(int id, Bitmap bitmap)
         {
             DebugText.IncrementUpdateCount();
@@ -139,6 +189,11 @@ namespace Sitrine.Texture
                 GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bitmap.Width, bitmap.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bc.Scan0);
         }
 
+        /// <summary>
+        /// 指定されたテクスチャ ID にビットマップを割り当てます。
+        /// </summary>
+        /// <param name="id">テクスチャ ID。</param>
+        /// <param name="bitmap">割り当てるビットマップ。</param>
         public static void Load(int id, Bitmap bitmap)
         {
             DebugText.IncrementLoadCount();
@@ -150,6 +205,11 @@ namespace Sitrine.Texture
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bc.Scan0);
         }
 
+        /// <summary>
+        /// 指定されたテクスチャ ID にファイル名が指し示すビットマップを割り当てます。
+        /// </summary>
+        /// <param name="id">テクスチャ ID。</param>
+        /// <param name="filename">読み込まれるファイル。</param>
         public static void Load(int id, string filename)
         {
             using (Bitmap bitmap = new Bitmap(filename))

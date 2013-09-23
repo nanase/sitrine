@@ -23,15 +23,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Sitrine.Texture
 {
+    /// <summary>
+    /// 複数のテクスチャの描画順を管理するリスト構造を提供します。
+    /// </summary>
     public class TextureList : SortedList<int, Texture>, IDisposable
     {
         #region Public Method
+        /// <summary>
+        /// リスト上のテクスチャを必要に応じて更新し、画面上に表示させます。
+        /// </summary>
         public void Render()
         {
             foreach (Texture item in this.Values)
@@ -43,6 +47,11 @@ namespace Sitrine.Texture
             }
         }
 
+        /// <summary>
+        /// 指定されたテクスチャをリストの最後、つまり最背面に追加します。
+        /// </summary>
+        /// <param name="item">追加されるテクスチャ。</param>
+        /// <returns>追加位置のキー。</returns>
         public int AddLast(Texture item)
         {
             int count = this.Count;
@@ -53,6 +62,11 @@ namespace Sitrine.Texture
             return index;
         }
 
+        /// <summary>
+        /// 指定されたテクスチャをリストの最初、つまり最前面に追加します。
+        /// </summary>
+        /// <param name="item">追加されるテクスチャ。</param>
+        /// <returns>追加位置のキー。</returns>
         public int AddFirst(Texture item)
         {
             int count = this.Count;
@@ -63,6 +77,10 @@ namespace Sitrine.Texture
             return index;
         }
 
+        /// <summary>
+        /// リストを空にします。
+        /// </summary>
+        /// <param name="dispose">オブジェクトの解放を行う場合は true、解放しない場合は false。</param>
         public void Clear(bool dispose)
         {
             if (dispose)
@@ -72,6 +90,12 @@ namespace Sitrine.Texture
             base.Clear();
         }
 
+        /// <summary>
+        /// 指定されたキーのテクスチャをリストから除外します。
+        /// </summary>
+        /// <param name="key">テクスチャを指し示すキー。</param>
+        /// <param name="dispose">テクスチャを除外と同時に解放する場合は true、解放しない場合は false。</param>
+        /// <returns>除外に成功したとき true、何らかの原因で失敗したとき false。</returns>
         public bool Remove(int key, bool dispose)
         {
             if (dispose)
@@ -80,6 +104,12 @@ namespace Sitrine.Texture
             return this.Remove(key);
         }
 
+        /// <summary>
+        /// 指定されたテクスチャをリストから除外します。
+        /// </summary>
+        /// <param name="item">除外されるテクスチャ。</param>
+        /// <param name="dispose">テクスチャを除外と同時に解放する場合は true、解放しない場合は false。</param>
+        /// <returns>除外に成功したとき true、何らかの原因で失敗したとき false。</returns>
         public bool Remove(Texture item, bool dispose)
         {
             int index = this.IndexOfValue(item);
@@ -95,6 +125,9 @@ namespace Sitrine.Texture
             return true;
         }
 
+        /// <summary>
+        /// リストを空にし、同時にすべてのテクスチャのリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             this.Clear(true);
