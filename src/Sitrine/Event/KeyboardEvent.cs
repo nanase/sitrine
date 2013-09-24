@@ -32,14 +32,14 @@ namespace Sitrine.Event
     /// </summary>
     public class KeyboardEvent : StoryEvent
     {
-        #region Private Field
+        #region -- Private Fields --
         private bool keyUpFlag;
 
         private Key[] okKeys = new[] { Key.Enter, Key.KeypadEnter, Key.Space, Key.Z };
         private Key[] cancelKeys = new[] { Key.BackSpace, Key.X };
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// OK (肯定) 入力に用いる Key 列挙体の配列を取得または設定します。
         /// </summary>
@@ -81,14 +81,14 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         internal KeyboardEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// OK キーが入力されるまでストーリーボードを停止します。
         /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
@@ -130,7 +130,7 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Listen(Action callback, Key[] keys)
         {
             this.keyUpFlag = false;

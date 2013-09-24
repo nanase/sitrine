@@ -32,7 +32,7 @@ namespace Sitrine.Utils
     /// </summary>
     public class TextOptions
     {
-        #region Private Field
+        #region -- Private Fields --
         private float lineHeight;
         private Brush[] brushes;
         private Font font;
@@ -40,7 +40,7 @@ namespace Sitrine.Utils
         private StringFormat format;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// 行の高さを取得または設定します。
         /// </summary>
@@ -148,7 +148,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// フォントと行の高さを指定して新しい TextOptions クラスのインスタンスを初期化します。
         /// </summary>
@@ -169,7 +169,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// Color 構造体の配列を使って Brushes プロパティを設定します。
         /// </summary>

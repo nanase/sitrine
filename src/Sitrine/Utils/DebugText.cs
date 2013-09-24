@@ -34,7 +34,7 @@ namespace Sitrine.Utils
     /// </summary>
     public class DebugText : IDisposable
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly TextOptions textOptions;
         private readonly SitrineWindow window;
         private readonly TextureList textures;
@@ -51,13 +51,13 @@ namespace Sitrine.Utils
         private long actionCountOld;
         #endregion
 
-        #region Private Static Field
+        #region -- Private Static Fields --
         private static long loadCount;
         private static long updateCount;
         private static long actionCount;
         #endregion
 
-        #region Public static Property
+        #region -- Public Static Properties --
         /// <summary>
         /// テクスチャをロードした回数を取得します。
         /// </summary>
@@ -74,14 +74,14 @@ namespace Sitrine.Utils
         public static long ActionCount { get { return DebugText.actionCount; } }
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// デバッグ表示を画面上に可視化するかの真偽値を取得または設定します。
         /// </summary>
         public bool IsVisible { get; set; }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// 各種パラメータを指定して DebugText クラスの新しいインスタンスを初期化します。
         /// </summary>
@@ -110,7 +110,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// デバッグ表示を更新し、テキストを最新のものに変更します。
         /// </summary>
@@ -180,7 +180,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Static Method
+        #region -- Public Static Methods --
         /// <summary>
         /// テクスチャのロードカウンタをインクリメントします。
         /// </summary>

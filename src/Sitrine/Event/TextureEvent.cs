@@ -33,11 +33,11 @@ namespace Sitrine.Event
     /// </summary>
     public class TextureEvent : StoryEvent
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly Dictionary<int, int> asignment;
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         internal TextureEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
@@ -45,7 +45,7 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// 指定された ID とビットマップから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
@@ -149,7 +149,7 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void AsignmentTexture(int id, Texture.Texture texture)
         {
             int key;

@@ -32,7 +32,7 @@ namespace Sitrine
     /// </summary>
     public class WindowOptions
     {
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// ウィンドウのサイズを取得または設定します。
         /// </summary>

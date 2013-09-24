@@ -32,12 +32,12 @@ namespace Sitrine.Texture
     /// </summary>
     public class TextTexture : Texture
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly TextRender render;
         private bool updated;
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// テキストレンダラと描画サイズを指定して新しい TextTexture クラスのインスタンスを初期化します。
         /// </summary>
@@ -61,7 +61,7 @@ namespace Sitrine.Texture
         }        
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// 指定された文字列を描画します。
         /// </summary>

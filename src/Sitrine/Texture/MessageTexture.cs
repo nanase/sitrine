@@ -35,7 +35,7 @@ namespace Sitrine.Texture
     /// </summary>
     public class MessageTexture : Texture, IAnimationTexture
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly TextRender render;
         private readonly Queue<object> tokenQueue;
 
@@ -47,7 +47,7 @@ namespace Sitrine.Texture
         private PointF charPosition;
         #endregion
 
-        #region Public Event
+        #region -- Public Events --
         /// <summary>
         /// テクスチャが更新されるたびに発生します。
         /// </summary>
@@ -59,7 +59,7 @@ namespace Sitrine.Texture
         public event EventHandler TextureEnd;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// メッセージの更新フレーム間隔を取得または設定します。
         /// </summary>
@@ -79,7 +79,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// テキストレンダラと描画サイズを指定して新しい MessegeTexture クラスのインスタンスを初期化します。
         /// </summary>
@@ -105,7 +105,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// 指定された文字を解析し、描画を予約します。
         /// </summary>
@@ -224,7 +224,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Control(ControlToken token, ref int i)
         {
             switch (token.Operate)
@@ -274,16 +274,16 @@ namespace Sitrine.Texture
 
         class ControlToken
         {
-            #region Private Field
+            #region -- Private Fields --
             private static readonly Regex tokenizer = new Regex(@"\\(.)(?:\[(\d+)\])?", RegexOptions.Compiled);
             #endregion
 
-            #region Public Property
+            #region -- Public Properties --
             public char Operate { get; private set; }
             public int Parameter { get; private set; }
             #endregion
 
-            #region Constructor
+            #region -- Constructors --
             private ControlToken(char operate, int parameter)
             {
                 this.Operate = operate;
@@ -291,7 +291,7 @@ namespace Sitrine.Texture
             }
             #endregion
 
-            #region Public Method
+            #region -- Public Methods --
             public static bool Create(out ControlToken token, string source, ref int index)
             {
                 char operate;

@@ -33,7 +33,7 @@ namespace Sitrine
     [Serializable]
     public class EventNotInitalizedException : Exception
     {
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// イベント名と初期化に必要なメソッド名を指定して新しい EventNotInitalizedException クラスのインスタンスを初期化します。
         /// </summary>

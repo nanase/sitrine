@@ -35,11 +35,11 @@ namespace Sitrine.Event
     /// </summary>
     public class MessageEvent : StoryEvent
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly MessageTexture texture;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// メッセージ表示に関連付けられている Texture オブジェクトを取得します。
         /// </summary>
@@ -116,7 +116,7 @@ namespace Sitrine.Event
         public EventHandler TextureEnd { get; set; }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextRender render, Size size)
             : base(storyboard, window)
         {
@@ -130,7 +130,7 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// 指定された文字列の描画を開始します。
         /// このメソッドは遅延実行されます。

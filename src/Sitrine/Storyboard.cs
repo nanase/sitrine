@@ -35,7 +35,7 @@ namespace Sitrine
     /// </summary>
     public abstract class Storyboard
     {
-        #region Private Field
+        #region -- Private Fields --
         #region Events
         private TextureEvent texture;
         private ProcessEvent process;
@@ -46,13 +46,13 @@ namespace Sitrine
         private int waitTime;
         #endregion
 
-        #region Protected Field
+        #region -- Protected Fields --
         protected readonly LinkedList<Action> actions;
         protected readonly List<Func<bool>> listener;
         protected readonly SitrineWindow window;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         #region Events
         /// <summary>
         /// テクスチャイベントを取得します。
@@ -111,7 +111,7 @@ namespace Sitrine
         }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// ストーリーボードが動作する SitrineWindow オブジェクトを指定して新しい Storyboard クラスのインスタンスを初期化します。
         /// </summary>
@@ -129,7 +129,7 @@ namespace Sitrine
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// ストーリーボードの状態を更新します。予約されたアクションを実行します。
         /// </summary>
@@ -177,7 +177,7 @@ namespace Sitrine
         }
         #endregion
 
-        #region Internal Method
+        #region -- Internal Methods --
         internal void AddAction(Action action)
         {
             this.actions.AddFirst(action);

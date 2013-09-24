@@ -37,18 +37,18 @@ namespace Sitrine.Texture
     /// </summary>
     public class Texture : IDisposable
     {
-        #region Private Field
+        #region -- Private Fields --
         private int listId = -1;
         #endregion
 
-        #region Protected Field
+        #region -- Protected Fields --
         protected readonly int id;
         protected Bitmap bitmap;
         protected Color4 color = Color4.White;
         protected PointF position = new PointF();
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// OpenGL で使われているテクスチャの ID を取得します。
         /// </summary>
@@ -106,7 +106,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// ビットマップを指定して新しい Texture クラスのインスタンスを初期化します。
         /// </summary>
@@ -147,7 +147,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// このオブジェクトで使用されているリソースを解放します。
         /// </summary>
@@ -174,7 +174,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Public Static Method
+        #region -- Public Static Methods --
         /// <summary>
         /// 指定されたテクスチャ ID にビットマップを差し替えます。
         /// </summary>
@@ -217,7 +217,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Compile(ListMode mode = ListMode.Compile)
         {
             if (this.listId != -1)

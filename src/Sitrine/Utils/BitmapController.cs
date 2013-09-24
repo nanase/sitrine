@@ -33,14 +33,14 @@ namespace Sitrine.Utils
     /// </summary>
     public class BitmapController : IDisposable
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly BitmapData data;
         private readonly Bitmap bitmap;
         private readonly IntPtr scan0;
         private bool isDisposed;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// 座標を指定して Color 構造体を取得または設定します。
         /// </summary>
@@ -76,7 +76,7 @@ namespace Sitrine.Utils
         public IntPtr Scan0 { get { return this.scan0; } }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// ビットマップとフラグをもとに BitmapController クラスのインスタンスを初期化します。
         /// </summary>
@@ -90,7 +90,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// このオブジェクトで使用されているリソースを解放します。ビットマップは解放されません。
         /// </summary>

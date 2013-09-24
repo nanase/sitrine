@@ -33,7 +33,7 @@ namespace Sitrine.Utils
     /// </summary>
     public class TextRender : IDisposable
     {
-        #region Private Field
+        #region -- Private Fields --
         private static readonly PointF foreOffset;
         private static readonly PointF shadowOffset;
 
@@ -44,7 +44,7 @@ namespace Sitrine.Utils
         private int brushIndex = 0;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// 文字列描画時のブラシのインデクスを取得または設定します。
         /// </summary>
@@ -69,7 +69,7 @@ namespace Sitrine.Utils
         public TextOptions Options { get { return this.options; } }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         static TextRender()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -115,7 +115,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         #region DrawString(string text, float x, float y)
         /// <summary>
         /// 文字列を描画します。

@@ -35,7 +35,7 @@ namespace Sitrine.Audio
     /// </summary>
     public class MusicPlayer : IDisposable
     {
-        #region Private Field
+        #region -- Private Fields --
         private const int buffer_size = 1024;
         private const int buffer_count = 4;
         private const int smaplingFrequency = 22050;
@@ -50,14 +50,14 @@ namespace Sitrine.Audio
         private Task Updater;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// シンセサイザと接続されるコネクタオブジェクトを取得します。
         /// </summary>
         public SmfConnector Connector { get; private set; }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// MusicPlayer クラスの新しいインスタンスを初期化します。
         /// </summary>
@@ -81,7 +81,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// 再生を開始します。
         /// </summary>
@@ -119,7 +119,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Update()
         {
             while (!this.reqEnd)

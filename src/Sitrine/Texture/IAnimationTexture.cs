@@ -29,14 +29,14 @@ namespace Sitrine.Texture
     /// </summary>
     public interface IAnimationTexture
     {
-        #region Property
+        #region -- Properties --
         /// <summary>
         /// アニメーションが更新されるフレーム間隔を取得または設定します。
         /// </summary>
         int Interval { get; set; }
         #endregion
 
-        #region Method
+        #region -- Methods --
         /// <summary>
         /// テクスチャの更新を実行します。
         /// </summary>

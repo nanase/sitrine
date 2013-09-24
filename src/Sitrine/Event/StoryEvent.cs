@@ -29,12 +29,12 @@ namespace Sitrine.Event
     /// </summary>
     public abstract class StoryEvent
     {
-        #region Protected Field
+        #region -- Protected Fields --
         protected readonly SitrineWindow window;
         protected readonly Storyboard storyboard;
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// ストーリーボードオブジェクトとそれが実行されるウィンドウオブジェクトを指定して Storyboard クラスの新しいインスタンスを初期化します。
         /// </summary>

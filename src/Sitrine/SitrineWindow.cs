@@ -40,7 +40,7 @@ namespace Sitrine
     /// </summary>
     public class SitrineWindow : GameWindow
     {
-        #region Protected Field
+        #region -- Protected Fields --
         protected readonly TextureList textures;
         protected readonly MusicPlayer music;        
         protected readonly DebugText debugText;
@@ -49,7 +49,7 @@ namespace Sitrine
         protected readonly TraceSource trace;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// テキストの表示に用いられるテキストオプションを取得します。
         /// </summary>
@@ -76,7 +76,7 @@ namespace Sitrine
         public Size TargetSize { get; protected set; }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// ウィンドウオプションを指定して SitrineWindow クラスの新しいインスタンスを初期化します。
         /// </summary>
@@ -96,7 +96,7 @@ namespace Sitrine
         }
         #endregion
 
-        #region Protected Method
+        #region -- Protected Methods --
         protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
         {
             if (this.Keyboard[OpenTK.Input.Key.Escape])

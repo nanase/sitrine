@@ -31,11 +31,11 @@ namespace Sitrine.Utils
     /// </summary>
     class DebugTextListener : TraceListener
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly DebugText debugText;
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// DebugTextListener クラスの新しいインスタンスを初期化します。
         /// </summary>
@@ -46,7 +46,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// リスナに文字列を書き込みます。
         /// </summary>

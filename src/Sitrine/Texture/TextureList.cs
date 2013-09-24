@@ -32,7 +32,7 @@ namespace Sitrine.Texture
     /// </summary>
     public class TextureList : SortedList<int, Texture>, IDisposable
     {
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// リスト上のテクスチャを必要に応じて更新し、画面上に表示させます。
         /// </summary>

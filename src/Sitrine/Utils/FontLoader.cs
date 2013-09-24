@@ -33,19 +33,19 @@ namespace Sitrine.Utils
     /// </summary>
     public class FontLoader : IDisposable
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly PrivateFontCollection fontCollection;
         private readonly FontFamily family;
         #endregion
 
-        #region Public Property
+        #region -- Public Properties --
         /// <summary>
         /// フォントから読み込みに成功したフォントファミリを取得します。
         /// </summary>
         public FontFamily Family { get { return this.family; } }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// 読み込むファイルを指定して新しい FontLoader クラスのインスタンスを初期化します。
         /// </summary>
@@ -62,7 +62,7 @@ namespace Sitrine.Utils
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// このオブジェクトで使用されているリソースを解放します。
         /// </summary>

@@ -31,14 +31,14 @@ namespace Sitrine.Event
     /// </summary>
     public class ProcessEvent : StoryEvent
     {
-        #region Constructor
+        #region -- Constructors --
         internal ProcessEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// 指定された秒数だけストーリーボードの動作を停止します。
         /// このメソッドは遅延実行されます。
