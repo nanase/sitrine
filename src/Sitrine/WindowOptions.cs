@@ -22,8 +22,8 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Sitrine.Utils;
 using System.Drawing;
+using Sitrine.Utils;
 
 namespace Sitrine
 {
@@ -49,7 +49,7 @@ namespace Sitrine
         public string Title { get; set; }
 
         /// <summary>
-        /// デバッグ表示に使用されるフォントファイル名を取得または設定します。
+        /// デバッグ表示に使用されるフォントオプションを取得または設定します。
         /// </summary>
         public TextOptions DebugTextOptions { get; set; }
 

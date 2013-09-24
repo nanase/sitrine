@@ -23,29 +23,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Sitrine
 {
+    /// <summary>
+    /// ストーリーイベントが初期化されないまま使用されようとしたときに発生する例外です。
+    /// </summary>
     [Serializable]
     public class EventNotInitalizedException : Exception
     {
         #region Constructor
+        /// <summary>
+        /// イベント名と初期化に必要なメソッド名を指定して新しい EventNotInitalizedException クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="initalizeMethod"></param>
         public EventNotInitalizedException(string eventName, string initalizeMethod)
-            : this(string.Format("イベント {0} は初期化されていません。メソッド {1} を呼び出して初期化してください。", eventName, initalizeMethod))
-        {
-        }
-
-        public EventNotInitalizedException(string message)
-            : base(message)
-        {
-        }
-
-        public EventNotInitalizedException(string message, Exception inner) 
-            : base(message, inner)
+            : base(string.Format("イベント {0} は初期化されていません。メソッド {1} を呼び出して初期化してください。", eventName, initalizeMethod))
         {
         }
 

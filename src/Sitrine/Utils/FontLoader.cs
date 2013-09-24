@@ -28,6 +28,9 @@ using System.Drawing.Text;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// ファイルからフォントをロードするためのローダです。
+    /// </summary>
     public class FontLoader : IDisposable
     {
         #region Private Field
@@ -36,10 +39,17 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// フォントから読み込みに成功したフォントファミリを取得します。
+        /// </summary>
         public FontFamily Family { get { return this.family; } }
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// 読み込むファイルを指定して新しい FontLoader クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="filename">読み込まれるフォントファイル。</param>
         public FontLoader(string filename)
         {
             this.fontCollection = new PrivateFontCollection();
@@ -53,6 +63,9 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             this.family.Dispose();

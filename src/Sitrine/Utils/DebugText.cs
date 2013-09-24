@@ -22,13 +22,16 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Sitrine.Texture;
 using System;
 using System.Drawing;
 using System.Linq;
+using Sitrine.Texture;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// デバッグに必要な情報を表示させるためのクラスです。
+    /// </summary>
     public class DebugText : IDisposable
     {
         #region Private Field
@@ -55,19 +58,36 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public static Property
+        /// <summary>
+        /// テクスチャをロードした回数を取得します。
+        /// </summary>
         public static long LoadCount { get { return DebugText.loadCount; } }
-
+        
+        /// <summary>
+        /// テクスチャを更新した回数を取得します。
+        /// </summary>
         public static long UpdateCount { get { return DebugText.updateCount; } }
 
+        /// <summary>
+        /// ストーリーボードのアクションを実行した回数を取得します。
+        /// </summary>
         public static long ActionCount { get { return DebugText.actionCount; } }
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// デバッグ表示を画面上に可視化するかの真偽値を取得または設定します。
+        /// </summary>
         public bool IsVisible { get; set; }
         #endregion
 
         #region Constructor
-        public DebugText(TextOptions options, SitrineWindow window, TextureList textures)
+        /// <summary>
+        /// 各種パラメータを指定して DebugText クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="options">デバッグ表示のテキストに用いられるテキストオプション。</param>
+        /// <param name="window">デバッグ表示が行われるウィンドウ。</param>
+        public DebugText(TextOptions options, SitrineWindow window)
         {
             this.textOptions = options;
 
@@ -79,7 +99,7 @@ namespace Sitrine.Utils
             this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight));
 
             this.window = window;
-            this.textures = textures;
+            this.textures = window.Textures;
             this.fps_old = 60.0;
 
 #if DEBUG
@@ -91,6 +111,10 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// デバッグ表示を更新し、テキストを最新のものに変更します。
+        /// </summary>
+        /// <param name="time">前回実行時までの経過時間。</param>
         public void Update(double time)
         {
             if (!this.IsVisible)
@@ -125,6 +149,9 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// デバッグ表示を画面上に表示します。
+        /// </summary>
         public void Render()
         {
             if (!this.IsVisible)
@@ -134,12 +161,19 @@ namespace Sitrine.Utils
             this.debugTextTexture.Render();
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             this.debugTexture.Dispose();
             this.debugTextTexture.Dispose();
         }
 
+        /// <summary>
+        /// デバッグログにテキストを追加します。
+        /// </summary>
+        /// <param name="message"></param>
         public void SetDebugText(string message)
         {
             this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
@@ -147,31 +181,52 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Static Method
+        /// <summary>
+        /// テクスチャのロードカウンタをインクリメントします。
+        /// </summary>
         public static void IncrementLoadCount()
         {
             DebugText.loadCount++;
         }
 
+        /// <summary>
+        /// テクスチャのロードカウンタを指定された数だけ加算します。
+        /// </summary>
+        /// <param name="value">加算する値。</param>
         public static void IncrementLoadCount(long value)
         {
             DebugText.loadCount += (value < 0 ? 0 : value);
         }
 
+        /// <summary>
+        /// テクスチャの更新カウンタをインクリメントします。
+        /// </summary>
         public static void IncrementUpdateCount()
         {
             DebugText.updateCount++;
         }
 
+        /// <summary>
+        /// テクスチャの更新カウンタを指定された数だけ加算します。
+        /// </summary>
+        /// <param name="value">加算する値。</param>
         public static void IncrementUpdateCount(long value)
         {
             DebugText.updateCount += (value < 0 ? 0 : value);
         }
 
+        /// <summary>
+        /// ストーリーボードのアクション実行回数をインクリメントします。
+        /// </summary>
         public static void IncrementActionCount()
         {
             DebugText.actionCount++;
         }
 
+        /// <summary>
+        /// ストーリーボードのアクション実行回数を指定された数だけ加算します。
+        /// </summary>
+        /// <param name="value">加算する値。</param>
         public static void IncrementActionCount(long value)
         {
             DebugText.actionCount += (value < 0 ? 0 : value);

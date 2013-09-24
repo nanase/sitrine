@@ -28,6 +28,9 @@ using System.Drawing.Imaging;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// ビットマップの生データ操作を提供します。
+    /// </summary>
     public class BitmapController : IDisposable
     {
         #region Private Field
@@ -38,6 +41,12 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// 座標を指定して Color 構造体を取得または設定します。
+        /// </summary>
+        /// <param name="x">取得する X 座標。</param>
+        /// <param name="y">取得する Y 座標。</param>
+        /// <returns>座標が指し示す Color 構造体。</returns>
         public unsafe Color this[int x, int y]
         {
             get
@@ -51,12 +60,28 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// 生データを格納する BitmapData オブジェクトを取得します。
+        /// </summary>
         public BitmapData BitmapData { get { return this.data; } }
+
+        /// <summary>
+        /// ビットマップの元となった Bitmap オブジェクトを取得します。
+        /// </summary>
         public Bitmap BaseBitmap { get { return this.bitmap; } }
+
+        /// <summary>
+        /// ビットマップデータの先頭ポインタを取得します。
+        /// </summary>
         public IntPtr Scan0 { get { return this.scan0; } }
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// ビットマップとフラグをもとに BitmapController クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="bitmap">元となるビットマップ。</param>
+        /// <param name="flags">メモリロックフラグ。</param>
         public BitmapController(Bitmap bitmap, ImageLockMode flags)
         {
             this.bitmap = bitmap;
@@ -66,6 +91,9 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。ビットマップは解放されません。
+        /// </summary>
         public void Dispose()
         {
             if (this.isDisposed)

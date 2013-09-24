@@ -27,6 +27,9 @@ using System.Drawing;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// テキストの描画に用いられるオプションを格納します。
+    /// </summary>
     public class TextOptions
     {
         #region Private Field
@@ -38,6 +41,9 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// 行の高さを取得または設定します。
+        /// </summary>
         public float LineHeight
         {
             get
@@ -56,6 +62,9 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// 描画時に文字に塗りつぶされるブラシオブジェクトの配列を取得または設定します。
+        /// </summary>
         public Brush[] Brushes
         {
             get
@@ -74,10 +83,19 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// アンチエイリアスを使用するかの真偽値を取得または設定します。
+        /// </summary>
         public bool Antialiasing { get; set; }
 
+        /// <summary>
+        /// 影の描画を行うかの真偽値を取得または設定します。
+        /// </summary>
         public bool DrawShadow { get; set; }
 
+        /// <summary>
+        /// 影の描画色のインデクスを取得または設定します。
+        /// </summary>
         public int ShadowIndex
         {
             get
@@ -93,6 +111,9 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// フォントを取得または設定します。
+        /// </summary>
         public Font Font
         {
             get
@@ -108,6 +129,9 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// 文字列の描画時に用いられる StringFormat オブジェクトを取得または設定します。
+        /// </summary>
         public StringFormat Format
         {
             get
@@ -125,6 +149,11 @@ namespace Sitrine.Utils
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// フォントと行の高さを指定して新しい TextOptions クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="font">描画に用いるフォント。</param>
+        /// <param name="lineHeight">行の高さ。</param>
         public TextOptions(Font font, int lineHeight)
         {
             if (font == null)
@@ -141,6 +170,10 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// Color 構造体の配列を使って Brushes プロパティを設定します。
+        /// </summary>
+        /// <param name="colors"></param>
         public void SetSolidBrushes(params Color[] colors)
         {
             if (colors == null)

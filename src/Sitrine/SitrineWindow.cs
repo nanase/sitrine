@@ -22,19 +22,22 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Sitrine.Audio;
 using Sitrine.Texture;
 using Sitrine.Utils;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 
 namespace Sitrine
 {
+    /// <summary>
+    /// GameWindow に各種補助機能を追加したウィンドウを定義します。
+    /// </summary>
     public class SitrineWindow : GameWindow
     {
         #region Protected Field
@@ -44,29 +47,50 @@ namespace Sitrine
         protected readonly List<Storyboard> stories;
         protected readonly TextOptions textOptions;
         protected readonly TraceSource trace;
-
-        protected Size targetSize;
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// テキストの表示に用いられるテキストオプションを取得します。
+        /// </summary>
         public TextOptions TextOptions { get { return this.textOptions; } }
+
+        /// <summary>
+        /// 音楽の再生を管理するオブジェクトを取得します。
+        /// </summary>
         public MusicPlayer Music { get { return this.music; } }
+
+        /// <summary>
+        /// テクスチャのリストを取得します。
+        /// </summary>
         public TextureList Textures { get { return this.textures; } }
+
+        /// <summary>
+        /// 実行されるストーリーボードを表す列挙子を取得します。
+        /// </summary>
         public IEnumerable<Storyboard> Storyboards { get { return this.stories; } }
-        public Size TargetSize { get { return this.targetSize; } }
+
+        /// <summary>
+        /// 描画サイズを取得します。描画サイズはウィンドウの表示サイズとは異なります。
+        /// </summary>
+        public Size TargetSize { get; protected set; }
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// ウィンドウオプションを指定して SitrineWindow クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="options">ウィンドウオプション。</param>
         public SitrineWindow(WindowOptions options)
             : base(options.WindowSize.Width, options.WindowSize.Height, GraphicsMode.Default, options.Title)
         {
             this.music = new MusicPlayer();
             this.textures = new TextureList();           
-            this.targetSize = options.TargetSize;
+            this.TargetSize = options.TargetSize;
             this.stories = new List<Storyboard>();
             this.textOptions = options.TextOptions;
 
-            this.debugText = new DebugText(options.DebugTextOptions, this, this.textures);
+            this.debugText = new DebugText(options.DebugTextOptions, this);
             this.trace = new TraceSource("Sitrine", SourceLevels.All);            
             this.trace.Listeners.Add(new DebugTextListener(this.debugText));     
         }
@@ -105,14 +129,14 @@ namespace Sitrine
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            GL.Ortho(0.0, this.targetSize.Width, this.targetSize.Height, 0.0, -1.0, 1.0);
+            GL.Ortho(0.0, this.TargetSize.Width, this.TargetSize.Height, 0.0, -1.0, 1.0);
 
-            int factor = Math.Min(this.ClientSize.Width / targetSize.Width, this.ClientSize.Height / targetSize.Height);
+            int factor = Math.Min(this.ClientSize.Width / TargetSize.Width, this.ClientSize.Height / TargetSize.Height);
             if (factor == 0)
-                GL.Viewport(targetSize);
+                GL.Viewport(TargetSize);
             else
-                GL.Viewport((this.Width - targetSize.Width * factor) / 2, (this.Height - targetSize.Height * factor) / 2,
-                    targetSize.Width * factor, targetSize.Height * factor);
+                GL.Viewport((this.Width - TargetSize.Width * factor) / 2, (this.Height - TargetSize.Height * factor) / 2,
+                    TargetSize.Width * factor, TargetSize.Height * factor);
         }
 
 

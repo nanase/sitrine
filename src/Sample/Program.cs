@@ -120,7 +120,7 @@ namespace Sample
             {
                 GL.Disable(EnableCap.Texture2D);
                 GL.Color3(Color.FromArgb(10, 59, 118));
-                GL.Rect(0, 0, this.targetSize.Width, this.targetSize.Height);
+                GL.Rect(0, 0, this.TargetSize.Width, this.TargetSize.Height);
                 GL.Enable(EnableCap.Texture2D);
             }
             GL.PopMatrix();

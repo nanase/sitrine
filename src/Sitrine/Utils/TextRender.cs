@@ -28,6 +28,9 @@ using System.Drawing.Text;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// ビットマップに文字列を描画するための機能を提供します。
+    /// </summary>
     public class TextRender : IDisposable
     {
         #region Private Field
@@ -42,6 +45,9 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Property
+        /// <summary>
+        /// 文字列描画時のブラシのインデクスを取得または設定します。
+        /// </summary>
         public int BrushIndex
         {
             get
@@ -57,6 +63,9 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// 描画に用いるテキストオプションを取得します。
+        /// </summary>
         public TextOptions Options { get { return this.options; } }
         #endregion
 
@@ -75,6 +84,11 @@ namespace Sitrine.Utils
             }
         }
 
+        /// <summary>
+        /// テキストオプションと描画先のビットマップを指定して新しい TextRender クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="options">使用されるテキストオプション。</param>
+        /// <param name="baseBitmap">描画先のビットマップ。</param>
         public TextRender(TextOptions options, Bitmap baseBitmap)
         {
             if (baseBitmap == null)
@@ -85,6 +99,11 @@ namespace Sitrine.Utils
             this.graphics = Graphics.FromImage(baseBitmap);
         }
 
+        /// <summary>
+        /// テキストオプションと描画先のテクスチャを指定して新しい TextRender クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="options">使用されるテキストオプション。</param>
+        /// <param name="texture">描画先のテクスチャ。</param>
         public TextRender(TextOptions options, Texture.Texture texture)
         {
             if (texture == null)
@@ -98,40 +117,73 @@ namespace Sitrine.Utils
 
         #region Public Method
         #region DrawString(string text, float x, float y)
+        /// <summary>
+        /// 文字列を描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
         public void DrawString(string text)
         {
             this.DrawString(text, this.brushIndex, 0.0f, 0.0f);
         }
 
+        /// <summary>
+        /// 文字列を描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="location">描画される原点位置。</param>
         public void DrawString(string text, PointF location)
         {
             this.DrawString(text, this.brushIndex, location.X, location.Y);
         }
 
+        /// <summary>
+        /// 文字列を描画します。 
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="x">描画される原点の X 座標。</param>
+        /// <param name="y">描画される原点の Y 座標。</param>
         public void DrawString(string text, float x, float y)
         {
             this.DrawString(text, this.brushIndex, x, y);
         }
         #endregion
 
-        #region DrawString(string text, int colorIndex, float x, float y)
-        public void DrawString(string text, int colorIndex)
+        #region DrawString(string text, int brushIndex, float x, float y)
+        /// <summary>
+        /// 文字列を指定されたブラシで描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="brushIndex">ブラシのインデクス。</param>
+        public void DrawString(string text, int brushIndex)
         {
-            this.DrawString(text, colorIndex, 0.0f, 0.0f);
+            this.DrawString(text, brushIndex, 0.0f, 0.0f);
         }
 
-        public void DrawString(string text, int colorIndex, PointF location)
+        /// <summary>
+        /// 文字列を指定されたブラシで描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="brushIndex">ブラシのインデクス。</param>
+        /// <param name="location">描画される原点位置。</param>
+        public void DrawString(string text, int brushIndex, PointF location)
         {
-            this.DrawString(text, colorIndex, location.X, location.Y);
+            this.DrawString(text, brushIndex, location.X, location.Y);
         }
 
-        public void DrawString(string text, int colorIndex, float x, float y)
+        /// <summary>
+        /// 文字列を指定されたブラシで描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="brushIndex">ブラシのインデクス。</param>
+        /// <param name="x">描画される原点の X 座標。</param>
+        /// <param name="y">描画される原点の Y 座標。</param>
+        public void DrawString(string text, int brushIndex, float x, float y)
         {
             this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             int i = 0;
             bool shadow = (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length);
-            bool fore = (colorIndex >= 0 && colorIndex < this.options.Brushes.Length);
+            bool fore = (brushIndex >= 0 && brushIndex < this.options.Brushes.Length);
 
             foreach (var line in text.Split('\n'))
             {
@@ -141,7 +193,7 @@ namespace Sitrine.Utils
                     this.graphics.DrawString(line, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y + y_offset, this.options.Format);
 
                 if (fore)
-                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[colorIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y_offset, this.options.Format);
+                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[brushIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y_offset, this.options.Format);
 
                 i++;
             }
@@ -149,57 +201,105 @@ namespace Sitrine.Utils
         #endregion
 
         #region DrawChars(string text, float x, float y)
+        /// <summary>
+        /// 文字列を描画し、その描画サイズを返します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <returns>描画された矩形領域のサイズを返します。</returns>
         public SizeF DrawChars(string text)
         {
             return this.DrawChars(text, 0.0f, 0.0f);
         }
 
+        /// <summary>
+        /// 文字列を描画し、その描画サイズを返します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="location">描画される原点位置。</param>
+        /// <returns>描画された矩形領域のサイズを返します。</returns>
         public SizeF DrawChars(string text, PointF location)
         {
             return this.DrawChars(text, location.X, location.Y);
         }
 
+        /// <summary>
+        /// 文字列を描画し、その描画サイズを返します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="x">描画される原点の X 座標。</param>
+        /// <param name="y">描画される原点の Y 座標。</param>
+        /// <returns>描画された矩形領域のサイズを返します。</returns>
         public SizeF DrawChars(string text, float x, float y)
         {
             return this.DrawChars(text, this.brushIndex, x, y);
         }
         #endregion
 
-        #region DrawChars(string text, int colorIndex, float x, float y)
-        public SizeF DrawChars(string text, int colorIndex)
+        #region DrawChars(string text, int brushIndex, float x, float y)
+        /// <summary>
+        /// 文字列を描画し、その描画サイズを返します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="brushIndex">ブラシのインデクス。</param>
+        /// <returns>描画された矩形領域のサイズを返します。</returns>
+        public SizeF DrawChars(string text, int brushIndex)
         {
-            return this.DrawChars(text, colorIndex, 0.0f, 0.0f);
+            return this.DrawChars(text, brushIndex, 0.0f, 0.0f);
         }
 
-        public SizeF DrawChars(string text, int colorIndex, PointF location)
+        /// <summary>
+        /// 文字列を描画し、その描画サイズを返します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="brushIndex">ブラシのインデクス。</param>
+        /// <param name="location">描画される原点位置。</param>
+        /// <returns>描画された矩形領域のサイズを返します。</returns>
+        public SizeF DrawChars(string text, int brushIndex, PointF location)
         {
-            return this.DrawChars(text, colorIndex, location.X, location.Y);
+            return this.DrawChars(text, brushIndex, location.X, location.Y);
         }
 
-        public SizeF DrawChars(string text, int colorIndex, float x, float y)
+        /// <summary>
+        /// 文字列を描画し、その描画サイズを返します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="brushIndex">ブラシのインデクス。</param>
+        /// <param name="x">描画される原点の X 座標。</param>
+        /// <param name="y">描画される原点の Y 座標。</param>
+        /// <returns>描画された矩形領域のサイズを返します。</returns>
+        public SizeF DrawChars(string text, int brushIndex, float x, float y)
         {
             this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             if (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length)
                 this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y + y, this.options.Format);
 
-            if (colorIndex >= 0 && colorIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[colorIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y, this.options.Format);
+            if (brushIndex >= 0 && brushIndex < this.options.Brushes.Length)
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[brushIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y, this.options.Format);
 
             return this.graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
         }
         #endregion
 
+        /// <summary>
+        /// ビットマップをクリアします。
+        /// </summary>
         public void Clear()
         {
             this.graphics.Clear(Color.Transparent);
         }
 
+        /// <summary>
+        /// ビットマップへの変更を確定します。
+        /// </summary>
         public void Flush()
         {
             this.graphics.Flush();
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             this.graphics.Dispose();

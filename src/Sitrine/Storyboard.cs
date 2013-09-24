@@ -22,14 +22,17 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Sitrine.Event;
-using Sitrine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Sitrine.Event;
+using Sitrine.Utils;
 
 namespace Sitrine
 {
+    /// <summary>
+    /// シナリオのストーリーボードとなるイベントを格納し、遅延実行させるための仕組みを提供します。
+    /// </summary>
     public abstract class Storyboard
     {
         #region Private Field
@@ -51,10 +54,24 @@ namespace Sitrine
 
         #region Public Property
         #region Events
+        /// <summary>
+        /// テクスチャイベントを取得します。
+        /// </summary>
         public TextureEvent Texture { get { return this.texture; } }
+
+        /// <summary>
+        /// プロセスイベントを取得します。
+        /// </summary>
         public ProcessEvent Process { get { return this.process; } }
+
+        /// <summary>
+        /// キーボードイベントを取得します。
+        /// </summary>
         public KeyboardEvent Keyboard { get { return this.keyboard; } }
 
+        /// <summary>
+        /// メッセージイベントを取得します。
+        /// </summary>
         public MessageEvent Message
         {
             get
@@ -67,8 +84,19 @@ namespace Sitrine
         }
         #endregion
 
+        /// <summary>
+        /// ストーリーボードに遅延実行を予約されたアクション数を取得します。
+        /// </summary>
         public int ActionCount { get { return this.actions.Count; } }
+
+        /// <summary>
+        /// ストーリーボードに格納されたリスナ数を取得します。
+        /// </summary>
         public int ListenerCount { get { return this.listener.Count; } }
+
+        /// <summary>
+        /// 現在のストーリーボードの状態を表す列挙体を取得します。
+        /// </summary>
         public StoryboardState State
         {
             get
@@ -84,6 +112,10 @@ namespace Sitrine
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// ストーリーボードが動作する SitrineWindow オブジェクトを指定して新しい Storyboard クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="window">動作対象の SitrineWindow オブジェクト。</param>
         public Storyboard(SitrineWindow window)
         {
             this.actions = new LinkedList<Action>();
@@ -98,6 +130,9 @@ namespace Sitrine
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// ストーリーボードの状態を更新します。予約されたアクションを実行します。
+        /// </summary>
         public void Update()
         {
             if (this.waitTime > 0)
@@ -128,6 +163,11 @@ namespace Sitrine
             }
         }
 
+        /// <summary>
+        /// メッセージイベントを指定されたパラメータで初期化します。
+        /// </summary>
+        /// <param name="options">メッセージ表示に用いるテキストオプション。</param>
+        /// <param name="size">メッセージ表示の描画サイズ。</param>
         public void InitalizeMessage(TextOptions options, Size size)
         {
             if (this.message != null && this.message is IDisposable)
@@ -177,10 +217,24 @@ namespace Sitrine
         #endregion
     }
 
+    /// <summary>
+    /// ストーリーボードの状態を表す列挙体です。
+    /// </summary>
     public enum StoryboardState
     {
+        /// <summary>
+        /// 停止しています。ストーリーボードは再開可能で、予約されたアクションが存在しないならば再び停止します。
+        /// </summary>
         Pausing,
+
+        /// <summary>
+        /// フレーム待ちです。ストーリーボードは何らかのアクションにより待ちの状態に入っています。
+        /// </summary>
         Waiting,
+
+        /// <summary>
+        /// 開始しています。ストーリーボードにはアクションが存在し、フレーム待ちもありません。
+        /// </summary>
         Started,
     }
 }

@@ -26,6 +26,9 @@ using System.Diagnostics;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// デバッグ表示にログを出力するためのリスナです。
+    /// </summary>
     class DebugTextListener : TraceListener
     {
         #region Private Field
@@ -33,6 +36,10 @@ namespace Sitrine.Utils
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// DebugTextListener クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="debugText">表示先の DebugText オブジェクト。</param>
         public DebugTextListener(DebugText debugText)
         {
             this.debugText = debugText;
@@ -40,11 +47,19 @@ namespace Sitrine.Utils
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// リスナに文字列を書き込みます。
+        /// </summary>
+        /// <param name="message">書き込まれる文字列。</param>
         public override void Write(string message)
         {
             this.debugText.SetDebugText(message);
         }
 
+        /// <summary>
+        /// リスナに文字列を書き込みます。
+        /// </summary>
+        /// <param name="message">書き込まれる文字列。</param>
         public override void WriteLine(string message)
         {
             this.debugText.SetDebugText(message);
