@@ -37,6 +37,13 @@ namespace Sitrine.Texture
         private bool updated;
         #endregion
 
+        #region -- Public Properties --
+        /// <summary>
+        /// 描画に使用するレンダラを取得します。
+        /// </summary>
+        public TextRender Renderer { get { return this.render; } } 
+        #endregion
+
         #region -- Constructors --
         /// <summary>
         /// テキストレンダラと描画サイズを指定して新しい TextTexture クラスのインスタンスを初期化します。

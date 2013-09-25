@@ -22,6 +22,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using System;
 using System.Diagnostics;
 
 namespace Sitrine.Utils
@@ -33,6 +34,7 @@ namespace Sitrine.Utils
     {
         #region -- Private Fields --
         private readonly DebugText debugText;
+        private readonly DateTime startupTime;
         #endregion
 
         #region -- Constructors --
@@ -43,6 +45,7 @@ namespace Sitrine.Utils
         public DebugTextListener(DebugText debugText)
         {
             this.debugText = debugText;
+            this.startupTime = DateTime.Now;
         }
         #endregion
 
@@ -53,7 +56,7 @@ namespace Sitrine.Utils
         /// <param name="message">書き込まれる文字列。</param>
         public override void Write(string message)
         {
-            this.debugText.SetDebugText(message);
+            this.debugText.SetDebugText(string.Format(@"[{0:hh\:mm\:ss}] {1}", DateTime.Now - this.startupTime, message));
         }
 
         /// <summary>
@@ -62,7 +65,74 @@ namespace Sitrine.Utils
         /// <param name="message">書き込まれる文字列。</param>
         public override void WriteLine(string message)
         {
-            this.debugText.SetDebugText(message);
+            this.debugText.SetDebugText(string.Format(@"[{0:hh\:mm\:ss}] {1}", DateTime.Now - this.startupTime, message));
+        }
+
+        /// <summary>
+        /// トレース情報、メッセージ、およびイベント情報をリスナー固有の出力に書き込みます。
+        /// </summary>
+        /// <param name="eventCache">現在のプロセス ID、スレッド ID、およびスタック トレース情報を格納している System.Diagnostics.TraceEventCache オブジェクト。</param>
+        /// <param name="source">出力を識別するために使用される名前。通常は、トレース イベントを生成したアプリケーションの名前。</param>
+        /// <param name="eventType">トレースを発生させたイベントのタイプを指定する System.Diagnostics.TraceEventType 値の 1 つ。</param>
+        /// <param name="id">イベントの数値識別子。</param>
+        /// <param name="message">書き込むメッセージ。</param>
+        public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
+        {
+            string output = string.Format(@"[{0:hh\:mm\:ss}] {1}", DateTime.Now - this.startupTime, message);
+
+            switch (eventType)
+            {
+                case TraceEventType.Information:
+                    this.debugText.SetDebugInfoText(output);
+                    break;
+
+                case TraceEventType.Warning:
+                    this.debugText.SetDebugWarningText(output);
+                    break;
+
+                case TraceEventType.Critical:
+                case TraceEventType.Error:
+                    this.debugText.SetDebugErrorText(output);
+                    break;
+
+                default:
+                    this.debugText.SetDebugText(output);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// トレース情報、オブジェクトの書式付き配列、およびイベント情報をリスナー固有の出力に書き込みます。
+        /// </summary>
+        /// <param name="eventCache">現在のプロセス ID、スレッド ID、およびスタック トレース情報を格納している System.Diagnostics.TraceEventCache オブジェクト。</param>
+        /// <param name="source">出力を識別するために使用される名前。通常は、トレース イベントを生成したアプリケーションの名前。</param>
+        /// <param name="eventType">トレースを発生させたイベントのタイプを指定する System.Diagnostics.TraceEventType 値の 1 つ。</param>
+        /// <param name="id">イベントの数値識別子。</param>
+        /// <param name="format">0 個以上の書式項目を格納している書式指定文字列。args 配列内のオブジェクトに対応します。</param>
+        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ object 配列。</param>
+        public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
+        {
+            string output = string.Format(@"[{0:hh\:mm\:ss}] ", DateTime.Now - this.startupTime) + string.Format(format, args);
+
+            switch (eventType)
+            {
+                case TraceEventType.Information:
+                    this.debugText.SetDebugInfoText(output);
+                    break;
+
+                case TraceEventType.Warning:
+                    this.debugText.SetDebugWarningText(output);
+                    break;
+
+                case TraceEventType.Critical:
+                case TraceEventType.Error:
+                    this.debugText.SetDebugErrorText(output);
+                    break;
+
+                default:
+                    this.debugText.SetDebugText(output);
+                    break;
+            }
         }
         #endregion
     }

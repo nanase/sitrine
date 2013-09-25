@@ -46,7 +46,6 @@ namespace Sitrine
         protected readonly DebugText debugText;
         protected readonly List<Storyboard> stories;
         protected readonly TextOptions textOptions;
-        protected readonly TraceSource trace;
         #endregion
 
         #region -- Public Properties --
@@ -91,8 +90,7 @@ namespace Sitrine
             this.textOptions = options.TextOptions;
 
             this.debugText = new DebugText(options.DebugTextOptions, this);
-            this.trace = new TraceSource("Sitrine", SourceLevels.All);            
-            this.trace.Listeners.Add(new DebugTextListener(this.debugText));     
+            Trace.Listeners.Add(new DebugTextListener(this.debugText));     
         }
         #endregion
 
@@ -121,7 +119,6 @@ namespace Sitrine
             this.music.Dispose();
             this.textures.Dispose();
             this.debugText.Dispose();
-            this.trace.Close();
         }
 
         protected override void OnResize(EventArgs e)

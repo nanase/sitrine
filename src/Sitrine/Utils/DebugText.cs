@@ -91,12 +91,12 @@ namespace Sitrine.Utils
         {
             this.textOptions = options;
 
-            this.textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black));
+            this.textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black), Color.Green, Color.Yellow, Color.Red);
             this.textOptions.ShadowIndex = 1;
             this.textOptions.DrawShadow = true;
 
-            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight));
-            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight));
+            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight + 1));
+            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight + 1));
 
             this.window = window;
             this.textures = window.Textures;
@@ -169,15 +169,6 @@ namespace Sitrine.Utils
             this.debugTexture.Dispose();
             this.debugTextTexture.Dispose();
         }
-
-        /// <summary>
-        /// デバッグログにテキストを追加します。
-        /// </summary>
-        /// <param name="message"></param>
-        public void SetDebugText(string message)
-        {
-            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
-        }
         #endregion
 
         #region -- Public Static Methods --
@@ -230,6 +221,32 @@ namespace Sitrine.Utils
         public static void IncrementActionCount(long value)
         {
             DebugText.actionCount += (value < 0 ? 0 : value);
+        }
+        #endregion
+
+        #region -- Internal Methods --
+        internal void SetDebugText(string message)
+        {
+            this.debugTextTexture.Renderer.BrushIndex = 0;
+            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+        }
+
+        internal void SetDebugInfoText(string message)
+        {
+            this.debugTextTexture.Renderer.BrushIndex = 2;
+            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+        }
+
+        internal void SetDebugWarningText(string message)
+        {
+            this.debugTextTexture.Renderer.BrushIndex = 3;
+            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+        }
+
+        internal void SetDebugErrorText(string message)
+        {
+            this.debugTextTexture.Renderer.BrushIndex = 4;
+            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
         }
         #endregion
     }
