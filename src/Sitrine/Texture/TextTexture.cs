@@ -75,9 +75,7 @@ namespace Sitrine.Texture
         /// <param name="text">描画される文字列。</param>
         public void Draw(string text)
         {
-            this.render.Clear();
             this.render.DrawString(text, 0.0f, 0.0f);
-
             this.updated = true;
         }
 
@@ -89,7 +87,6 @@ namespace Sitrine.Texture
         /// <param name="y">描画位置の Y 座標。</param>
         public void Draw(string text, float x, float y)
         {
-            this.render.Clear();
             this.render.DrawString(text, x, y);
             this.updated = true;
         }

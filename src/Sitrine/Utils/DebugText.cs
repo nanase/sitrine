@@ -126,6 +126,8 @@ namespace Sitrine.Utils
             {
                 this.fps_old += (this.window.RenderFrequency - this.fps_old) * 0.1;
                 var storyboards = this.window.Storyboards.ToArray();
+
+                this.debugTexture.Clear();
                 this.debugTexture.Draw(string.Format("FPS: {0:f1}({1}), T: {2}, L: {3}, U: {4}, S: {5}, A: {6}, L: {7}, P: {8}, M: {9:f2}MB",
                     this.fps_old,
                     this.renderCount,
