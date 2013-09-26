@@ -40,6 +40,11 @@ namespace Sitrine
     /// </summary>
     public class SitrineWindow : GameWindow
     {
+        #region -- Private Fields --
+        private Color backgroundColor = Color.Black;
+        private Color foregroundColor = Color.FromArgb(0);
+        #endregion
+
         #region -- Protected Fields --
         protected readonly TextureList textures;
         protected readonly MusicPlayer music;        
@@ -73,6 +78,37 @@ namespace Sitrine
         /// 描画サイズを取得します。描画サイズはウィンドウの表示サイズとは異なります。
         /// </summary>
         public Size TargetSize { get; protected set; }
+
+        /// <summary>
+        /// ウィンドウの背景色を取得または設定します。
+        /// </summary>
+        public Color BackgroundColor
+        {
+            get
+            {
+                return this.backgroundColor;
+            }
+            set
+            {
+                GL.ClearColor(value);
+                this.backgroundColor = value;
+            }
+        }
+
+        /// <summary>
+        /// ウィンドウの前景色を取得または設定します。
+        /// </summary>
+        public Color ForegroundColor
+        {
+            get
+            {
+                return this.foregroundColor;
+            }
+            set
+            {
+                this.foregroundColor = value;
+            }
+        }
         #endregion
 
         #region -- Constructors --
@@ -103,7 +139,7 @@ namespace Sitrine
 
         protected override void OnLoad(EventArgs e)
         {
-            GL.ClearColor(Color4.Black);
+            GL.ClearColor(this.backgroundColor);
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -148,8 +184,24 @@ namespace Sitrine
         protected void ProcessAfterRender(FrameEventArgs e)
         {
             this.textures.Render();
+
+            GL.PushMatrix();
+            {
+                GL.Disable(EnableCap.Texture2D);
+                GL.Color4(this.foregroundColor);
+                GL.Rect(0, 0, this.TargetSize.Width, this.TargetSize.Height);
+                GL.Enable(EnableCap.Texture2D);
+            }
+            GL.PopMatrix();
+
             this.debugText.Render();
             this.SwapBuffers();
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            this.ProcessBeforeRender(e);
+            this.ProcessAfterRender(e);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

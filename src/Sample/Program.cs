@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using Sitrine;
 using Sitrine.Utils;
 using ux.Component;
@@ -91,6 +89,8 @@ namespace Sample
         {
             this.stories.Add(new SampleStory(this));
 
+            this.BackgroundColor = Color.FromArgb(10, 59, 118);
+
             #region Music
             this.music.Connector.Master.PushHandle(new[]{
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
@@ -110,22 +110,6 @@ namespace Sample
             #endregion
 
             base.OnLoad(e);
-        }
-
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            this.ProcessBeforeRender(e);
-
-            GL.PushMatrix();
-            {
-                GL.Disable(EnableCap.Texture2D);
-                GL.Color3(Color.FromArgb(10, 59, 118));
-                GL.Rect(0, 0, this.TargetSize.Width, this.TargetSize.Height);
-                GL.Enable(EnableCap.Texture2D);
-            }
-            GL.PopMatrix();
-
-            this.ProcessAfterRender(e);
         }
     }
 }
