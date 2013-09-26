@@ -74,7 +74,7 @@
     <Compile Include="Utils\DebugTextListener.cs" />
     <Compile Include="Utils\FontLoader.cs" />
     <Compile Include="Utils\TextOptions.cs" />
-    <Compile Include="Utils\TextRender.cs" />
+    <Compile Include="Utils\TextRenderer.cs" />
     <Compile Include="WindowOptions.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -31,7 +31,7 @@ namespace Sitrine.Utils
     /// <summary>
     /// ビットマップに文字列を描画するための機能を提供します。
     /// </summary>
-    public class TextRender : IDisposable
+    public class TextRenderer : IDisposable
     {
         #region -- Private Fields --
         private static readonly PointF foreOffset;
@@ -70,26 +70,26 @@ namespace Sitrine.Utils
         #endregion
 
         #region -- Constructors --
-        static TextRender()
+        static TextRenderer()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                TextRender.foreOffset = new PointF(1, -1);
-                TextRender.shadowOffset = new PointF(2, 0);
+                TextRenderer.foreOffset = new PointF(1, -1);
+                TextRenderer.shadowOffset = new PointF(2, 0);
             }
             else
             {
-                TextRender.foreOffset = new PointF(0, -2);
-                TextRender.shadowOffset = new PointF(1, -1);
+                TextRenderer.foreOffset = new PointF(0, -2);
+                TextRenderer.shadowOffset = new PointF(1, -1);
             }
         }
 
         /// <summary>
-        /// テキストオプションと描画先のビットマップを指定して新しい TextRender クラスの新しいインスタンスを初期化します。
+        /// テキストオプションと描画先のビットマップを指定して新しい TextRenderer クラスの新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="options">使用されるテキストオプション。</param>
         /// <param name="baseBitmap">描画先のビットマップ。</param>
-        public TextRender(TextOptions options, Bitmap baseBitmap)
+        public TextRenderer(TextOptions options, Bitmap baseBitmap)
         {
             if (baseBitmap == null)
                 throw new ArgumentNullException();
@@ -100,11 +100,11 @@ namespace Sitrine.Utils
         }
 
         /// <summary>
-        /// テキストオプションと描画先のテクスチャを指定して新しい TextRender クラスの新しいインスタンスを初期化します。
+        /// テキストオプションと描画先のテクスチャを指定して新しい TextRenderer クラスの新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="options">使用されるテキストオプション。</param>
         /// <param name="texture">描画先のテクスチャ。</param>
-        public TextRender(TextOptions options, Texture.Texture texture)
+        public TextRenderer(TextOptions options, Texture.Texture texture)
         {
             if (texture == null)
                 throw new ArgumentNullException();
@@ -190,10 +190,10 @@ namespace Sitrine.Utils
                 float y_offset = i * (this.options.LineHeight + 1.0f) + y;
 
                 if (shadow)
-                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y + y_offset, this.options.Format);
+                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRenderer.shadowOffset.X + x, TextRenderer.shadowOffset.Y + y_offset, this.options.Format);
 
                 if (fore)
-                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[brushIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y_offset, this.options.Format);
+                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[brushIndex], TextRenderer.foreOffset.X + x, TextRenderer.foreOffset.Y + y_offset, this.options.Format);
 
                 i++;
             }
@@ -272,10 +272,10 @@ namespace Sitrine.Utils
             this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             if (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRender.shadowOffset.X + x, TextRender.shadowOffset.Y + y, this.options.Format);
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRenderer.shadowOffset.X + x, TextRenderer.shadowOffset.Y + y, this.options.Format);
 
             if (brushIndex >= 0 && brushIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[brushIndex], TextRender.foreOffset.X + x, TextRender.foreOffset.Y + y, this.options.Format);
+                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[brushIndex], TextRenderer.foreOffset.X + x, TextRenderer.foreOffset.Y + y, this.options.Format);
 
             return this.graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
         }

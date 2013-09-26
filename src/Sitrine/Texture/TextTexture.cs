@@ -33,7 +33,7 @@ namespace Sitrine.Texture
     public class TextTexture : Texture
     {
         #region -- Private Fields --
-        private readonly TextRender render;
+        private readonly TextRenderer renderer;
         private bool updated;
         #endregion
 
@@ -41,19 +41,19 @@ namespace Sitrine.Texture
         /// <summary>
         /// 描画に使用するレンダラを取得します。
         /// </summary>
-        public TextRender Renderer { get { return this.render; } } 
+        public TextRenderer Renderer { get { return this.renderer; } } 
         #endregion
 
         #region -- Constructors --
         /// <summary>
         /// テキストレンダラと描画サイズを指定して新しい TextTexture クラスのインスタンスを初期化します。
         /// </summary>
-        /// <param name="render">テキストレンダラ。</param>
+        /// <param name="renderer">テキストレンダラ。</param>
         /// <param name="size">描画サイズ。</param>
-        public TextTexture(TextRender render, Size size)
+        public TextTexture(TextRenderer renderer, Size size)
             : base(size)
         {
-            this.render = render;
+            this.renderer = renderer;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Sitrine.Texture
         public TextTexture(TextOptions options, Size size)
             : base(size)
         {
-            this.render = new TextRender(options, this.bitmap);
+            this.renderer = new TextRenderer(options, this.bitmap);
         }        
         #endregion
 
@@ -75,7 +75,7 @@ namespace Sitrine.Texture
         /// <param name="text">描画される文字列。</param>
         public void Draw(string text)
         {
-            this.render.DrawString(text, 0.0f, 0.0f);
+            this.renderer.DrawString(text, 0.0f, 0.0f);
             this.updated = true;
         }
 
@@ -87,7 +87,7 @@ namespace Sitrine.Texture
         /// <param name="y">描画位置の Y 座標。</param>
         public void Draw(string text, float x, float y)
         {
-            this.render.DrawString(text, x, y);
+            this.renderer.DrawString(text, x, y);
             this.updated = true;
         }
 
@@ -99,7 +99,7 @@ namespace Sitrine.Texture
             if (this.updated)
             {
                 this.updated = false;
-                this.render.Flush();
+                this.renderer.Flush();
                 Texture.Update(this.id, this.bitmap);
             }
 
@@ -111,7 +111,7 @@ namespace Sitrine.Texture
         /// </summary>
         public void Clear()
         {
-            this.render.Clear();
+            this.renderer.Clear();
             this.updated = true;
         }
 
@@ -120,7 +120,7 @@ namespace Sitrine.Texture
         /// </summary>
         public override void Dispose()
         {
-            this.render.Dispose();
+            this.renderer.Dispose();
             base.Dispose();
         }
         #endregion

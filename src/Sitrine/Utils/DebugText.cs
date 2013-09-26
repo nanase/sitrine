@@ -300,7 +300,7 @@ namespace Sitrine.Utils
             {
                 var item = this.textQueue.First;
 
-                for (int i = 0, j = 0; item != null; i++)
+                for (int i = 0; item != null; i++)
                 {
                     var next = item.Next;
 

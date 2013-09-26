@@ -36,7 +36,7 @@ namespace Sitrine.Texture
     public class MessageTexture : Texture, IAnimationTexture
     {
         #region -- Private Fields --
-        private readonly TextRender render;
+        private readonly TextRenderer renderer;
         private readonly Queue<object> tokenQueue;
 
         private int interval = 1;
@@ -83,12 +83,12 @@ namespace Sitrine.Texture
         /// <summary>
         /// テキストレンダラと描画サイズを指定して新しい MessegeTexture クラスのインスタンスを初期化します。
         /// </summary>
-        /// <param name="render">テキストレンダラ。</param>
+        /// <param name="renderer">テキストレンダラ。</param>
         /// <param name="size">描画サイズ。</param>
-        public MessageTexture(TextRender render, Size size)
+        public MessageTexture(TextRenderer renderer, Size size)
             : base(size)
         {
-            this.render = render;
+            this.renderer = renderer;
             this.tokenQueue = new Queue<object>();
         }
 
@@ -100,7 +100,7 @@ namespace Sitrine.Texture
         public MessageTexture(TextOptions options, Size size)
             : base(size)
         {
-            this.render = new TextRender(options, this.bitmap);
+            this.renderer = new TextRenderer(options, this.bitmap);
             this.tokenQueue = new Queue<object>();
         }
         #endregion
@@ -143,21 +143,21 @@ namespace Sitrine.Texture
                         char c = (char)token;
                         if (c == '\n')
                         {
-                            this.charPosition = new PointF(0.0f, this.charPosition.Y + this.render.Options.LineHeight + 1.0f);
+                            this.charPosition = new PointF(0.0f, this.charPosition.Y + this.renderer.Options.LineHeight + 1.0f);
                         }
                         else if (c == ' ')
                         {
-                            this.charPosition = new PointF(this.charPosition.X + this.render.Options.Font.Size / 2.0f, this.charPosition.Y);
+                            this.charPosition = new PointF(this.charPosition.X + this.renderer.Options.Font.Size / 2.0f, this.charPosition.Y);
                         }
                         else if (c == '　')
                         {
-                            this.charPosition = new PointF(this.charPosition.X + this.render.Options.Font.Size, this.charPosition.Y);
+                            this.charPosition = new PointF(this.charPosition.X + this.renderer.Options.Font.Size, this.charPosition.Y);
                         }
                         else
                         {
                             this.updated = true;
                             string ch = c.ToString();
-                            SizeF charSize = this.render.DrawChars(c.ToString(), this.charPosition);
+                            SizeF charSize = this.renderer.DrawChars(c.ToString(), this.charPosition);
                             charSize.Height = 0.0f;
                             this.charPosition = PointF.Add(this.charPosition, charSize);
                         }
@@ -199,8 +199,8 @@ namespace Sitrine.Texture
         /// </summary>
         public void Start()
         {
-            this.render.Clear();
-            this.render.Flush();
+            this.renderer.Clear();
+            this.renderer.Flush();
 
             this.updated = true;
             this.charPosition = PointF.Empty;
@@ -216,7 +216,7 @@ namespace Sitrine.Texture
             if (this.updated)
             {
                 this.updated = false;
-                this.render.Flush();
+                this.renderer.Flush();
                 Texture.Update(this.id, this.bitmap);
             }
 
@@ -231,18 +231,18 @@ namespace Sitrine.Texture
             {
                 case '\\':
                     this.updated = true;
-                    SizeF charSize = this.render.DrawChars("\\", this.charPosition);
+                    SizeF charSize = this.renderer.DrawChars("\\", this.charPosition);
                     charSize.Height = 0.0f;
                     this.charPosition = PointF.Add(this.charPosition, charSize);
                     break;
 
                 case 'c':
-                    if (this.render.Options.Brushes.Length <= token.Parameter)
+                    if (this.renderer.Options.Brushes.Length <= token.Parameter)
                     {
                         // TODO: エラー時のメッセージ報告
                     }
                     else
-                        this.render.BrushIndex = token.Parameter;
+                        this.renderer.BrushIndex = token.Parameter;
                     break;
 
                 default:

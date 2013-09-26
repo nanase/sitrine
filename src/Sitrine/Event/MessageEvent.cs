@@ -117,10 +117,10 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Constructors --
-        internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextRender render, Size size)
+        internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextRenderer renderer, Size size)
             : base(storyboard, window)
         {
-            this.texture = new MessageTexture(render, size);
+            this.texture = new MessageTexture(renderer, size);
         }
 
         internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextOptions options, Size size)
