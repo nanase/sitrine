@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Sitrine.Texture;
@@ -38,13 +39,15 @@ namespace Sitrine.Utils
         private readonly TextOptions textOptions;
         private readonly SitrineWindow window;
         private readonly TextureList textures;
+        private readonly LinkedList<TextItem> textQueue;
 
         private double elapsed = 1.0;
-        private int renderCount = 0;
+        private int frameUpdateCount = 0;
         private readonly TextTexture debugTexture;
         private readonly TextTexture debugTextTexture;
-        private TimeSpan processorTimeOld = TimeSpan.Zero;
         private double fps_old = 0.0;
+        private bool textUpdated = false;
+        private DateTime firstQueueTime;
 
         private long loadCountOld;
         private long updateCountOld;
@@ -62,7 +65,7 @@ namespace Sitrine.Utils
         /// テクスチャをロードした回数を取得します。
         /// </summary>
         public static long LoadCount { get { return DebugText.loadCount; } }
-        
+
         /// <summary>
         /// テクスチャを更新した回数を取得します。
         /// </summary>
@@ -95,12 +98,15 @@ namespace Sitrine.Utils
             this.textOptions.ShadowIndex = 1;
             this.textOptions.DrawShadow = true;
 
-            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight + 1));
-            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)window.TextOptions.LineHeight + 1));
+            this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)options.LineHeight + 1));
+            this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)(options.LineHeight + 1) * 4 + 1));
+            this.debugTextTexture.Position = new PointF(0f, options.LineHeight + 1);
 
             this.window = window;
             this.textures = window.Textures;
             this.fps_old = 60.0;
+
+            this.textQueue = new LinkedList<TextItem>();
 
 #if DEBUG
             this.IsVisible = true;
@@ -120,35 +126,9 @@ namespace Sitrine.Utils
             if (!this.IsVisible)
                 return;
 
-            this.elapsed += time;
-            this.renderCount++;
-            if (this.elapsed >= 1.0)
-            {
-                this.fps_old += (this.window.RenderFrequency - this.fps_old) * 0.1;
-                var storyboards = this.window.Storyboards.ToArray();
+            this.UpdateDebug(time);
 
-                this.debugTexture.Clear();
-                this.debugTexture.Draw(string.Format("FPS: {0:f1}({1}), T: {2}, L: {3}, U: {4}, S: {5}, A: {6}, L: {7}, P: {8}, M: {9:f2}MB",
-                    this.fps_old,
-                    this.renderCount,
-                    this.textures.Count,
-                    DebugText.loadCount - this.loadCountOld,
-                    DebugText.updateCount - this.updateCountOld,
-
-                    storyboards.Length,
-                    storyboards.Sum(s => s.ActionCount),
-                    storyboards.Sum(s => s.ListenerCount),
-                    DebugText.actionCount - this.actionCountOld,
-                    GC.GetTotalMemory(false) / (1024.0 * 1024.0)
-                    ));
-
-                this.elapsed -= (int)this.elapsed;
-
-                this.renderCount = 0;
-                this.loadCountOld = DebugText.loadCount;
-                this.updateCountOld = DebugText.updateCount;
-                this.actionCountOld = DebugText.actionCount;
-            }
+            this.UpdateDebugText();
         }
 
         /// <summary>
@@ -229,27 +209,130 @@ namespace Sitrine.Utils
         #region -- Internal Methods --
         internal void SetDebugText(string message)
         {
-            this.debugTextTexture.Renderer.BrushIndex = 0;
-            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+            this.textUpdated = true;
+            this.textQueue.AddFirst(new TextItem(message, 0));
         }
 
         internal void SetDebugInfoText(string message)
         {
-            this.debugTextTexture.Renderer.BrushIndex = 2;
-            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+            this.textUpdated = true;
+            this.textQueue.AddFirst(new TextItem(message, 2));
         }
 
         internal void SetDebugWarningText(string message)
         {
-            this.debugTextTexture.Renderer.BrushIndex = 3;
-            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+            this.textUpdated = true;
+            this.textQueue.AddFirst(new TextItem(message, 3));
         }
 
         internal void SetDebugErrorText(string message)
         {
-            this.debugTextTexture.Renderer.BrushIndex = 4;
-            this.debugTextTexture.Draw(message, 0f, this.textOptions.LineHeight);
+            this.textUpdated = true;
+            this.textQueue.AddFirst(new TextItem(message, 4));
         }
         #endregion
+
+        #region -- Private Methods --
+        private void UpdateDebug(double time)
+        {
+            this.elapsed += time;
+            this.frameUpdateCount++;
+            if (this.elapsed >= 1.0)
+            {
+                this.fps_old += (this.window.RenderFrequency - this.fps_old) * 0.1;
+                var storyboards = this.window.Storyboards.ToArray();
+
+                this.debugTexture.Clear();
+                this.debugTexture.Draw(string.Format("FPS: {0:f1}({1}), T: {2}, L: {3}, U: {4}, S: {5}, A: {6}, L: {7}, P: {8}, M: {9:f2}MB",
+                    this.fps_old,
+                    this.frameUpdateCount,
+                    this.textures.Count,
+                    DebugText.loadCount - this.loadCountOld,
+                    DebugText.updateCount - this.updateCountOld,
+
+                    storyboards.Length,
+                    storyboards.Sum(s => s.ActionCount),
+                    storyboards.Sum(s => s.ListenerCount),
+                    DebugText.actionCount - this.actionCountOld,
+                    GC.GetTotalMemory(false) / (1024.0 * 1024.0)
+                    ));
+
+                this.elapsed -= (int)this.elapsed;
+
+                this.frameUpdateCount = 0;
+                this.loadCountOld = DebugText.loadCount;
+                this.updateCountOld = DebugText.updateCount;
+                this.actionCountOld = DebugText.actionCount;
+            }
+        }
+
+        private void UpdateDebugText()
+        {
+            var now = DateTime.Now;
+
+            if (this.textUpdated)
+            {
+                this.textUpdated = false;
+                this.debugTextTexture.Clear();
+
+
+                var item = this.textQueue.First;
+
+                for (int i = 0, j = 0; item != null; i++)
+                {
+                    var next = item.Next;
+
+                    if ((i >= 4) || (now - item.Value.QueuedTime).TotalSeconds > 10.0)
+                        this.textQueue.Remove(item);
+                    else
+                    {
+                        this.debugTextTexture.Renderer.BrushIndex = item.Value.BrushIndex;
+                        this.debugTextTexture.Draw(item.Value.Text, 0, j * (this.debugTextTexture.Renderer.Options.LineHeight + 1));
+                        j++;
+
+                        this.firstQueueTime = item.Value.QueuedTime;
+                    }
+
+                    item = next;
+                }
+            }
+            else if ((now - this.firstQueueTime).TotalSeconds > 10.0)
+            {
+                var item = this.textQueue.First;
+
+                for (int i = 0, j = 0; item != null; i++)
+                {
+                    var next = item.Next;
+
+                    if ((now - item.Value.QueuedTime).TotalSeconds > 10.0)
+                        this.textQueue.Remove(item);
+
+                    item = next;
+                }
+
+                this.textUpdated = true;
+            }
+        }
+        #endregion
+
+        class TextItem
+        {
+            #region -- Properties
+            public int BrushIndex { get; private set; }
+
+            public string Text { get; private set; }
+
+            public DateTime QueuedTime { get; private set; }
+            #endregion
+
+            #region -- Constructor --
+            public TextItem(string text, int brushIndex)
+            {
+                this.Text = text;
+                this.BrushIndex = brushIndex;
+                this.QueuedTime = DateTime.Now;
+            }
+            #endregion
+        }
     }
 }
