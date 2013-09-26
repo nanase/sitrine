@@ -130,6 +130,16 @@ namespace Sitrine
         }
         #endregion
 
+        #region -- Public Methods --
+        /// <summary>
+        /// デバッグ表示をトグルします。
+        /// </summary>
+        public void ToggleDebugVisibility()
+        {
+            this.debugText.IsVisible = !this.debugText.IsVisible;
+        }
+        #endregion
+
         #region -- Protected Methods --
         protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
         {

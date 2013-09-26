@@ -61,6 +61,7 @@
     <Compile Include="Event\StoryEvent.cs" />
     <Compile Include="Event\TextureEvent.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="LoopStoryboard.cs" />
     <Compile Include="SitrineWindow.cs" />
     <Compile Include="Storyboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

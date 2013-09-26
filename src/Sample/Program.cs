@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using OpenTK.Input;
 using Sitrine;
 using Sitrine.Utils;
 using ux.Component;
@@ -70,6 +71,16 @@ namespace Sample
         }
     }
 
+    class FunctionKeyStory : LoopStoryboard
+    {
+        public FunctionKeyStory(SitrineWindow window)
+            : base(window)
+        {
+            Keyboard.WaitFor(window.ToggleDebugVisibility, Key.F3);
+            this.StartLooping();
+        }
+    }
+
     class SampleWindow : SitrineWindow
     {
         public SampleWindow(WindowOptions options)
@@ -77,17 +88,10 @@ namespace Sample
         {
         }
 
-        protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
-        {
-            if (this.Keyboard[OpenTK.Input.Key.Tab])
-                this.debugText.IsVisible = !this.debugText.IsVisible;
-
-            base.OnKeyPress(e);
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             this.stories.Add(new SampleStory(this));
+            this.stories.Add(new FunctionKeyStory(this));
 
             this.BackgroundColor = Color.FromArgb(10, 59, 118);
 

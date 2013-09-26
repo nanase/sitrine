@@ -124,7 +124,7 @@ namespace Sitrine.Event
         public void WaitFor(Action callback = null, params Key[] keys)
         {
             if (this.storyboard.State != StoryboardState.Started)
-                this.Listen(callback, this.okKeys);
+                this.Listen(callback, keys);
             else
                 this.storyboard.AddAction(() => this.Listen(callback, keys));
         }

@@ -131,9 +131,21 @@ namespace Sitrine
 
         #region -- Public Methods --
         /// <summary>
-        /// ストーリーボードの状態を更新します。予約されたアクションを実行します。
+        /// メッセージイベントを指定されたパラメータで初期化します。
         /// </summary>
-        public void Update()
+        /// <param name="options">メッセージ表示に用いるテキストオプション。</param>
+        /// <param name="size">メッセージ表示の描画サイズ。</param>
+        public void InitalizeMessage(TextOptions options, Size size)
+        {
+            if (this.message != null && this.message is IDisposable)
+                ((IDisposable)this.message).Dispose();
+
+            this.message = new MessageEvent(this, this.window, options, size);
+        }
+        #endregion
+
+        #region -- Internal Methods --
+        internal virtual void Update()
         {
             if (this.waitTime > 0)
             {
@@ -163,21 +175,6 @@ namespace Sitrine
             }
         }
 
-        /// <summary>
-        /// メッセージイベントを指定されたパラメータで初期化します。
-        /// </summary>
-        /// <param name="options">メッセージ表示に用いるテキストオプション。</param>
-        /// <param name="size">メッセージ表示の描画サイズ。</param>
-        public void InitalizeMessage(TextOptions options, Size size)
-        {
-            if (this.message != null && this.message is IDisposable)
-                ((IDisposable)this.message).Dispose();
-
-            this.message = new MessageEvent(this, this.window, options, size);
-        }
-        #endregion
-
-        #region -- Internal Methods --
         internal void AddAction(Action action)
         {
             this.actions.AddFirst(action);
