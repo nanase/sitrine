@@ -56,7 +56,7 @@ namespace Sitrine.Utils
         /// <param name="message">書き込まれる文字列。</param>
         public override void Write(string message)
         {
-            this.debugText.SetDebugText(string.Format(@"[{0:hh\:mm\:ss}] {1}", DateTime.Now - this.startupTime, message).Replace("\n", ""));
+            this.debugText.SetDebugText(string.Format(@"[{0}] {1}", this.GetTimeSpanString(DateTime.Now - this.startupTime), message).Replace("\n", ""));
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Sitrine.Utils
         /// <param name="message">書き込まれる文字列。</param>
         public override void WriteLine(string message)
         {
-            this.debugText.SetDebugText(string.Format(@"[{0:hh\:mm\:ss}] {1}", DateTime.Now - this.startupTime, message).Replace("\n", ""));
+            this.debugText.SetDebugText(string.Format(@"[{0}] {1}", this.GetTimeSpanString(DateTime.Now - this.startupTime), message).Replace("\n", ""));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Sitrine.Utils
         /// <param name="message">書き込むメッセージ。</param>
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
         {
-            string output = string.Format(@"[{0:hh\:mm\:ss}] {1}", DateTime.Now - this.startupTime, message).Replace("\n", "");
+            string output = string.Format(@"[{0}] {1}", this.GetTimeSpanString(DateTime.Now - this.startupTime), message).Replace("\n", "");
 
             switch (eventType)
             {
@@ -112,7 +112,7 @@ namespace Sitrine.Utils
         /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ object 配列。</param>
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
         {
-            string output = string.Format(@"[{0:hh\:mm\:ss}] ", DateTime.Now - this.startupTime) + string.Format(format, args).Replace("\n", "");
+            string output = string.Format(@"[{0}] ", this.GetTimeSpanString(DateTime.Now - this.startupTime)) + string.Format(format, args).Replace("\n", "");
 
             switch (eventType)
             {
@@ -133,6 +133,13 @@ namespace Sitrine.Utils
                     this.debugText.SetDebugText(output);
                     break;
             }
+        }
+        #endregion
+
+        #region -- Private Method --
+        private string GetTimeSpanString(TimeSpan span)
+        {
+            return ((int)span.TotalMinutes).ToString() + (span.Seconds < 10 ? ":0" : ":") + span.Seconds.ToString();
         }
         #endregion
     }

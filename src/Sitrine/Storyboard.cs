@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using Sitrine.Event;
 using Sitrine.Utils;
@@ -126,6 +127,8 @@ namespace Sitrine
             this.process = new ProcessEvent(this, this.window);
             this.texture = new TextureEvent(this, this.window);
             this.keyboard = new KeyboardEvent(this, this.window);
+
+            Trace.WriteLine("storyboard", "Init");
         }
         #endregion
 
@@ -141,6 +144,7 @@ namespace Sitrine
                 ((IDisposable)this.message).Dispose();
 
             this.message = new MessageEvent(this, this.window, options, size);
+            Trace.WriteLine("message event", "Init");
         }
         #endregion
 

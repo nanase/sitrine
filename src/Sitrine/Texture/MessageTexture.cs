@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using Sitrine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
@@ -115,7 +116,7 @@ namespace Sitrine.Texture
             if (!this.Parse(text))
             {
                 this.tokenQueue.Clear();
-                // TODO: エラー時のメッセージ報告
+                Trace.TraceWarning("Unable to parse string: {0}", (text.Length > 8) ? text.Substring(0, 8) + "..." : text);
             }
 
             this.TextureEnd = null;
@@ -238,11 +239,10 @@ namespace Sitrine.Texture
 
                 case 'c':
                     if (this.renderer.Options.Brushes.Length <= token.Parameter)
-                    {
-                        // TODO: エラー時のメッセージ報告
-                    }
+                        Trace.TraceWarning("Out of brush index: {0}", token.Parameter);
                     else
                         this.renderer.BrushIndex = token.Parameter;
+
                     break;
 
                 default:

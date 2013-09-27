@@ -126,7 +126,8 @@ namespace Sitrine
             this.textOptions = options.TextOptions;
 
             this.debugText = new DebugText(options.DebugTextOptions, this);
-            Trace.Listeners.Add(new DebugTextListener(this.debugText));     
+            Trace.Listeners.Add(new DebugTextListener(this.debugText));
+            Trace.WriteLine("window", "Init");
         }
         #endregion
 
