@@ -119,6 +119,9 @@ namespace Sitrine
         /// <param name="window">動作対象の SitrineWindow オブジェクト。</param>
         public Storyboard(SitrineWindow window)
         {
+            if (window == null)
+                throw new ArgumentNullException();
+
             this.actions = new LinkedList<Action>();
             this.listener = new List<Func<bool>>();
             this.window = window;
@@ -140,6 +143,9 @@ namespace Sitrine
         /// <param name="size">メッセージ表示の描画サイズ。</param>
         public void InitalizeMessage(TextOptions options, Size size)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
             if (this.message != null && this.message is IDisposable)
                 ((IDisposable)this.message).Dispose();
 
@@ -181,21 +187,33 @@ namespace Sitrine
 
         internal void AddAction(Action action)
         {
+            if (action == null)
+                throw new ArgumentNullException();
+
             this.actions.AddFirst(action);
         }
 
         internal void AddActionNow(Action action)
         {
+            if (action == null)
+                throw new ArgumentNullException();
+
             this.actions.AddLast(action);
         }
 
         internal void AddListener(Func<bool> listener)
         {
+            if (listener == null)
+                throw new ArgumentNullException();
+
             this.listener.Add(listener);
         }
 
         internal void SetWait(int frame)
         {
+            if (frame < 0)
+                throw new ArgumentOutOfRangeException();
+
             this.waitTime = frame;
         }
 

@@ -89,6 +89,9 @@ namespace Sitrine.Texture
         public MessageTexture(TextRenderer renderer, Size size)
             : base(size)
         {
+            if (renderer == null)
+                throw new ArgumentNullException();
+
             this.renderer = renderer;
             this.tokenQueue = new Queue<object>();
         }
@@ -101,6 +104,9 @@ namespace Sitrine.Texture
         public MessageTexture(TextOptions options, Size size)
             : base(size)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
             this.renderer = new TextRenderer(options, this.bitmap);
             this.tokenQueue = new Queue<object>();
         }

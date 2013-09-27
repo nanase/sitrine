@@ -119,6 +119,9 @@ namespace Sitrine
         public SitrineWindow(WindowOptions options)
             : base(options.WindowSize.Width, options.WindowSize.Height, GraphicsMode.Default, options.Title)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
             this.music = new MusicPlayer();
             this.textures = new TextureList();           
             this.TargetSize = options.TargetSize;

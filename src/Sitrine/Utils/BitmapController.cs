@@ -51,10 +51,22 @@ namespace Sitrine.Utils
         {
             get
             {
+                if (x < 0 || y < 0)
+                    throw new ArgumentOutOfRangeException();
+
+                if (x >= this.data.Width || y >= this.data.Height)
+                    throw new ArgumentOutOfRangeException();
+
                 return Color.FromArgb(*((int*)this.scan0 + (this.data.Width * y + x)));
             }
             set
             {
+                if (x < 0 || y < 0)
+                    throw new ArgumentOutOfRangeException();
+
+                if (x >= this.data.Width || y >= this.data.Height)
+                    throw new ArgumentOutOfRangeException();
+
                 int* dst = (int*)this.scan0 + (this.data.Width * y + x);
                 *dst = value.ToArgb();
             }
@@ -84,6 +96,9 @@ namespace Sitrine.Utils
         /// <param name="flags">メモリロックフラグ。</param>
         public BitmapController(Bitmap bitmap, ImageLockMode flags)
         {
+            if (bitmap == null)
+                throw new ArgumentNullException();
+
             this.bitmap = bitmap;
             this.data = bitmap.LockBits(new Rectangle(Point.Empty, bitmap.Size), flags, PixelFormat.Format32bppArgb);
             this.scan0 = data.Scan0;

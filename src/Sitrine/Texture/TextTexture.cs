@@ -22,8 +22,9 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Sitrine.Utils;
+using System;
 using System.Drawing;
+using Sitrine.Utils;
 
 namespace Sitrine.Texture
 {
@@ -53,6 +54,9 @@ namespace Sitrine.Texture
         public TextTexture(TextRenderer renderer, Size size)
             : base(size)
         {
+            if (renderer == null)
+                throw new ArgumentNullException();
+
             this.renderer = renderer;
         }
 
@@ -64,6 +68,9 @@ namespace Sitrine.Texture
         public TextTexture(TextOptions options, Size size)
             : base(size)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
             this.renderer = new TextRenderer(options, this.bitmap);
         }        
         #endregion

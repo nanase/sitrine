@@ -22,6 +22,8 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using System;
+
 namespace Sitrine.Event
 {
     /// <summary>
@@ -42,6 +44,12 @@ namespace Sitrine.Event
         /// <param name="window">ストーリーボードが実行される SitrineWindow オブジェクト。</param>
         public StoryEvent(Storyboard storyboard, SitrineWindow window)
         {
+            if (storyboard == null)
+                throw new ArgumentNullException();
+
+            if (window == null)
+                throw new ArgumentNullException();
+
             this.storyboard = storyboard;
             this.window = window;
         }

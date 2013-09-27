@@ -52,6 +52,9 @@ namespace Sitrine.Utils
         /// <param name="filename">読み込まれるフォントファイル。</param>
         public FontLoader(string filename)
         {
+            if (string.IsNullOrWhiteSpace(filename))
+                throw new ArgumentException();
+
             this.fontCollection = new PrivateFontCollection();
             this.fontCollection.AddFontFile(filename);
 

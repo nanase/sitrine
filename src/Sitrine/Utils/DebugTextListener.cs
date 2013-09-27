@@ -44,6 +44,9 @@ namespace Sitrine.Utils
         /// <param name="debugText">表示先の DebugText オブジェクト。</param>
         public DebugTextListener(DebugText debugText)
         {
+            if (debugText == null)
+                throw new ArgumentNullException();
+
             this.debugText = debugText;
             this.startupTime = DateTime.Now;
         }

@@ -22,6 +22,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -54,6 +55,9 @@ namespace Sitrine.Event
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         public void Create(int id, Bitmap bitmap)
         {
+            if (bitmap == null)
+                throw new ArgumentNullException();
+
             this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
         }
 
@@ -65,6 +69,9 @@ namespace Sitrine.Event
         /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
         public void Create(int id, Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException();
+
             this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
         }
 
@@ -76,6 +83,9 @@ namespace Sitrine.Event
         /// <param name="filename">ビットマップデータを格納したファイル名。</param>
         public void Create(int id, string filename)
         {
+            if (string.IsNullOrWhiteSpace(filename))
+                throw new ArgumentException();
+
             this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
         }
 

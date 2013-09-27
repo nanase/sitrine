@@ -22,13 +22,13 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using Sitrine.Utils;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
+using Sitrine.Utils;
 
 namespace Sitrine.Texture
 {
@@ -113,6 +113,9 @@ namespace Sitrine.Texture
         /// <param name="bitmap">関連付けられるビットマップ。</param>
         public Texture(Bitmap bitmap)
         {
+            if (bitmap == null)
+                throw new ArgumentNullException();
+
             this.bitmap = bitmap;
 
             GL.GenTextures(1, out this.id);
@@ -182,6 +185,9 @@ namespace Sitrine.Texture
         /// <param name="bitmap">差し替えるビットマップ。</param>
         public static void Update(int id, Bitmap bitmap)
         {
+            if (bitmap == null)
+                throw new ArgumentNullException();
+
             DebugText.IncrementUpdateCount();
             GL.BindTexture(TextureTarget.Texture2D, id);
 
@@ -196,6 +202,9 @@ namespace Sitrine.Texture
         /// <param name="bitmap">割り当てるビットマップ。</param>
         public static void Load(int id, Bitmap bitmap)
         {
+            if (bitmap == null)
+                throw new ArgumentNullException();
+
             DebugText.IncrementLoadCount();
             GL.BindTexture(TextureTarget.Texture2D, id);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);

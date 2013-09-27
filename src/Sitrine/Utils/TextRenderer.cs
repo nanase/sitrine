@@ -91,6 +91,9 @@ namespace Sitrine.Utils
         /// <param name="baseBitmap">描画先のビットマップ。</param>
         public TextRenderer(TextOptions options, Bitmap baseBitmap)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
             if (baseBitmap == null)
                 throw new ArgumentNullException();
 
@@ -106,6 +109,9 @@ namespace Sitrine.Utils
         /// <param name="texture">描画先のテクスチャ。</param>
         public TextRenderer(TextOptions options, Texture.Texture texture)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
             if (texture == null)
                 throw new ArgumentNullException();
 

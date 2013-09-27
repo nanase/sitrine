@@ -54,6 +54,9 @@ namespace Sitrine.Texture
         /// <returns>追加位置のキー。</returns>
         public int AddLast(Texture item)
         {
+            if (item == null)
+                throw new ArgumentNullException();
+
             int count = this.Count;
             int index = (count > 0) ? this.Keys[count - 1] + 1 : 0;
 
@@ -69,6 +72,9 @@ namespace Sitrine.Texture
         /// <returns>追加位置のキー。</returns>
         public int AddFirst(Texture item)
         {
+            if (item == null)
+                throw new ArgumentNullException();
+
             int count = this.Count;
             int index = (count > 0) ? this.Keys[0] - 1 : 0;
 
@@ -112,6 +118,9 @@ namespace Sitrine.Texture
         /// <returns>除外に成功したとき true、何らかの原因で失敗したとき false。</returns>
         public bool Remove(Texture item, bool dispose)
         {
+            if (item == null)
+                throw new ArgumentNullException();
+
             int index = this.IndexOfValue(item);
 
             if (index < 0)

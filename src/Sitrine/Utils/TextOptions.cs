@@ -159,6 +159,9 @@ namespace Sitrine.Utils
             if (font == null)
                 throw new ArgumentNullException();
 
+            if (lineHeight < 0)
+                throw new ArgumentOutOfRangeException();
+
             this.font = font;
             this.LineHeight = lineHeight;
             this.brushes = new Brush[0];

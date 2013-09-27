@@ -123,6 +123,12 @@ namespace Sitrine.Event
         /// <param name="keys">入力を待つキー。</param>
         public void WaitFor(Action callback = null, params Key[] keys)
         {
+            if (keys == null)
+                throw new ArgumentNullException();
+
+            if (keys.Length == 0)
+                throw new ArgumentException();
+
             if (this.storyboard.State != StoryboardState.Started)
                 this.Listen(callback, keys);
             else

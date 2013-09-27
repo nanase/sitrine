@@ -92,6 +92,12 @@ namespace Sitrine.Utils
         /// <param name="window">デバッグ表示が行われるウィンドウ。</param>
         public DebugText(TextOptions options, SitrineWindow window)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
+            if (window == null)
+                throw new ArgumentNullException();
+
             this.textOptions = options;
 
             this.textOptions.SetSolidBrushes(Color.White, Color.FromArgb(128, Color.Black), Color.Green, Color.Yellow, Color.Red);
