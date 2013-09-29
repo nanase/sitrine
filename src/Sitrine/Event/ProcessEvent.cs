@@ -76,6 +76,26 @@ namespace Sitrine.Event
         {
             this.storyboard.AddAction(this.storyboard.Break);
         }
+
+        /// <summary>
+        /// 新しいストーリーボードを追加し、開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="newStoryboard">追加されるストーリーボード。</param>
+        public void Start(Storyboard newStoryboard)
+        {
+            // TODO: public void Start(Storyboard newStoryboard) の実装
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 指定された処理を予約し、遅延実行させます。
+        /// </summary>
+        /// <param name="action">予約する処理。</param>
+        public void Invoke(Action action)
+        {
+            this.storyboard.AddAction(action);
+        }
         #endregion
     }
 }
