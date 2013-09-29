@@ -84,8 +84,7 @@ namespace Sitrine.Event
         /// <param name="newStoryboard">追加されるストーリーボード。</param>
         public void Start(Storyboard newStoryboard)
         {
-            // TODO: public void Start(Storyboard newStoryboard) の実装
-            throw new NotImplementedException();
+            this.storyboard.AddAction(() => this.window.AddStoryboard(newStoryboard));
         }
 
         /// <summary>

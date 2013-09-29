@@ -229,11 +229,11 @@ namespace Sitrine
 
         internal void Break()
         {
-            // TODO: ストーリーボードの削除動作
-
             this.actions.Clear();
             this.listener.Clear();
             this.waitTime = 0;
+
+            this.window.RemoveStoryboard(this);
         }
         #endregion
     }

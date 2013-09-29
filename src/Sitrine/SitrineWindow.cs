@@ -144,6 +144,18 @@ namespace Sitrine
         }
         #endregion
 
+        #region -- Internal Methods --
+        internal void AddStoryboard(Storyboard storyboard)
+        {
+            this.stories.Add(storyboard);
+        }
+
+        internal void RemoveStoryboard(Storyboard storyboard)
+        {
+            this.stories.Remove(storyboard);
+        }
+        #endregion
+
         #region -- Protected Methods --
         protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
         {
