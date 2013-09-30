@@ -49,10 +49,10 @@ namespace Sitrine.Event
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            if (this.window.TargetUpdateFrequency < 0.0)
+            if (this.Window.TargetUpdateFrequency < 0.0)
                 throw new Exception("TargetUpdateFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'updates_per_second' に値を指定してください。");
 
-            this.storyboard.AddAction(() => this.storyboard.SetWait((int)Math.Round(this.window.TargetUpdateFrequency * seconds)));
+            this.Storyboard.AddAction(() => this.Storyboard.SetWait((int)Math.Round(this.Window.TargetUpdateFrequency * seconds)));
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Sitrine.Event
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("frame");
 
-            this.storyboard.AddAction(() => this.storyboard.SetWait(frame));
+            this.Storyboard.AddAction(() => this.Storyboard.SetWait(frame));
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Sitrine.Event
         /// </summary>
         public void Break()
         {
-            this.storyboard.AddAction(this.storyboard.Break);
+            this.Storyboard.AddAction(this.Storyboard.Break);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Sitrine.Event
         /// <param name="newStoryboard">追加されるストーリーボード。</param>
         public void Start(Storyboard newStoryboard)
         {
-            this.storyboard.AddAction(() => this.window.AddStoryboard(newStoryboard));
+            this.Storyboard.AddAction(() => this.Window.AddStoryboard(newStoryboard));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Sitrine.Event
         /// <param name="action">予約する処理。</param>
         public void Invoke(Action action)
         {
-            this.storyboard.AddAction(action);
+            this.Storyboard.AddAction(action);
         }
         #endregion
     }

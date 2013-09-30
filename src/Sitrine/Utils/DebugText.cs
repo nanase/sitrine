@@ -89,7 +89,7 @@ namespace Sitrine.Utils
         /// 各種パラメータを指定して DebugText クラスの新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="options">デバッグ表示のテキストに用いられるテキストオプション。</param>
-        /// <param name="window">デバッグ表示が行われるウィンドウ。</param>
+        /// <param name="Window">デバッグ表示が行われるウィンドウ。</param>
         public DebugText(TextOptions options, SitrineWindow window)
         {
             if (options == null)

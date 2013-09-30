@@ -71,7 +71,7 @@ namespace Sitrine.Texture
             if (options == null)
                 throw new ArgumentNullException();
 
-            this.renderer = new TextRenderer(options, this.bitmap);
+            this.renderer = new TextRenderer(options, this.BaseBitmap);
         }        
         #endregion
 
@@ -107,7 +107,7 @@ namespace Sitrine.Texture
             {
                 this.updated = false;
                 this.renderer.Flush();
-                Texture.Update(this.id, this.bitmap);
+                Texture.Update(this.ID, this.BaseBitmap);
             }
 
             base.Render();

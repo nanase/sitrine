@@ -32,16 +32,23 @@ namespace Sitrine.Event
     public abstract class StoryEvent
     {
         #region -- Protected Fields --
-        protected readonly SitrineWindow window;
-        protected readonly Storyboard storyboard;
+        /// <summary>
+        /// イベントが実行されるウィンドウ。この変数は読み取り専用です。
+        /// </summary>
+        protected readonly SitrineWindow Window;
+
+        /// <summary>
+        /// イベントが属するストーリーボード。この変数は読み取り専用です。
+        /// </summary>
+        protected readonly Storyboard Storyboard;
         #endregion
 
         #region -- Constructors --
         /// <summary>
         /// ストーリーボードオブジェクトとそれが実行されるウィンドウオブジェクトを指定して Storyboard クラスの新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="storyboard">対象となる Storyboard オブジェクト。</param>
-        /// <param name="window">ストーリーボードが実行される SitrineWindow オブジェクト。</param>
+        /// <param name="Storyboard">対象となる Storyboard オブジェクト。</param>
+        /// <param name="Window">ストーリーボードが実行される SitrineWindow オブジェクト。</param>
         public StoryEvent(Storyboard storyboard, SitrineWindow window)
         {
             if (storyboard == null)
@@ -50,8 +57,8 @@ namespace Sitrine.Event
             if (window == null)
                 throw new ArgumentNullException();
 
-            this.storyboard = storyboard;
-            this.window = window;
+            this.Storyboard = storyboard;
+            this.Window = window;
         }
         #endregion
     }

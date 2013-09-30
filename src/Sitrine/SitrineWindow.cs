@@ -129,7 +129,7 @@ namespace Sitrine
 
             this.debugText = new DebugText(options.DebugTextOptions, this);
             Trace.Listeners.Add(new DebugTextListener(this.debugText));
-            Trace.WriteLine("window", "Init");
+            Trace.WriteLine("Window", "Init");
         }
         #endregion
 
@@ -145,7 +145,7 @@ namespace Sitrine
         /// <summary>
         /// ストーリーボードを追加します。
         /// </summary>
-        /// <param name="storyboard">追加されるストーリーボード。</param>
+        /// <param name="Storyboard">追加されるストーリーボード。</param>
         public void AddStoryboard(Storyboard storyboard)
         {
             this.stories.Add(storyboard);
@@ -154,7 +154,7 @@ namespace Sitrine
         /// <summary>
         /// ストーリーボードを実行対象から除外します。
         /// </summary>
-        /// <param name="storyboard">除外されるストーリーボード。</param>
+        /// <param name="Storyboard">除外されるストーリーボード。</param>
         public void RemoveStoryboard(Storyboard storyboard)
         {
             this.stories.Remove(storyboard);

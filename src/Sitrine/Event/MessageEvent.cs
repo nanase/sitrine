@@ -56,7 +56,7 @@ namespace Sitrine.Event
             }
             set
             {
-                this.storyboard.AddAction(() => this.texture.Position = value);
+                this.Storyboard.AddAction(() => this.texture.Position = value);
             }
         }
 
@@ -71,7 +71,7 @@ namespace Sitrine.Event
             }
             set
             {
-                this.storyboard.AddAction(() => this.texture.Color = value);
+                this.Storyboard.AddAction(() => this.texture.Color = value);
             }
         }
 
@@ -86,7 +86,7 @@ namespace Sitrine.Event
             }
             set
             {
-                this.storyboard.AddAction(() => this.texture.Interval = value);
+                this.Storyboard.AddAction(() => this.texture.Interval = value);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Sitrine.Event
             }
             set
             {
-                this.storyboard.AddAction(() => this.texture.ProgressCount = value);
+                this.Storyboard.AddAction(() => this.texture.ProgressCount = value);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Sitrine.Event
         /// <param name="text"></param>
         public void Show(string text)
         {
-            this.storyboard.AddAction(() =>
+            this.Storyboard.AddAction(() =>
             {
                 this.texture.Draw(text);
 
@@ -150,11 +150,11 @@ namespace Sitrine.Event
                         if (this.TextureEnd != null)
                             this.TextureEnd(s, e2);
 
-                        this.storyboard.Keyboard.WaitForOK(() => this.window.Textures.Remove(this.texture, false));
+                        this.Storyboard.Keyboard.WaitForOK(() => this.Window.Textures.Remove(this.texture, false));
                     };
 
-                this.window.Textures.AddLast(this.texture);
-                this.storyboard.Pause();
+                this.Window.Textures.AddLast(this.texture);
+                this.Storyboard.Pause();
             });
         }
         #endregion

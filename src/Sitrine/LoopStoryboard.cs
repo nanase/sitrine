@@ -62,7 +62,7 @@ namespace Sitrine
         /// <summary>
         /// ストーリーボードが動作する SitrineWindow オブジェクトを指定して新しい Storyboard クラスのインスタンスを初期化します。
         /// </summary>
-        /// <param name="window">動作対象の SitrineWindow オブジェクト。</param>
+        /// <param name="Window">動作対象の SitrineWindow オブジェクト。</param>
         public LoopStoryboard(SitrineWindow window)
             : base(window)
         {

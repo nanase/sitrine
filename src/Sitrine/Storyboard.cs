@@ -116,7 +116,7 @@ namespace Sitrine
         /// <summary>
         /// ストーリーボードが動作する SitrineWindow オブジェクトを指定して新しい Storyboard クラスのインスタンスを初期化します。
         /// </summary>
-        /// <param name="window">動作対象の SitrineWindow オブジェクト。</param>
+        /// <param name="Window">動作対象の SitrineWindow オブジェクト。</param>
         public Storyboard(SitrineWindow window)
         {
             if (window == null)
@@ -131,7 +131,7 @@ namespace Sitrine
             this.texture = new TextureEvent(this, this.window);
             this.keyboard = new KeyboardEvent(this, this.window);
 
-            Trace.WriteLine("storyboard", "Init");
+            Trace.WriteLine("Storyboard", "Init");
         }
         #endregion
 

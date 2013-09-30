@@ -51,57 +51,57 @@ namespace Sitrine.Event
         /// 指定された ID とビットマップから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="Id">関連付けられる ID。</param>
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         public void Create(int id, Bitmap bitmap)
         {
             if (bitmap == null)
                 throw new ArgumentNullException();
 
-            this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
         }
 
         /// <summary>
         /// 指定された ID とビットマップデータを格納するストリームから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="Id">関連付けられる ID。</param>
         /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
         public void Create(int id, Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException();
 
-            this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
         }
 
         /// <summary>
         /// 指定された ID とビットマップファイルから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="Id">関連付けられる ID。</param>
         /// <param name="filename">ビットマップデータを格納したファイル名。</param>
         public void Create(int id, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentException();
 
-            this.storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
         }
 
         /// <summary>
         /// 指定された ID のテクスチャを不透明にし、画面上に表示されるようにします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="Id">関連付けられた ID。</param>
         public void Show(int id)
         {
-            this.storyboard.AddAction(() =>
+            this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
                     return;
 
-                var tex = this.window.Textures[this.asignment[id]];
+                var tex = this.Window.Textures[this.asignment[id]];
                 var color = tex.Color;
                 color.A = 1f;
                 tex.Color = color;
@@ -112,15 +112,15 @@ namespace Sitrine.Event
         /// 指定された ID のテクスチャを完全不透明にし、画面上から隠します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="Id">関連付けられた ID。</param>
         public void Hide(int id)
         {
-            this.storyboard.AddAction(() =>
+            this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
                     return;
 
-                var tex = this.window.Textures[this.asignment[id]];
+                var tex = this.Window.Textures[this.asignment[id]];
                 var color = tex.Color;
                 color.A = 0f;
                 tex.Color = color;
@@ -131,15 +131,15 @@ namespace Sitrine.Event
         /// 指定された ID のテクスチャのリソースを解放し画面上から消去します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="Id">関連付けられた ID。</param>
         public void Clear(int id)
         {
-            this.storyboard.AddAction(() =>
+            this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
                     return;
 
-                this.window.Textures.Remove(this.asignment[id], true);
+                this.Window.Textures.Remove(this.asignment[id], true);
             });
         }
 
@@ -149,10 +149,10 @@ namespace Sitrine.Event
         /// </summary>
         public void ClearAll()
         {
-            this.storyboard.AddAction(() =>
+            this.Storyboard.AddAction(() =>
             {
                 foreach (int key in this.asignment.Values)
-                    this.window.Textures.Remove(key, true);
+                    this.Window.Textures.Remove(key, true);
 
                 this.asignment.Clear();
             });
@@ -167,12 +167,12 @@ namespace Sitrine.Event
             if (this.asignment.ContainsKey(id))
             {
                 key = this.asignment[id];
-                this.window.Textures.Remove(key, true);
-                this.window.Textures.Add(key, texture);
+                this.Window.Textures.Remove(key, true);
+                this.Window.Textures.Add(key, texture);
             }
             else
             {
-                key = this.window.Textures.AddLast(texture);
+                key = this.Window.Textures.AddLast(texture);
                 this.asignment.Add(id, key);
             }
         }

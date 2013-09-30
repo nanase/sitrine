@@ -38,21 +38,19 @@ namespace Sitrine.Texture
     public class Texture : IDisposable
     {
         #region -- Private Fields --
-        private int listId = -1;
-        #endregion
+        private readonly int Id;
 
-        #region -- Protected Fields --
-        protected readonly int id;
-        protected Bitmap bitmap;
-        protected Color4 color = Color4.White;
-        protected PointF position = new PointF();
+        private int listId = -1;
+        private Color4 color = Color4.White;
+        private PointF position = new PointF();
+        private Bitmap bitmap;
         #endregion
 
         #region -- Public Properties --
         /// <summary>
         /// OpenGL で使われているテクスチャの ID を取得します。
         /// </summary>
-        public int ID { get { return this.id; } }
+        public int ID { get { return this.Id; } }
 
         /// <summary>
         /// 表示されるビットマップオブジェクトを取得します。
@@ -118,8 +116,8 @@ namespace Sitrine.Texture
 
             this.bitmap = bitmap;
 
-            GL.GenTextures(1, out this.id);
-            Texture.Load(this.id, bitmap);
+            GL.GenTextures(1, out this.Id);
+            Texture.Load(this.Id, bitmap);
         }
 
         /// <summary>
@@ -156,7 +154,7 @@ namespace Sitrine.Texture
         /// </summary>
         public virtual void Dispose()
         {
-            int id = this.id;
+            int id = this.Id;
             GL.DeleteTextures(1, ref id);
 
             if (this.listId != -1)
@@ -181,7 +179,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// 指定されたテクスチャ ID にビットマップを差し替えます。
         /// </summary>
-        /// <param name="id">テクスチャ ID。</param>
+        /// <param name="Id">テクスチャ ID。</param>
         /// <param name="bitmap">差し替えるビットマップ。</param>
         public static void Update(int id, Bitmap bitmap)
         {
@@ -198,7 +196,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// 指定されたテクスチャ ID にビットマップを割り当てます。
         /// </summary>
-        /// <param name="id">テクスチャ ID。</param>
+        /// <param name="Id">テクスチャ ID。</param>
         /// <param name="bitmap">割り当てるビットマップ。</param>
         public static void Load(int id, Bitmap bitmap)
         {
@@ -217,7 +215,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// 指定されたテクスチャ ID にファイル名が指し示すビットマップを割り当てます。
         /// </summary>
-        /// <param name="id">テクスチャ ID。</param>
+        /// <param name="Id">テクスチャ ID。</param>
         /// <param name="filename">読み込まれるファイル。</param>
         public static void Load(int id, string filename)
         {

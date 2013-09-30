@@ -77,7 +77,7 @@ namespace Sitrine.Utils
         /// <param name="eventCache">現在のプロセス ID、スレッド ID、およびスタック トレース情報を格納している System.Diagnostics.TraceEventCache オブジェクト。</param>
         /// <param name="source">出力を識別するために使用される名前。通常は、トレース イベントを生成したアプリケーションの名前。</param>
         /// <param name="eventType">トレースを発生させたイベントのタイプを指定する System.Diagnostics.TraceEventType 値の 1 つ。</param>
-        /// <param name="id">イベントの数値識別子。</param>
+        /// <param name="Id">イベントの数値識別子。</param>
         /// <param name="message">書き込むメッセージ。</param>
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
         {
@@ -110,7 +110,7 @@ namespace Sitrine.Utils
         /// <param name="eventCache">現在のプロセス ID、スレッド ID、およびスタック トレース情報を格納している System.Diagnostics.TraceEventCache オブジェクト。</param>
         /// <param name="source">出力を識別するために使用される名前。通常は、トレース イベントを生成したアプリケーションの名前。</param>
         /// <param name="eventType">トレースを発生させたイベントのタイプを指定する System.Diagnostics.TraceEventType 値の 1 つ。</param>
-        /// <param name="id">イベントの数値識別子。</param>
+        /// <param name="Id">イベントの数値識別子。</param>
         /// <param name="format">0 個以上の書式項目を格納している書式指定文字列。args 配列内のオブジェクトに対応します。</param>
         /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ object 配列。</param>
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
