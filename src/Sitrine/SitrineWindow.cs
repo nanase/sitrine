@@ -41,16 +41,15 @@ namespace Sitrine
     public class SitrineWindow : GameWindow
     {
         #region -- Private Fields --
+        private readonly DebugText debugText;
+
+        private readonly TextureList textures;
+        private readonly MusicPlayer music;
+        private readonly List<Storyboard> stories;
+        private readonly TextOptions textOptions;
+
         private Color backgroundColor = Color.Black;
         private Color foregroundColor = Color.FromArgb(0);
-        #endregion
-
-        #region -- Protected Fields --
-        protected readonly TextureList textures;
-        protected readonly MusicPlayer music;        
-        protected readonly DebugText debugText;
-        protected readonly List<Storyboard> stories;
-        protected readonly TextOptions textOptions;
         #endregion
 
         #region -- Public Properties --
@@ -142,15 +141,21 @@ namespace Sitrine
         {
             this.debugText.IsVisible = !this.debugText.IsVisible;
         }
-        #endregion
 
-        #region -- Internal Methods --
-        internal void AddStoryboard(Storyboard storyboard)
+        /// <summary>
+        /// ストーリーボードを追加します。
+        /// </summary>
+        /// <param name="storyboard">追加されるストーリーボード。</param>
+        public void AddStoryboard(Storyboard storyboard)
         {
             this.stories.Add(storyboard);
         }
 
-        internal void RemoveStoryboard(Storyboard storyboard)
+        /// <summary>
+        /// ストーリーボードを実行対象から除外します。
+        /// </summary>
+        /// <param name="storyboard">除外されるストーリーボード。</param>
+        public void RemoveStoryboard(Storyboard storyboard)
         {
             this.stories.Remove(storyboard);
         }

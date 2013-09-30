@@ -90,13 +90,13 @@ namespace Sample
 
         protected override void OnLoad(EventArgs e)
         {
-            this.stories.Add(new SampleStory(this));
-            this.stories.Add(new FunctionKeyStory(this));
+            this.AddStoryboard(new SampleStory(this));
+            this.AddStoryboard(new FunctionKeyStory(this));
 
             this.BackgroundColor = Color.FromArgb(10, 59, 118);
 
             #region Music
-            this.music.Connector.Master.PushHandle(new[]{
+            this.Music.Connector.Master.PushHandle(new[]{
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),
