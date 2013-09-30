@@ -51,7 +51,7 @@ namespace Sitrine.Event
         /// 指定された ID とビットマップから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="Id">関連付けられる ID。</param>
+        /// <param name="id">関連付けられる ID。</param>
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         public void Create(int id, Bitmap bitmap)
         {
@@ -65,7 +65,7 @@ namespace Sitrine.Event
         /// 指定された ID とビットマップデータを格納するストリームから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="Id">関連付けられる ID。</param>
+        /// <param name="id">関連付けられる ID。</param>
         /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
         public void Create(int id, Stream stream)
         {
@@ -79,7 +79,7 @@ namespace Sitrine.Event
         /// 指定された ID とビットマップファイルから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="Id">関連付けられる ID。</param>
+        /// <param name="id">関連付けられる ID。</param>
         /// <param name="filename">ビットマップデータを格納したファイル名。</param>
         public void Create(int id, string filename)
         {
@@ -93,7 +93,7 @@ namespace Sitrine.Event
         /// 指定された ID のテクスチャを不透明にし、画面上に表示されるようにします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="Id">関連付けられた ID。</param>
+        /// <param name="id">関連付けられた ID。</param>
         public void Show(int id)
         {
             this.Storyboard.AddAction(() =>
@@ -112,7 +112,7 @@ namespace Sitrine.Event
         /// 指定された ID のテクスチャを完全不透明にし、画面上から隠します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="Id">関連付けられた ID。</param>
+        /// <param name="id">関連付けられた ID。</param>
         public void Hide(int id)
         {
             this.Storyboard.AddAction(() =>
@@ -131,7 +131,7 @@ namespace Sitrine.Event
         /// 指定された ID のテクスチャのリソースを解放し画面上から消去します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="Id">関連付けられた ID。</param>
+        /// <param name="id">関連付けられた ID。</param>
         public void Clear(int id)
         {
             this.Storyboard.AddAction(() =>
