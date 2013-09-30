@@ -76,18 +76,18 @@ namespace Sitrine
         protected void StartLooping()
         {
             this.nowCount = 0;
-            this.actionPool.AddRange(this.actions);
+            this.actionPool.AddRange(this.Actions);
         }
         #endregion
 
         #region -- Internal Methods --
         internal override void Update()
         {
-            if (this.actions.Count == 0)
+            if (this.Actions.Count == 0)
             {
                 if (this.loopCount == -1 || ++this.nowCount < this.loopCount)
                     foreach (var action in this.actionPool)
-                        this.actions.AddFirst(action);
+                        this.Actions.AddFirst(action);
             }
 
             base.Update();

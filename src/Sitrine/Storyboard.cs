@@ -48,9 +48,20 @@ namespace Sitrine
         #endregion
 
         #region -- Protected Fields --
-        protected readonly LinkedList<Action> actions;
-        protected readonly List<Func<bool>> listener;
-        protected readonly SitrineWindow window;
+        /// <summary>
+        /// アクションオブジェクトを格納するリスト。この変数は読み取り専用です。
+        /// </summary>
+        protected readonly LinkedList<Action> Actions;
+
+        /// <summary>
+        /// リスナオブジェクトを格納するリスト。この変数は読み取り専用です。
+        /// </summary>
+        protected readonly List<Func<bool>> Listener;
+        
+        /// <summary>
+        /// このストーリーボードが所属するウィンドウ。この変数は読み取り専用です。
+        /// </summary>
+        protected readonly SitrineWindow Window;
         #endregion
 
         #region -- Public Properties --
@@ -88,12 +99,12 @@ namespace Sitrine
         /// <summary>
         /// ストーリーボードに遅延実行を予約されたアクション数を取得します。
         /// </summary>
-        public int ActionCount { get { return this.actions.Count; } }
+        public int ActionCount { get { return this.Actions.Count; } }
 
         /// <summary>
         /// ストーリーボードに格納されたリスナ数を取得します。
         /// </summary>
-        public int ListenerCount { get { return this.listener.Count; } }
+        public int ListenerCount { get { return this.Listener.Count; } }
 
         /// <summary>
         /// 現在のストーリーボードの状態を表す列挙体を取得します。
@@ -122,14 +133,14 @@ namespace Sitrine
             if (window == null)
                 throw new ArgumentNullException();
 
-            this.actions = new LinkedList<Action>();
-            this.listener = new List<Func<bool>>();
-            this.window = window;
+            this.Actions = new LinkedList<Action>();
+            this.Listener = new List<Func<bool>>();
+            this.Window = window;
             this.waitTime = 0;
 
-            this.process = new ProcessEvent(this, this.window);
-            this.texture = new TextureEvent(this, this.window);
-            this.keyboard = new KeyboardEvent(this, this.window);
+            this.process = new ProcessEvent(this, this.Window);
+            this.texture = new TextureEvent(this, this.Window);
+            this.keyboard = new KeyboardEvent(this, this.Window);
 
             Trace.WriteLine("Storyboard", "Init");
         }
@@ -149,7 +160,7 @@ namespace Sitrine
             if (this.message != null && this.message is IDisposable)
                 ((IDisposable)this.message).Dispose();
 
-            this.message = new MessageEvent(this, this.window, options, size);
+            this.message = new MessageEvent(this, this.Window, options, size);
             Trace.WriteLine("message event", "Init");
         }
         #endregion
@@ -165,21 +176,21 @@ namespace Sitrine
             {
                 int count = 0;
 
-                while (this.actions.Count > 0 && this.waitTime == 0)
+                while (this.Actions.Count > 0 && this.waitTime == 0)
                 {
-                    this.actions.Last.Value();
-                    this.actions.RemoveLast();
+                    this.Actions.Last.Value();
+                    this.Actions.RemoveLast();
                     count++;
                 }
 
                 DebugText.IncrementActionCount(count);
             }
 
-            for (int i = 0; i < this.listener.Count; i++)
+            for (int i = 0; i < this.Listener.Count; i++)
             {
-                if (this.listener[i]())
+                if (this.Listener[i]())
                 {
-                    this.listener.RemoveAt(i);
+                    this.Listener.RemoveAt(i);
                     i--;
                 }
             }
@@ -190,7 +201,7 @@ namespace Sitrine
             if (action == null)
                 throw new ArgumentNullException();
 
-            this.actions.AddFirst(action);
+            this.Actions.AddFirst(action);
         }
 
         internal void AddActionNow(Action action)
@@ -198,7 +209,7 @@ namespace Sitrine
             if (action == null)
                 throw new ArgumentNullException();
 
-            this.actions.AddLast(action);
+            this.Actions.AddLast(action);
         }
 
         internal void AddListener(Func<bool> listener)
@@ -206,7 +217,7 @@ namespace Sitrine
             if (listener == null)
                 throw new ArgumentNullException();
 
-            this.listener.Add(listener);
+            this.Listener.Add(listener);
         }
 
         internal void SetWait(int frame)
@@ -229,11 +240,11 @@ namespace Sitrine
 
         internal void Break()
         {
-            this.actions.Clear();
-            this.listener.Clear();
+            this.Actions.Clear();
+            this.Listener.Clear();
             this.waitTime = 0;
 
-            this.window.RemoveStoryboard(this);
+            this.Window.RemoveStoryboard(this);
         }
         #endregion
     }
