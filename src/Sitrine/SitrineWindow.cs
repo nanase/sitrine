@@ -121,7 +121,7 @@ namespace Sitrine
             if (options == null)
                 throw new ArgumentNullException();
 
-            this.music = new MusicPlayer();
+            this.music = new MusicPlayer(new MusicOptions());
             this.textures = new TextureList();           
             this.TargetSize = options.TargetSize;
             this.stories = new List<Storyboard>();

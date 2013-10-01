@@ -36,9 +36,10 @@ namespace Sitrine.Audio
     public class MusicPlayer : IDisposable
     {
         #region -- Private Fields --
-        private const int buffer_size = 1024;
-        private const int buffer_count = 4;
-        private const int smaplingFrequency = 22050;
+        private readonly int bufferSize;
+        private readonly int bufferCount;
+        private readonly int samplingRate;
+        private readonly int updateInterval;
 
         private readonly AudioContext context;
         private readonly int source;
@@ -61,15 +62,23 @@ namespace Sitrine.Audio
         /// <summary>
         /// MusicPlayer クラスの新しいインスタンスを初期化します。
         /// </summary>
-        public MusicPlayer()
+        public MusicPlayer(MusicOptions options)
         {
+            if (options == null)
+                throw new ArgumentNullException();
+
+            this.bufferSize = options.BufferSize;
+            this.bufferCount = options.BufferCount;
+            this.samplingRate = options.SamplingRate;
+            this.updateInterval = options.UpdateInterval;
+
             this.context = new AudioContext();
-            this.Connector = new SmfConnector(smaplingFrequency);
+            this.Connector = new SmfConnector(samplingRate);
 
             this.source = AL.GenSource();
-            this.buffers = AL.GenBuffers(buffer_count);
-            this.sbuf = new short[buffer_size];
-            this.fbuf = new float[buffer_size];
+            this.buffers = AL.GenBuffers(bufferCount);
+            this.sbuf = new short[bufferSize];
+            this.fbuf = new float[bufferSize];
 
             foreach (int buffer in buffers)
                 this.FillBuffer(buffer);
@@ -130,7 +139,7 @@ namespace Sitrine.Audio
                 do
                 {
                     AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed_count);
-                    System.Threading.Thread.Sleep(10);
+                    System.Threading.Thread.Sleep(this.updateInterval);
                 }
                 while (processed_count == 0);
 
@@ -158,12 +167,12 @@ namespace Sitrine.Audio
 
         private void FillBuffer(int buffer)
         {
-            this.Connector.Master.Read(this.fbuf, 0, buffer_size);
+            this.Connector.Master.Read(this.fbuf, 0, bufferSize);
 
-            for (int i = 0; i < buffer_size; i++)
+            for (int i = 0; i < bufferSize; i++)
                 this.sbuf[i] = (short)(this.fbuf[i] * short.MaxValue);
 
-            AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * buffer_size, smaplingFrequency);
+            AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * bufferSize, samplingRate);
         }
         #endregion
     }

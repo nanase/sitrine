@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\MusicOptions.cs" />
     <Compile Include="Audio\MusicPlayer.cs" />
     <Compile Include="Event\KeyboardEvent.cs" />
     <Compile Include="Event\MessageEvent.cs" />

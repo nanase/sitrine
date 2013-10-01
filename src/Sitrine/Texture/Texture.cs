@@ -43,7 +43,7 @@ namespace Sitrine.Texture
 
         private int listId = -1;
         private Color4 color = Color4.White;
-        private PointF position = new PointF();        
+        private PointF position = new PointF();
         #endregion
 
         #region -- Public Properties --
