@@ -31,43 +31,29 @@ using System.Threading.Tasks;
 
 namespace Sitrine.Audio
 {
-    /// <summary>
-    /// イベントをスケジューリングし、決められた時間に送出するシーケンサを提供します。
-    /// </summary>
-    public class Sequencer
+    class Sequencer
     {
-        #region Private Field
+        #region -- Private Fields --
         private long tick;
         private double tempo = 120.0;
         private int interval = 5;
-        private long endOfTick;
         private double tempoFactor = 1.0;
         private double tickTime;
 
         private int eventIndex = 0;
 
         private Task sequenceTask = null;
-        private readonly List<Event> events;
+        private readonly List<HandleItem> handles;
         private readonly object syncObject = new object();
+        private readonly SequenceInfo info;
 
         private volatile bool reqEnd;
         private volatile bool reqRewind;
         #endregion
 
-        #region Property
-        /// <summary>
-        /// 一連のイベントを格納したシーケンスを取得します。
-        /// </summary>
-        public Sequence Sequence { get; private set; }
-
-        /// <summary>
-        /// シーケンサの現在のテンポ (BPM) を取得します。
-        /// </summary>
+        #region -- Public Properties --
         public double Tempo { get { return this.tempo; } }
 
-        /// <summary>
-        /// シーケンサの現在のティックを取得または設定します。
-        /// </summary>
         public long Tick
         {
             get { return this.tick; }
@@ -93,9 +79,6 @@ namespace Sitrine.Audio
             }
         }
 
-        /// <summary>
-        /// シーケンサがスケジューリングのために割り込む間隔をミリ秒単位で取得または設定します。
-        /// </summary>
         public int Interval
         {
             get { return this.interval; }
@@ -108,9 +91,6 @@ namespace Sitrine.Audio
             }
         }
 
-        /// <summary>
-        /// シーケンサのテンポに応じて乗算される係数を取得または設定します。
-        /// </summary>
         public double TempoFactor
         {
             get { return this.tempoFactor; }
@@ -125,16 +105,11 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Event
+        #region -- Public Events --
         /// <summary>
         /// シーケンサによってスケジュールされたイベントが送出される時に発生します。
         /// </summary>
         public event EventHandler<TrackEventArgs> OnTrackEvent;
-
-        /// <summary>
-        /// イベントによってテンポが変更された時に発生します。このイベントは TempoFactor の影響を受けません。
-        /// </summary>
-        public event EventHandler<TempoChangedEventArgs> TempoChanged;
 
         /// <summary>
         /// シーケンサが開始された時に発生します。
@@ -152,27 +127,22 @@ namespace Sitrine.Audio
         public event EventHandler SequenceEnd;
         #endregion
 
-        #region Constructor
-        /// <summary>
-        /// シーケンスを指定して新しい Sequencer クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="sequence">一連のイベントが格納されたシーケンス。</param>
-        public Sequencer(Sequence sequence)
+        #region -- Constructors --
+        public Sequencer(IEnumerable<HandleItem> handles, SequenceInfo info)
         {
-            if (sequence == null)
+            if (handles == null)
                 throw new ArgumentNullException();
 
-            this.Sequence = sequence;
-            this.events = new List<Event>(sequence.Tracks.SelectMany(t => t.Events).OrderBy(e => e.Tick));
-            this.endOfTick = sequence.MaxTick;
+            this.handles = new List<HandleItem>(handles);
+            this.info = info;
 
-            this.tick = -(long)(sequence.Resolution * 1.0);
+            this.tick = -(long)(info.Resolution * 1.0);
 
             this.RecalcTickTime();
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// シーケンサを開始します。
         /// </summary>
@@ -210,7 +180,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Update()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -255,7 +225,7 @@ namespace Sitrine.Audio
                     oldTick = nowTick;
                     this.tick += processTick;
 
-                    if (this.tick >= this.endOfTick)
+                    if (this.tick >= this.info.EndOfTick)
                     {
                         if (this.SequenceEnd != null)
                             this.SequenceEnd(this, new EventArgs());
@@ -265,33 +235,28 @@ namespace Sitrine.Audio
                 }
             }
 
-            this.tick = -(long)(this.Sequence.Resolution * 1.0);
+            this.tick = -(long)(this.info.Resolution * 1.0);
 
             stopwatch.Stop();
         }
 
-        private IEnumerable<Event> SelectEvents(long start, long end)
+        private IEnumerable<HandleItem> SelectEvents(long start, long end)
         {
-            Event @event;
-            MetaEvent tempoEvent;
+            SequenceItem item;
 
             if (this.eventIndex < 0)
                 this.eventIndex = 0;
 
-            this.eventIndex = this.events.FindIndex(this.eventIndex, e => e.Tick >= start);
+            this.eventIndex = this.handles.FindIndex(this.eventIndex, e => e.Tick >= start);
 
-            while (this.eventIndex >= 0 && this.eventIndex < this.events.Count && this.events[this.eventIndex].Tick < end)
+            while (this.eventIndex >= 0 && this.eventIndex < this.handles.Count && this.handles[this.eventIndex].Tick < end)
             {
-                @event = this.events[this.eventIndex++];
+                item = this.handles[this.eventIndex++];
 
-                if (@event is MetaEvent)
-                {
-                    tempoEvent = (MetaEvent)@event;
-                    if (tempoEvent.MetaType == MetaType.Tempo)
-                        this.ChangeTempo(tempoEvent.GetTempo());
-                }
-
-                yield return @event;
+                if (item is TempoItem)
+                    this.ChangeTempo(((TempoItem)item).Tempo);
+                else
+                    yield return (HandleItem)item;
             }
         }
 
@@ -301,15 +266,11 @@ namespace Sitrine.Audio
                 return;
 
             double oldTempo = this.tempo;
-
-            if (this.TempoChanged != null)
-                this.TempoChanged(this, new TempoChangedEventArgs(oldTempo, newTempo));
-
             this.tempo = newTempo;
             this.RecalcTickTime();
         }
 
-        private void OutputEvents(IEnumerable<Event> events)
+        private void OutputEvents(IEnumerable<HandleItem> events)
         {
             if (this.OnTrackEvent != null)
                 this.OnTrackEvent(this, new TrackEventArgs(events));
@@ -317,62 +278,21 @@ namespace Sitrine.Audio
 
         private void RecalcTickTime()
         {
-            this.tickTime = 1.0 / ((double)Stopwatch.Frequency * ((60.0 / (this.tempo * this.tempoFactor)) / (double)this.Sequence.Resolution));
+            this.tickTime = 1.0 / ((double)Stopwatch.Frequency * ((60.0 / (this.tempo * this.tempoFactor)) / (double)this.info.Resolution));
         }
         #endregion
     }
 
-    /// <summary>
-    /// イベントの送出イベントに用いられるデータを格納したクラスです。
-    /// </summary>
-    public class TrackEventArgs : EventArgs
+    class TrackEventArgs : EventArgs
     {
-        #region Property
-        /// <summary>
-        /// イベントの列挙子を取得します。
-        /// </summary>
-        public IEnumerable<Event> Events { get; private set; }
+        #region -- Public Properties --
+        public IEnumerable<HandleItem> Events { get; private set; }
         #endregion
 
-        #region Constructor
-        /// <summary>
-        /// イベントの列挙子を指定して新しい TrackEventArgs クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="events">イベントの列挙子。</param>
-        public TrackEventArgs(IEnumerable<Event> events)
+        #region -- Constructors --
+        public TrackEventArgs(IEnumerable<HandleItem> events)
         {
             this.Events = events;
-        }
-        #endregion
-    }
-
-    /// <summary>
-    /// テンポ変更イベントに用いられるデータを格納したクラスです。
-    /// </summary>
-    public class TempoChangedEventArgs : EventArgs
-    {
-        #region Property
-        /// <summary>
-        /// 変更前のテンポを取得します。
-        /// </summary>
-        public double OldTempo { get; private set; }
-
-        /// <summary>
-        /// 変更後のテンポを取得します。
-        /// </summary>
-        public double NewTempo { get; private set; }
-        #endregion
-
-        #region Constructor
-        /// <summary>
-        /// 引数を指定して新しい TempoChangedEventArgs クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="oldTempo">変更前のテンポ。</param>
-        /// <param name="newTempo">変更後のテンポ。</param>
-        public TempoChangedEventArgs(double oldTempo, double newTempo)
-        {
-            this.OldTempo = oldTempo;
-            this.NewTempo = newTempo;
         }
         #endregion
     }

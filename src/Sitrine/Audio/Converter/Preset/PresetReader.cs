@@ -36,7 +36,7 @@ namespace Sitrine.Audio
     /// </summary>
     public static class PresetReader
     {
-        #region Private Field
+        #region -- Private Fields --
         private static readonly XName xtype = XName.Get("type");
         private static readonly XName xvalue = XName.Get("value");
         private static readonly XName xnumber = XName.Get("number");
@@ -46,7 +46,7 @@ namespace Sitrine.Audio
         private static readonly XName xnote = XName.Get("note");
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// XML を格納したファイルを読み込み、プログラムプリセットを生成します。
         /// </summary>
@@ -88,7 +88,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private static IEnumerable<ProgramPreset> Load(XDocument document)
         {
             var preset = document.Elements("ux").Select(e => e.Elements("preset")).FirstOrDefault();

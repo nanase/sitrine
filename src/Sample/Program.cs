@@ -58,7 +58,7 @@ namespace Sample
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
             Message.Position = new PointF(0, 160);
-            Message.TextureUpdate = (s, e2) => this.Window.Music.Connector.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
+            Message.TextureUpdate = (s, e2) => this.Window.Music.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
 
             var file = File.ReadAllLines("message.txt");
 
@@ -96,7 +96,7 @@ namespace Sample
             this.BackgroundColor = Color.FromArgb(10, 59, 118);
 
             #region Music
-            this.Music.Connector.Master.PushHandle(new[]{
+            this.Music.Master.PushHandle(new[]{
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
               new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),

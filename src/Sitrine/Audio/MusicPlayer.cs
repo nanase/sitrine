@@ -26,6 +26,7 @@ using System;
 using System.Threading.Tasks;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
+using ux;
 
 namespace Sitrine.Audio
 {
@@ -48,13 +49,19 @@ namespace Sitrine.Audio
 
         private volatile bool reqEnd;
         private Task Updater;
+
+        private readonly Master master;
+        private SmfContainer musicSequence;
+        private SmfContainer effectSequence;
+        private Sequencer musicSequencer;
+        private Sequencer effectSequencer;
         #endregion
 
         #region -- Public Properties --
         /// <summary>
-        /// シンセサイザと接続されるコネクタオブジェクトを取得します。
+        /// ux のマスターオブジェクトを取得します。
         /// </summary>
-        public SmfConnector Connector { get; private set; }
+        public Master Master { get { return this.master; } }
         #endregion
 
         #region -- Constructors --
@@ -72,7 +79,7 @@ namespace Sitrine.Audio
             this.updateInterval = options.UpdateInterval;
 
             this.context = new AudioContext();
-            this.Connector = new SmfConnector(this.samplingRate);
+            this.master = new Master(options.SamplingRate, 23);
 
             this.source = AL.GenSource();
             this.buffers = AL.GenBuffers(this.bufferCount);
@@ -95,8 +102,7 @@ namespace Sitrine.Audio
         /// </summary>
         public void Play()
         {
-            this.Connector.Play();
-            this.Connector.Master.Play();
+            this.master.Play();
         }
 
         /// <summary>
@@ -104,8 +110,7 @@ namespace Sitrine.Audio
         /// </summary>
         public void Stop()
         {
-            this.Connector.Master.Stop();
-            this.Connector.Stop();
+            this.master.Stop();
         }
 
         /// <summary>
@@ -116,8 +121,6 @@ namespace Sitrine.Audio
             this.reqEnd = true;
             this.Updater.Wait();
             this.Updater.Dispose();
-
-            this.Connector.Dispose();
 
             AL.SourceStop(this.source);
             AL.DeleteBuffers(this.buffers);
@@ -166,7 +169,7 @@ namespace Sitrine.Audio
 
         private void FillBuffer(int buffer)
         {
-            this.Connector.Master.Read(this.fbuf, 0, this.bufferSize);
+            this.master.Read(this.fbuf, 0, this.bufferSize);
 
             for (int i = 0; i < this.bufferSize; i++)
                 this.sbuf[i] = (short)(this.fbuf[i] * short.MaxValue);

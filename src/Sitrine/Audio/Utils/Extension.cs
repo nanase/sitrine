@@ -32,6 +32,7 @@ namespace Sitrine.Audio.Utils
     /// </summary>
     public static class Extension
     {
+        #region -- Public Methods --
         /// <summary>
         /// 与えられた Int16 値のバイトオーダを逆転させます。
         /// </summary>
@@ -68,10 +69,17 @@ namespace Sitrine.Audio.Utils
             return BitConverter.ToUInt32(array, 0);
         }
 
+        /// <summary>
+        /// 要素中の指定された名前を持つ属性値を取得します。
+        /// </summary>
+        /// <param name="element">属性が属する要素。</param>
+        /// <param name="name">属性名。</param>
+        /// <returns>属性の値。存在しない場合は null。</returns>
         public static string GetAttribute(this XElement element, XName name)
         {
             var result = element.Attribute(name);
             return result == null ? null : result.Value;
         }
+        #endregion
     }
 }

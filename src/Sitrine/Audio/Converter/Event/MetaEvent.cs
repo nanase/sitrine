@@ -35,7 +35,7 @@ namespace Sitrine.Audio
     /// </summary>
     public class MetaEvent : Event
     {
-        #region Property
+        #region -- Public Properties --
         /// <summary>
         /// 格納された可変長のバイトデータを取得します。
         /// </summary>
@@ -47,7 +47,7 @@ namespace Sitrine.Audio
         public MetaType MetaType { get; private set; }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
         /// パラメータを指定して新しい MetaEvent クラスのインスタンスを初期化します。
         /// </summary>
@@ -64,7 +64,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Public Method
+        #region -- Public Methods --
         /// <summary>
         /// このメタイベントのバイトデータをテンポデータと解釈し、テンポを取得します。
         /// </summary>
@@ -84,7 +84,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Load(BinaryReader br)
         {
             this.MetaType = (MetaType)br.ReadByte();

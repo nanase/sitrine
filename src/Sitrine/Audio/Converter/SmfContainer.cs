@@ -37,13 +37,13 @@ namespace Sitrine.Audio
     /// <summary>
     /// MIDI に関する一連のイベントを格納したシーケンスを提供します。
     /// </summary>
-    public class Sequence
+    public class SmfContainer
     {
-        #region Private Field
+        #region -- Private Fields --
         private readonly List<Track> tracks;
         #endregion
 
-        #region Property
+        #region -- Public Properties --
         /// <summary>
         /// 読み込まれた SMF のフォーマットを取得します。このプロパティは 0 または 1 のみの値となります。
         /// </summary>
@@ -70,30 +70,33 @@ namespace Sitrine.Audio
         public IEnumerable<Track> Tracks { get { return this.tracks; } }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
+        /// <summary>
+        /// ストリームを指定して新しい Sequence クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="stream">読み込まれるストリーム。</param>
+        public SmfContainer(Stream stream)
+        {
+            this.tracks = new List<Track>();
+            this.Load(stream);
+        }
+
         /// <summary>
         /// ファイルを指定して新しい Sequence クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="filename">読み込まれる SMF (MIDI) ファイル名。</param>
-        public Sequence(string filename)
+        public SmfContainer(string filename)
         {
             this.tracks = new List<Track>();
-            this.LoadFile(filename);
+
+            using (Stream stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                this.Load(stream);
         }
         #endregion
 
-        #region Private Method
-        private void LoadFile(string filename)
-        {
-            if (String.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException();
-
-            if (!File.Exists(filename))
-                throw new FileNotFoundException();
-
-            Console.WriteLine("Loading: " + filename);
-
-            using (Stream stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+        #region -- Private Methods --
+        private void Load(Stream stream)
+        {           
             using (BinaryReader br = new BinaryReader(stream))
             {
                 // ヘッダ読み取り

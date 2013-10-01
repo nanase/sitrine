@@ -49,22 +49,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\Preset\DrumPreset.cs" />
-    <Compile Include="Audio\Event\Event.cs" />
+    <Compile Include="Audio\Converter\HandleConverter.cs" />
+    <Compile Include="Audio\Converter\HandleItem.cs" />
+    <Compile Include="Audio\Converter\SequenceInfo.cs" />
+    <Compile Include="Audio\Converter\SmfContainer.cs" />
+    <Compile Include="Audio\Converter\Preset\DrumPreset.cs" />
+    <Compile Include="Audio\Converter\Event\Event.cs" />
     <Compile Include="Audio\Utils\Extension.cs" />
-    <Compile Include="Audio\Preset\HandleCreator.cs" />
-    <Compile Include="Audio\Event\MetaEvent.cs" />
-    <Compile Include="Audio\Connector\MidiConnector.cs" />
-    <Compile Include="Audio\Event\MidiEvent.cs" />
+    <Compile Include="Audio\Converter\Preset\HandleCreator.cs" />
+    <Compile Include="Audio\Converter\Event\MetaEvent.cs" />
+    <Compile Include="Audio\Converter\Event\MidiEvent.cs" />
     <Compile Include="Audio\MusicOptions.cs" />
     <Compile Include="Audio\MusicPlayer.cs" />
-    <Compile Include="Audio\Preset\PresetReader.cs" />
-    <Compile Include="Audio\Preset\ProgramPreset.cs" />
-    <Compile Include="Audio\Connector\Sequence.cs" />
+    <Compile Include="Audio\Converter\Preset\PresetReader.cs" />
+    <Compile Include="Audio\Converter\Preset\ProgramPreset.cs" />
     <Compile Include="Audio\Sequencer.cs" />
-    <Compile Include="Audio\Connector\SmfConnector.cs" />
-    <Compile Include="Audio\Event\SystemExclusiveEvent.cs" />
-    <Compile Include="Audio\Connector\Track.cs" />
+    <Compile Include="Audio\Converter\Event\SystemExclusiveEvent.cs" />
+    <Compile Include="Audio\Converter\Track.cs" />
     <Compile Include="Event\KeyboardEvent.cs" />
     <Compile Include="Event\MessageEvent.cs" />
     <Compile Include="Event\ProcessEvent.cs" />

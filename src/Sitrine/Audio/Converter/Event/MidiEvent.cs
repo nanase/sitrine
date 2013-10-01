@@ -31,31 +31,52 @@ using System.IO;
 namespace Sitrine.Audio
 {
     /// <summary>
-    /// 可変用のデータを持ったイベントを提供します。
+    /// MIDI の演奏に関わるイベントを提供します。
     /// </summary>
-    public class SystemExclusiveEvent : Event
+    public class MidiEvent : Event
     {
-        #region Property
+        #region -- Public Properties --
         /// <summary>
-        /// 可変長のバイトデータを取得します。
+        /// 1つ目のパラメータを取得します。
         /// </summary>
-        public byte[] Data { get; private set; }
+        public int Data1 { get; private set; }
+
+        /// <summary>
+        /// 2つ目のパラメータを取得します。
+        /// </summary>
+        public int Data2 { get; private set; }
+
+        /// <summary>
+        /// 対象となるチャネル番号を取得します。
+        /// </summary>
+        public int Channel { get; private set; }
         #endregion
 
-        #region Constructor
+        #region -- Constructors --
         /// <summary>
-        /// パラメータを指定して新しい SystemExclusiveEvent クラスのインスタンスを初期化します。
+        /// パラメータを指定して新しい MidiEvent クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="deltaTime">デルタタイム。</param>
         /// <param name="tick">ティック位置。</param>
         /// <param name="type">イベントのタイプ。</param>
+        /// <param name="channel">チャネル番号。</param>
         /// <param name="br">読み込まれるバイトリーダ。</param>
-        internal SystemExclusiveEvent(int deltaTime, long tick, EventType type, BinaryReader br)
+        internal MidiEvent(int deltaTime, long tick, EventType type, int channel, BinaryReader br)
             : base(deltaTime, tick)
         {
             this.Type = type;
+            this.Channel = channel;
 
             this.Load(br);
+        }
+
+        public MidiEvent(EventType type, int channel, int data1, int data2)
+            : base(0, 0)
+        {
+            this.Type = type;
+            this.Channel = channel;
+            this.Data1 = data1;
+            this.Data2 = data2;
         }
 
         /// <summary>
@@ -64,26 +85,17 @@ namespace Sitrine.Audio
         /// <returns>このインスタンスを表す文字列。</returns>
         public override string ToString()
         {
-            return string.Format("{0}, Length={1}", this.Type, this.Data.Length);
+            return string.Format("{0}, Channel={1}, Control={2}", this.Type, this.Channel, this.Data1);
         }
         #endregion
 
-        #region Private Method
+        #region -- Private Methods --
         private void Load(BinaryReader br)
         {
-            int length = br.ReadByte();
+            this.Data1 = br.ReadByte();
 
-            if (this.Type == EventType.SystemExclusiveF0)
-            {
-                this.Data = new byte[length + 1];
-                this.Data[0] = 0xf0;
-                br.Read(this.Data, 1, length);
-            }
-            else
-            {
-                this.Data = new byte[length];
-                br.Read(this.Data, 0, length);
-            }
+            if (this.Type != EventType.ProgramChange && this.Type != EventType.ChannelPressure)
+                this.Data2 = br.ReadByte();
         }
         #endregion
     }
