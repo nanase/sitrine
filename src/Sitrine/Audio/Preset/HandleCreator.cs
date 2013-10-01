@@ -1,0 +1,117 @@
+﻿/* Sitrine - 2D Game Library with OpenTK */
+
+/* LICENSE - The MIT License (MIT)
+
+Copyright (c) 2013 Tomona Nanase
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+using System;
+using ux.Component;
+
+namespace Sitrine.Audio
+{
+    /// <summary>
+    /// 文字列から新しいハンドルを生成するメソッドを提供します。
+    /// </summary>
+    static class HandleCreator
+    {
+        #region Public Method
+        /// <summary>
+        /// ハンドル名、タイプ、値から新しいハンドルを生成します。
+        /// </summary>
+        /// <param name="name">ハンドル名。</param>
+        /// <param name="type">タイプ。</param>
+        /// <param name="value">値。</param>
+        /// <returns></returns>
+        public static Handle Create(string name, string type, string value)
+        {
+            HandleType handleType;
+            int data1;
+            float data2;
+
+            if (!Enum.TryParse(name, true, out handleType))
+                throw new ArgumentException();
+
+            data1 = (string.IsNullOrWhiteSpace(type)) ? 0 : HandleCreator.ParseOperators(handleType, type);
+
+            if (string.IsNullOrWhiteSpace(value))
+                data2 = 0.0f;
+            else if (!float.TryParse(value, out data2))
+                throw new ArgumentException();
+
+            return new Handle(0, handleType, data1, data2);
+        }
+        #endregion
+
+        #region Private Method
+        private static int ParseOperators(HandleType type, string operators)
+        {
+            int result = 0;
+            int tmp;
+
+            foreach (var op in operators.Split(','))
+                result |= (int.TryParse(op, out tmp)) ? tmp : HandleCreator.ParseOperator(type, op);
+
+            return result;
+        }
+
+        private static int ParseOperator(HandleType type, string @operator)
+        {
+            switch (type)
+            {
+                case HandleType.Volume:
+                    return (int)Enum.Parse(typeof(VolumeOperate), @operator, true);
+
+                case HandleType.Vibrate:
+                    return (int)Enum.Parse(typeof(VibrateOperate), @operator, true);
+
+                case HandleType.Waveform:
+                    return (int)Enum.Parse(typeof(WaveformType), @operator, true);
+
+                case HandleType.EditWaveform:
+                    FMOperate fmo;
+                    BasicWaveformOperate bwo;
+                    StepWaveformOperate swo;
+                    RandomNoiseOperate rno;
+
+                    if (Enum.TryParse(@operator, true, out fmo))
+                        return (int)fmo;
+                    else if (Enum.TryParse(@operator, true, out bwo))
+                        return (int)bwo;
+                    else if (Enum.TryParse(@operator, true, out swo))
+                        return (int)swo;
+                    else if (Enum.TryParse(@operator, true, out rno))
+                        return (int)rno;
+                    else
+                        goto case HandleType.Envelope;
+
+                case HandleType.Envelope:
+                    return (int)Enum.Parse(typeof(EnvelopeOperate), @operator, true);
+
+                case HandleType.Portament:
+                    return (int)Enum.Parse(typeof(PortamentOperate), @operator, true);
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+        #endregion
+    }
+}

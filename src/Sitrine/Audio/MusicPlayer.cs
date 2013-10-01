@@ -26,7 +26,6 @@ using System;
 using System.Threading.Tasks;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
-using uxMidi;
 
 namespace Sitrine.Audio
 {
@@ -73,18 +72,18 @@ namespace Sitrine.Audio
             this.updateInterval = options.UpdateInterval;
 
             this.context = new AudioContext();
-            this.Connector = new SmfConnector(samplingRate);
+            this.Connector = new SmfConnector(this.samplingRate);
 
             this.source = AL.GenSource();
-            this.buffers = AL.GenBuffers(bufferCount);
-            this.sbuf = new short[bufferSize];
-            this.fbuf = new float[bufferSize];
+            this.buffers = AL.GenBuffers(this.bufferCount);
+            this.sbuf = new short[this.bufferSize];
+            this.fbuf = new float[this.bufferSize];
 
-            foreach (int buffer in buffers)
+            foreach (int buffer in this.buffers)
                 this.FillBuffer(buffer);
 
-            AL.SourceQueueBuffers(source, buffers.Length, buffers);
-            AL.SourcePlay(source);
+            AL.SourceQueueBuffers(this.source, this.buffers.Length, this.buffers);
+            AL.SourcePlay(this.source);
 
             this.Updater = Task.Factory.StartNew(this.Update);
         }
@@ -138,27 +137,27 @@ namespace Sitrine.Audio
                 // 処理済みバッファの処理
                 do
                 {
-                    AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed_count);
+                    AL.GetSource(this.source, ALGetSourcei.BuffersProcessed, out processed_count);
                     System.Threading.Thread.Sleep(this.updateInterval);
                 }
                 while (processed_count == 0);
 
                 while (processed_count > 0)
                 {
-                    int buffer = AL.SourceUnqueueBuffer(source);
+                    int buffer = AL.SourceUnqueueBuffer(this.source);
                     this.FillBuffer(buffer);
-                    AL.SourceQueueBuffer(source, buffer);
+                    AL.SourceQueueBuffer(this.source, buffer);
                     --processed_count;
                 }
 
                 // キュー済みバッファの処理
-                AL.GetSource(source, ALGetSourcei.BuffersQueued, out queued_count);
+                AL.GetSource(this.source, ALGetSourcei.BuffersQueued, out queued_count);
                 if (queued_count > 0)
                 {
                     int state;
-                    AL.GetSource(source, ALGetSourcei.SourceState, out state);
+                    AL.GetSource(this.source, ALGetSourcei.SourceState, out state);
                     if ((ALSourceState)state != ALSourceState.Playing)
-                        AL.SourcePlay(source);
+                        AL.SourcePlay(this.source);
                 }
                 else
                     break;
@@ -167,12 +166,12 @@ namespace Sitrine.Audio
 
         private void FillBuffer(int buffer)
         {
-            this.Connector.Master.Read(this.fbuf, 0, bufferSize);
+            this.Connector.Master.Read(this.fbuf, 0, this.bufferSize);
 
-            for (int i = 0; i < bufferSize; i++)
+            for (int i = 0; i < this.bufferSize; i++)
                 this.sbuf[i] = (short)(this.fbuf[i] * short.MaxValue);
 
-            AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * bufferSize, samplingRate);
+            AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * this.bufferSize, this.samplingRate);
         }
         #endregion
     }
