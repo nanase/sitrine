@@ -48,10 +48,12 @@ namespace Sitrine.Audio
 
         #region -- Public Properties --
         public IEnumerable<SequenceItem> Output { get { return this.output; } }
+
+        public SequenceInfo Info { get { return this.info; } }
         #endregion
 
         #region -- Constructors --
-        public HandleConverter(SmfContainer input)
+        public HandleConverter()
         {
             const int Part = 15 + 8;
 
@@ -67,32 +69,36 @@ namespace Sitrine.Audio
         #endregion
 
         #region -- Public Methods --
+        public void SetPreset(string file)
+        {
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+                this.SetPreset(fs);
+        }
+
         public void SetPreset(Stream stream)
         {
             this.presets.AddRange(PresetReader.Load(stream));
+            stream.Seek(0L, SeekOrigin.Begin);
             this.drumset.AddRange(PresetReader.DrumLoad(stream));
         }
 
         public void Convert(SmfContainer input)
         {
+            this.output = new List<SequenceItem>();
             this.info = new SequenceInfo()
             {
                 Resolution = input.Resolution,
                 EndOfTick = input.MaxTick
             };
 
-            foreach (Event @event in input.Tracks.SelectMany(t => t.Events).Where(e => e is MidiEvent).OrderBy(e => e.Tick))
+            this.ResetHandles();
+
+            foreach (Event @event in input.Tracks.SelectMany(t => t.Events).OrderBy(e => e.Tick))
             {
                 this.nowTick = @event.Tick;
 
                 if (@event is MidiEvent)
-                {
-                    MidiEvent midievent = (MidiEvent)@event;
-                    if (midievent.Channel == 10)
-                        this.ConvertDrumHandles(midievent);
-                    else
-                        this.ConvertHandles(midievent);
-                }
+                    this.ConvertHandles((MidiEvent)@event);
                 else if (@event is MetaEvent)
                 {
                     MetaEvent metaevent = (MetaEvent)@event;
@@ -127,6 +133,12 @@ namespace Sitrine.Audio
         private void ConvertHandles(MidiEvent @event)
         {
             int part = @event.Channel + 1;
+
+            if (part == 10)
+            {
+                this.ConvertDrumHandles(@event);
+                return;
+            }
 
             switch (@event.Type)
             {
@@ -309,7 +321,7 @@ namespace Sitrine.Audio
             this.nowPresets[channel] = preset;
         }
 
-        public void ResetHandles()
+        private void ResetHandles()
         {
             this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Silence)));
             this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Reset)));

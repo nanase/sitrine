@@ -43,7 +43,7 @@ namespace Sitrine.Audio
         private int eventIndex = 0;
 
         private Task sequenceTask = null;
-        private readonly List<HandleItem> handles;
+        private readonly List<SequenceItem> handles;
         private readonly object syncObject = new object();
         private readonly SequenceInfo info;
 
@@ -106,37 +106,22 @@ namespace Sitrine.Audio
         #endregion
 
         #region -- Public Events --
-        /// <summary>
-        /// シーケンサによってスケジュールされたイベントが送出される時に発生します。
-        /// </summary>
         public event EventHandler<TrackEventArgs> OnTrackEvent;
-
-        /// <summary>
-        /// シーケンサが開始された時に発生します。
-        /// </summary>
         public event EventHandler SequenceStarted;
-
-        /// <summary>
-        /// シーケンサが停止した時に発生します。
-        /// </summary>
         public event EventHandler SequenceStopped;
-
-        /// <summary>
-        /// シーケンサがスケジュールされたイベントの最後を処理し、シーケンスの最後に達した時に発生します。
-        /// </summary>
         public event EventHandler SequenceEnd;
         #endregion
 
         #region -- Constructors --
-        public Sequencer(IEnumerable<HandleItem> handles, SequenceInfo info)
+        public Sequencer(IEnumerable<SequenceItem> handles, SequenceInfo info)
         {
             if (handles == null)
                 throw new ArgumentNullException();
 
-            this.handles = new List<HandleItem>(handles);
+            this.handles = new List<SequenceItem>(handles);
             this.info = info;
 
-            this.tick = -(long)(info.Resolution * 1.0);
+            this.tick = -info.Resolution;
 
             this.RecalcTickTime();
         }

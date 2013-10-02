@@ -23,10 +23,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using ux;
+using System.Linq;
 
 namespace Sitrine.Audio
 {
@@ -51,10 +53,8 @@ namespace Sitrine.Audio
         private Task Updater;
 
         private readonly Master master;
-        private SmfContainer musicSequence;
-        private SmfContainer effectSequence;
-        private Sequencer musicSequencer;
-        private Sequencer effectSequencer;
+        private Sequencer musicSequencer = null;
+        private Sequencer effectSequencer = null;
         #endregion
 
         #region -- Public Properties --
@@ -128,6 +128,46 @@ namespace Sitrine.Audio
 
             this.context.Dispose();
         }
+
+        public void LoadMusic(string file)
+        {
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+                this.LoadMusic(fs);
+        }
+
+        public void LoadMusic(Stream stream)
+        {
+            SmfContainer container = new SmfContainer(stream);
+            HandleConverter hc = new HandleConverter();
+            hc.Convert(container);
+
+            if (this.musicSequencer != null)
+                this.musicSequencer.Stop();
+
+            this.musicSequencer = new Sequencer(hc.Output, hc.Info);
+            this.musicSequencer.Start();
+            this.musicSequencer.OnTrackEvent += this.OnTrackEvent;
+        }
+
+        public void LoadEffect(string file)
+        {
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+                this.LoadEffect(fs);
+        }
+
+        public void LoadEffect(Stream stream)
+        {
+            SmfContainer container = new SmfContainer(stream);
+            HandleConverter hc = new HandleConverter();
+            hc.Convert(container);
+
+            if (this.effectSequencer != null)
+                this.effectSequencer.Stop();
+
+            this.effectSequencer = new Sequencer(hc.Output, hc.Info);
+            this.musicSequencer.Start();
+            this.musicSequencer.OnTrackEvent += this.OnTrackEvent;
+        }
         #endregion
 
         #region -- Private Methods --
@@ -175,6 +215,11 @@ namespace Sitrine.Audio
                 this.sbuf[i] = (short)(this.fbuf[i] * short.MaxValue);
 
             AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * this.bufferSize, this.samplingRate);
+        }
+
+        private void OnTrackEvent(object sender, TrackEventArgs e)
+        {
+            this.master.PushHandle(e.Events.Select(i => i.Handle));
         }
         #endregion
     }

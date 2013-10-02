@@ -58,7 +58,7 @@ namespace Sample
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
             Message.Position = new PointF(0, 160);
-            Message.TextureUpdate = (s, e2) => this.Window.Music.Master.PushHandle(new Handle(1, HandleType.NoteOn, 72, 1.0f));
+            Message.TextureUpdate = (s, e2) => this.Window.Music.Master.PushHandle(new Handle(16, HandleType.NoteOn, 72, 1.0f));
 
             var file = File.ReadAllLines("message.txt");
 
@@ -97,19 +97,12 @@ namespace Sample
 
             #region Music
             this.Music.Master.PushHandle(new[]{
-              new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
-              new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
-              new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),
-              new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.S, 0.0f),
-              new Handle(1, HandleType.Envelope, (int)EnvelopeOperate.R, 0.0f),
-              new Handle(1, HandleType.Waveform, (int)WaveformType.Square), 
-
-              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
-              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
-              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),
-              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.S, 0.0f),
-              new Handle(2, HandleType.Envelope, (int)EnvelopeOperate.R, 0.0f),
-              new Handle(2, HandleType.Waveform, (int)WaveformType.Square), 
+              new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
+              new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
+              new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),
+              new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.S, 0.0f),
+              new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.R, 0.0f),
+              new Handle(16, HandleType.Waveform, (int)WaveformType.Square)
             });
             #endregion
 
