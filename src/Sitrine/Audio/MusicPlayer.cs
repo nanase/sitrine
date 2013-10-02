@@ -49,10 +49,11 @@ namespace Sitrine.Audio
         private readonly short[] sbuf;
         private readonly float[] fbuf;
 
-        private volatile bool reqEnd;
-        private Task Updater;
-
         private readonly Master master;
+        private readonly Preset preset;
+
+        private volatile bool reqEnd;
+        private Task Updater;    
         private Sequencer musicSequencer = null;
         private Sequencer effectSequencer = null;
         #endregion
@@ -62,6 +63,11 @@ namespace Sitrine.Audio
         /// ux のマスターオブジェクトを取得します。
         /// </summary>
         public Master Master { get { return this.master; } }
+
+        /// <summary>
+        /// 音源プリセットを取得します。
+        /// </summary>
+        public Preset Preset { get { return this.preset; } }
         #endregion
 
         #region -- Constructors --
@@ -80,6 +86,7 @@ namespace Sitrine.Audio
 
             this.context = new AudioContext();
             this.master = new Master(options.SamplingRate, 23);
+            this.preset = new Preset();
 
             this.source = AL.GenSource();
             this.buffers = AL.GenBuffers(this.bufferCount);
@@ -129,16 +136,25 @@ namespace Sitrine.Audio
             this.context.Dispose();
         }
 
+        #region LoadMusic
+        /// <summary>
+        /// SMF ファイルを読み込み、ミュージックシーケンサにロードします。
+        /// </summary>
+        /// <param name="file">読み込まれる SMF ファイル。</param>
         public void LoadMusic(string file)
         {
             using (FileStream fs = new FileStream(file, FileMode.Open))
                 this.LoadMusic(fs);
         }
 
+        /// <summary>
+        /// ストリームを読み込み、ミュージックシーケンサにロードします。
+        /// </summary>
+        /// <param name="stream">読み込まれるストリーム。</param>
         public void LoadMusic(Stream stream)
         {
             SmfContainer container = new SmfContainer(stream);
-            HandleConverter hc = new HandleConverter();
+            HandleConverter hc = new HandleConverter(this.preset);
             hc.Convert(container);
 
             if (this.musicSequencer != null)
@@ -148,17 +164,27 @@ namespace Sitrine.Audio
             this.musicSequencer.Start();
             this.musicSequencer.OnTrackEvent += this.OnTrackEvent;
         }
+        #endregion
 
+        #region LoadEffect
+        /// <summary>
+        /// SMF ファイルを読み込み、エフェクトシーケンサにロードします。
+        /// </summary>
+        /// <param name="file">読み込まれる SMF ファイル。</param>
         public void LoadEffect(string file)
         {
             using (FileStream fs = new FileStream(file, FileMode.Open))
                 this.LoadEffect(fs);
         }
 
+        /// <summary>
+        /// ストリームを読み込み、エフェクトシーケンサにロードします。
+        /// </summary>
+        /// <param name="stream">読み込まれるストリーム。</param>
         public void LoadEffect(Stream stream)
         {
             SmfContainer container = new SmfContainer(stream);
-            HandleConverter hc = new HandleConverter();
+            HandleConverter hc = new HandleConverter(this.preset);
             hc.Convert(container);
 
             if (this.effectSequencer != null)
@@ -168,6 +194,7 @@ namespace Sitrine.Audio
             this.musicSequencer.Start();
             this.musicSequencer.OnTrackEvent += this.OnTrackEvent;
         }
+        #endregion        
         #endregion
 
         #region -- Private Methods --

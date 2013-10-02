@@ -33,10 +33,10 @@ namespace Sitrine.Audio
 {
     class HandleConverter
     {
-        #region -- Private Fields --
-        private readonly List<ProgramPreset> presets;
-        private readonly List<DrumPreset> drumset;
-        private readonly List<string> presetFiles;
+        #region -- Private Fields --   
+        private const int Part = 15 + 8;
+
+        private readonly Preset preset;
         private readonly int[] partLsb, partMsb, partProgram;
         private readonly ProgramPreset[] nowPresets;
         private readonly int[] drumTargets = new[] { 10, 17, 18, 19, 20, 21, 22, 23 };
@@ -53,35 +53,18 @@ namespace Sitrine.Audio
         #endregion
 
         #region -- Constructors --
-        public HandleConverter()
+        public HandleConverter(Preset preset)
         {
-            const int Part = 15 + 8;
+            this.preset = preset;
 
-            this.presets = new List<ProgramPreset>();
-            this.drumset = new List<DrumPreset>();
-            this.presetFiles = new List<string>();
-
-            this.partLsb = new int[Part];
-            this.partMsb = new int[Part];
-            this.partProgram = new int[Part];
-            this.nowPresets = new ProgramPreset[Part];
+            this.partLsb = new int[HandleConverter.Part];
+            this.partMsb = new int[HandleConverter.Part];
+            this.partProgram = new int[HandleConverter.Part];
+            this.nowPresets = new ProgramPreset[HandleConverter.Part];
         }
         #endregion
 
         #region -- Public Methods --
-        public void SetPreset(string file)
-        {
-            using (FileStream fs = new FileStream(file, FileMode.Open))
-                this.SetPreset(fs);
-        }
-
-        public void SetPreset(Stream stream)
-        {
-            this.presets.AddRange(PresetReader.Load(stream));
-            stream.Seek(0L, SeekOrigin.Begin);
-            this.drumset.AddRange(PresetReader.DrumLoad(stream));
-        }
-
         public void Convert(SmfContainer input)
         {
             this.output = new List<SequenceItem>();
@@ -187,7 +170,7 @@ namespace Sitrine.Audio
                             break;
 
                         case 120:
-                            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Silence)));
+                            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.Silence)));
                             break;
 
                         case 121:
@@ -195,7 +178,7 @@ namespace Sitrine.Audio
                             break;
 
                         case 123:
-                            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.NoteOff)));
+                            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.NoteOff)));
                             break;
 
                         default:
@@ -230,7 +213,7 @@ namespace Sitrine.Audio
                     else
                         target += 16;
 
-                    var preset = this.drumset.Find(p => p.Number == @event.Data1);
+                    var preset = this.preset.FindDrum(p => p.Number == @event.Data1);
 
                     if (preset != null)
                     {
@@ -273,7 +256,7 @@ namespace Sitrine.Audio
                             break;
 
                         case 120:
-                            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Silence)));
+                            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.Silence)));
                             break;
 
                         case 121:
@@ -281,7 +264,7 @@ namespace Sitrine.Audio
                             break;
 
                         case 123:
-                            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.NoteOff)));
+                            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.NoteOff)));
                             break;
 
                         default:
@@ -310,8 +293,8 @@ namespace Sitrine.Audio
             if (this.nowPresets[channel] != null)
                 this.AddHandle(this.nowPresets[channel].FinalHandles, part);
 
-            ProgramPreset preset = this.presets.Find(p => p.Number == @event.Data1 && p.MSB == this.partMsb[channel] && p.LSB == this.partLsb[channel]) ??
-                                   this.presets.Find(p => p.Number == @event.Data1);
+            ProgramPreset preset = this.preset.FindProgram(p => p.Number == @event.Data1 && p.MSB == this.partMsb[channel] && p.LSB == this.partLsb[channel]) ??
+                                   this.preset.FindProgram(p => p.Number == @event.Data1);
 
             if (preset != null)
                 this.AddHandle(preset.InitHandles, part);
@@ -323,9 +306,9 @@ namespace Sitrine.Audio
 
         private void ResetHandles()
         {
-            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Silence)));
-            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Reset)));
-            this.AddHandle(Enumerable.Range(1, 23).Select(i => new Handle(i, HandleType.Waveform, (int)WaveformType.FM)));
+            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.Silence)));
+            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.Reset)));
+            this.AddHandle(Enumerable.Range(1, HandleConverter.Part).Select(i => new Handle(i, HandleType.Waveform, (int)WaveformType.FM)));
 
             this.AddHandle(this.drumTargets.Select(i => new Handle(i, HandleType.Waveform, (int)WaveformType.LongNoise)));
             this.AddHandle(this.drumTargets.Select(i => new Handle(i, HandleType.Envelope, (int)EnvelopeOperate.Sustain, 0.0f)));

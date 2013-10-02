@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Audio\Converter\HandleConverter.cs" />
     <Compile Include="Audio\Converter\HandleItem.cs" />
+    <Compile Include="Audio\Converter\Preset\Preset.cs" />
     <Compile Include="Audio\Converter\SequenceInfo.cs" />
     <Compile Include="Audio\Converter\SmfContainer.cs" />
     <Compile Include="Audio\Converter\Preset\DrumPreset.cs" />
