@@ -56,6 +56,7 @@
     <Compile Include="Audio\Converter\SmfContainer.cs" />
     <Compile Include="Audio\Converter\Preset\DrumPreset.cs" />
     <Compile Include="Audio\Converter\Event\Event.cs" />
+    <Compile Include="Audio\SequenceLayer.cs" />
     <Compile Include="Audio\Utils\Extension.cs" />
     <Compile Include="Audio\Converter\Preset\HandleCreator.cs" />
     <Compile Include="Audio\Converter\Event\MetaEvent.cs" />
