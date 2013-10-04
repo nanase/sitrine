@@ -42,6 +42,7 @@ namespace Sitrine
         private ProcessEvent process;
         private MessageEvent message;
         private KeyboardEvent keyboard;
+        private MusicEvent music;
         #endregion
 
         private int waitTime;
@@ -80,6 +81,11 @@ namespace Sitrine
         /// キーボードイベントを取得します。
         /// </summary>
         public KeyboardEvent Keyboard { get { return this.keyboard; } }
+
+        /// <summary>
+        /// ミュージックイベントを取得します。
+        /// </summary>
+        public MusicEvent Music { get { return this.music; } }
 
         /// <summary>
         /// メッセージイベントを取得します。
@@ -141,6 +147,7 @@ namespace Sitrine
             this.process = new ProcessEvent(this, this.Window);
             this.texture = new TextureEvent(this, this.Window);
             this.keyboard = new KeyboardEvent(this, this.Window);
+            this.music = new MusicEvent(this, this.Window);
 
             Trace.WriteLine("Storyboard", "Init");
         }
