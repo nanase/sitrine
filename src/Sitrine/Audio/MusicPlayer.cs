@@ -29,6 +29,7 @@ using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using ux;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Sitrine.Audio
 {
@@ -52,8 +53,10 @@ namespace Sitrine.Audio
         private readonly Master master;
         private readonly Preset preset;
 
+        private readonly Dictionary<string, SequenceLayer> layer;
+
         private volatile bool reqEnd;
-        private Task Updater;    
+        private Task Updater;
         private Sequencer musicSequencer = null;
         private Sequencer effectSequencer = null;
         #endregion
@@ -68,6 +71,8 @@ namespace Sitrine.Audio
         /// 音源プリセットを取得します。
         /// </summary>
         public Preset Preset { get { return this.preset; } }
+
+        public IDictionary<string, SequenceLayer> Layer { get { return this.layer; } }
         #endregion
 
         #region -- Constructors --
@@ -87,6 +92,7 @@ namespace Sitrine.Audio
             this.context = new AudioContext();
             this.master = new Master(options.SamplingRate, 23);
             this.preset = new Preset();
+            this.layer = new Dictionary<string, SequenceLayer>();
 
             this.source = AL.GenSource();
             this.buffers = AL.GenBuffers(this.bufferCount);
@@ -136,65 +142,10 @@ namespace Sitrine.Audio
             this.context.Dispose();
         }
 
-        #region LoadMusic
-        /// <summary>
-        /// SMF ファイルを読み込み、ミュージックシーケンサにロードします。
-        /// </summary>
-        /// <param name="file">読み込まれる SMF ファイル。</param>
-        public void LoadMusic(string file)
+        public void AddLayer(string key, IEnumerable<int> tagetParts)
         {
-            using (FileStream fs = new FileStream(file, FileMode.Open))
-                this.LoadMusic(fs);
+            this.layer[key] = new SequenceLayer(this.preset, this.master, tagetParts);
         }
-
-        /// <summary>
-        /// ストリームを読み込み、ミュージックシーケンサにロードします。
-        /// </summary>
-        /// <param name="stream">読み込まれるストリーム。</param>
-        public void LoadMusic(Stream stream)
-        {
-            SmfContainer container = new SmfContainer(stream);
-            HandleConverter hc = new HandleConverter(this.preset);
-            hc.Convert(container);
-
-            if (this.musicSequencer != null)
-                this.musicSequencer.Stop();
-
-            this.musicSequencer = new Sequencer(hc.Output, hc.Info);
-            this.musicSequencer.Start();
-            this.musicSequencer.OnTrackEvent += this.OnTrackEvent;
-        }
-        #endregion
-
-        #region LoadEffect
-        /// <summary>
-        /// SMF ファイルを読み込み、エフェクトシーケンサにロードします。
-        /// </summary>
-        /// <param name="file">読み込まれる SMF ファイル。</param>
-        public void LoadEffect(string file)
-        {
-            using (FileStream fs = new FileStream(file, FileMode.Open))
-                this.LoadEffect(fs);
-        }
-
-        /// <summary>
-        /// ストリームを読み込み、エフェクトシーケンサにロードします。
-        /// </summary>
-        /// <param name="stream">読み込まれるストリーム。</param>
-        public void LoadEffect(Stream stream)
-        {
-            SmfContainer container = new SmfContainer(stream);
-            HandleConverter hc = new HandleConverter(this.preset);
-            hc.Convert(container);
-
-            if (this.effectSequencer != null)
-                this.effectSequencer.Stop();
-
-            this.effectSequencer = new Sequencer(hc.Output, hc.Info);
-            this.musicSequencer.Start();
-            this.musicSequencer.OnTrackEvent += this.OnTrackEvent;
-        }
-        #endregion        
         #endregion
 
         #region -- Private Methods --
@@ -244,10 +195,7 @@ namespace Sitrine.Audio
             AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * this.bufferSize, this.samplingRate);
         }
 
-        private void OnTrackEvent(object sender, TrackEventArgs e)
-        {
-            this.master.PushHandle(e.Events.Select(i => i.Handle));
-        }
+
         #endregion
     }
 }

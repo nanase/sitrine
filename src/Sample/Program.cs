@@ -69,6 +69,7 @@ namespace Sample
                     new Handle(16, HandleType.NoteOn, 72, 1.0f)
                  });
 
+            this.Window.Music.AddLayer("music", Enumerable.Range(1, 23).Except(new []{16}));
             var file = File.ReadAllLines("message.txt");
 
             Process.Wait(0.5);

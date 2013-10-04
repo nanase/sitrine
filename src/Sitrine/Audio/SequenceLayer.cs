@@ -24,8 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using ux;
 
 namespace Sitrine.Audio
 {
@@ -34,13 +36,50 @@ namespace Sitrine.Audio
     /// </summary>
     public class SequenceLayer
     {
-        // TODO:
-
         #region -- Private Field --
         private Sequencer sequencer = null;
-        private int partBegin;
-        private int partEnd;
+        private readonly int[] targetParts;
+        private readonly Preset preset;
+        private readonly Master master;
         #endregion
-       
+
+        #region -- Constructor --
+        public SequenceLayer(Preset preset, Master master, IEnumerable<int> targetParts)
+        {
+            this.preset = preset;
+            this.master = master;
+            this.targetParts = targetParts.ToArray();
+        }
+        #endregion
+
+        #region -- Public Methods --
+        public void Load(string file)
+        {
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+                this.Load(fs);
+        }
+
+        public void Load(Stream stream)
+        {
+            SmfContainer container = new SmfContainer(stream);
+            HandleConverter hc = new HandleConverter(this.preset);
+            hc.Convert(container);
+
+            if (this.sequencer != null)
+                this.sequencer.Stop();
+
+            this.sequencer = new Sequencer(hc.Output, hc.Info);
+            this.sequencer.Start();
+            this.sequencer.OnTrackEvent += this.OnTrackEvent;
+        }
+        
+        #endregion
+
+        #region -- Private Methods --
+        private void OnTrackEvent(object sender, TrackEventArgs e)
+        {
+            this.master.PushHandle(e.Events.Where(h => this.targetParts.Contains(h.Handle.TargetPart)).Select(i => i.Handle));
+        }
+        #endregion
     }
 }
