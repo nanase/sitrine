@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using OpenTK.Input;
 using Sitrine;
+using Sitrine.Audio;
 using Sitrine.Utils;
 using ux.Component;
 
@@ -63,14 +65,15 @@ namespace Sample
             Message.TextureUpdate = (s, e2) => Music.PushNow(new[] { new Handle(16, HandleType.NoteOn, 72, 1.0f) });
 
             Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
-            Music.Push(new[] {
-                new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.A, 0.0f),  
-                new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.P, 0.0f), 
-                new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.D, 0.025f),
-                new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.S, 0.0f),
-                new Handle(16, HandleType.Envelope, (int)EnvelopeOperate.R, 0.0f),
-                new Handle(16, HandleType.Waveform, (int)WaveformType.Square)
-            });
+
+            IEnumerable<Handle> handles;
+            HandleParser.TryParse(@"16 Envelope A 0
+.  Envelope P 0
+.  Envelope D 0.025
+.  Envelope S 0
+.  Envelope R 0
+.  Waveform Square", out handles);
+            Music.Push(handles);
 
             Process.Wait(0.5);
             Message.Interval = 2;

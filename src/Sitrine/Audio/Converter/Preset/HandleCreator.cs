@@ -58,6 +58,28 @@ namespace Sitrine.Audio
 
             return new Handle(0, handleType, data1, data2);
         }
+
+        public static bool TryCreate(int part, string name, string type, string value, out Handle handle)
+        {
+            HandleType handleType;
+            int data1;
+            float data2;
+
+            handle = null;
+
+            if (!Enum.TryParse(name, true, out handleType))
+                return false;
+
+            data1 = (string.IsNullOrWhiteSpace(type)) ? 0 : HandleCreator.ParseOperators(handleType, type);
+
+            if (string.IsNullOrWhiteSpace(value))
+                data2 = 0.0f;
+            else if (!float.TryParse(value, out data2))
+                return false;
+
+            handle = new Handle(part, handleType, data1, data2);
+            return true;
+        }
         #endregion
 
         #region -- Private Methods --
