@@ -87,6 +87,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="sound.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="font\COPYRIGHT" />
     <Content Include="message.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -23,13 +23,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using ux;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Sitrine.Audio
 {
@@ -142,6 +140,11 @@ namespace Sitrine.Audio
             this.context.Dispose();
         }
 
+        /// <summary>
+        /// レイヤを追加します。
+        /// </summary>
+        /// <param name="key">キーとなるレイヤ名。</param>
+        /// <param name="tagetParts">通過させるハンドルのパート。</param>
         public void AddLayer(string key, IEnumerable<int> tagetParts)
         {
             this.layer[key] = new SequenceLayer(this.preset, this.master, tagetParts);

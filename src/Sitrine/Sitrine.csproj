@@ -57,6 +57,7 @@
     <Compile Include="Audio\Converter\Preset\DrumPreset.cs" />
     <Compile Include="Audio\Converter\Event\Event.cs" />
     <Compile Include="Audio\HandleParser.cs" />
+    <Compile Include="Audio\HandleStore.cs" />
     <Compile Include="Audio\SequenceLayer.cs" />
     <Compile Include="Audio\Utils\Extension.cs" />
     <Compile Include="Audio\Converter\Preset\HandleCreator.cs" />

@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using ux;
 
 namespace Sitrine.Audio
@@ -44,23 +43,52 @@ namespace Sitrine.Audio
         #endregion
 
         #region -- Constructor --
-        public SequenceLayer(Preset preset, Master master, IEnumerable<int> targetParts)
+        /// <summary>
+        /// パラメータを指定して新しい SequenceLayer クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="preset">適用されるプリセット。</param>
+        /// <param name="master">シーケンサの送出先となるマスターオブジェクト。</param>
+        /// <param name="targetParts">このレイヤーが通過させるハンドルのターゲットパート。</param>
+        public SequenceLayer(Preset preset, Master master, IEnumerable<int> targetParts = null)
         {
+            if (preset == null)
+                throw new ArgumentNullException();
+
+            if (master == null)
+                throw new ArgumentNullException();
+
             this.preset = preset;
             this.master = master;
-            this.targetParts = targetParts.ToArray();
+            this.targetParts = (targetParts == null) ? new int[0] : targetParts.ToArray();
         }
         #endregion
 
         #region -- Public Methods --
+        /// <summary>
+        /// SMF ファイルを読み込み、シーケンスを開始します。
+        /// </summary>
+        /// <param name="file">読み込まれる SMF ファイル。</param>
         public void Load(string file)
         {
+            if (file == null)
+                throw new ArgumentNullException();
+
             using (FileStream fs = new FileStream(file, FileMode.Open))
                 this.Load(fs);
         }
 
+        /// <summary>
+        /// SMF データを格納したストリームを読み込み、シーケンスを開始します。
+        /// </summary>
+        /// <param name="stream">読み込まれるストリーム。</param>
         public void Load(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException();
+
+            if (!stream.CanRead)
+                throw new ArgumentException();
+
             SmfContainer container = new SmfContainer(stream);
             HandleConverter hc = new HandleConverter(this.preset);
             hc.Convert(container);
@@ -72,7 +100,7 @@ namespace Sitrine.Audio
             this.sequencer.Start();
             this.sequencer.OnTrackEvent += this.OnTrackEvent;
         }
-        
+
         #endregion
 
         #region -- Private Methods --

@@ -1,0 +1,10 @@
+﻿[message_init]
+16 envelope A 0
+.  envelope P 0
+.  envelope D 0.025
+.  envelope S 0
+.  envelope R 0
+.  waveform Square
+
+[message_progress]
+16 noteon 72 1.0

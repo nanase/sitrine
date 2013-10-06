@@ -24,15 +24,22 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ux.Component;
 
 namespace Sitrine.Audio
 {
+    /// <summary>
+    /// 文字列からハンドルを生成するためのパーサを提供します。
+    /// </summary>
     public class HandleParser
     {
         #region -- Public Methods --
+        /// <summary>
+        /// 指定された文字列を解析し、複数のハンドルを出力します。
+        /// </summary>
+        /// <param name="code">解析される文字列。</param>
+        /// <param name="handles">ハンドルオブジェクトの列挙子。</param>
+        /// <returns>解析に成功した場合は true、失敗した場合は false。</returns>
         public static bool TryParse(string code, out IEnumerable<Handle> handles)
         {
             handles = null;

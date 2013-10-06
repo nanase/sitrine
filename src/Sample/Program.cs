@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -8,7 +7,6 @@ using OpenTK.Input;
 using Sitrine;
 using Sitrine.Audio;
 using Sitrine.Utils;
-using ux.Component;
 
 namespace Sample
 {
@@ -58,22 +56,15 @@ namespace Sample
             : base(window)
         {
             var file = File.ReadAllLines("message.txt");
+            var handle = new HandleStore("sound.txt");
 
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
             Message.Position = new PointF(0, 160);
-            Message.TextureUpdate = (s, e2) => Music.PushNow(new[] { new Handle(16, HandleType.NoteOn, 72, 1.0f) });
+            Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
 
             Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
-
-            IEnumerable<Handle> handles;
-            HandleParser.TryParse(@"16 Envelope A 0
-.  Envelope P 0
-.  Envelope D 0.025
-.  Envelope S 0
-.  Envelope R 0
-.  Waveform Square", out handles);
-            Music.Push(handles);
+            Music.Push(handle["message_init"]);
 
             Process.Wait(0.5);
             Message.Interval = 2;
