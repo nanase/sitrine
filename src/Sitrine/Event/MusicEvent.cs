@@ -24,12 +24,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using Sitrine.Audio;
 using ux.Component;
 
 namespace Sitrine.Event
 {
-
+    /// <summary>
+    /// 音楽や効果音の再生に関連するイベントをスケジューリングします。
+    /// </summary>
     public class MusicEvent : StoryEvent
     {
         #region -- Constructors --
@@ -40,80 +44,211 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
+        #region Layer
+        /// <summary>
+        /// シーケンスレイヤを追加します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">追加されるレイヤのキーとなるレイヤ名。</param>
+        /// <param name="targetParts">通過させるパート。</param>
         public void AddLayer(string key, IEnumerable<int> targetParts = null)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceWarning("Add layer '{0}', but it already exists.", key);
+
+                this.Window.Music.AddLayer(key, targetParts);
+            });
         }
 
+        /// <summary>
+        /// シーケンスレイヤを削除します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">レイヤのキー。</param>
         public void RemoveLayer(string key)
         {
-            throw new NotImplementedException();
-        }
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceWarning("Layer '{0}' does not exist.", key);
 
+                this.Window.Music.Layer.Remove(key);
+            });
+        }
+        #endregion
+
+        #region Load
+        /// <summary>
+        /// レイヤに指定された SMF ファイルをロードし、再生します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">レイヤのキー。</param>
+        /// <param name="file">読み込まれる SMF ファイルのパス。</param>
         public void Load(string key, string file)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceError("Layer '{0}' does not exist.", key);
+
+                this.Window.Music.Layer[key].Load(file);
+            });
         }
 
+        /// <summary>
+        /// レイヤに指定されたストリームからロードし、再生します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">レイヤのキー。</param>
+        /// <param name="stream">読み込まれるストリーム。</param>
         public void Load(string key, Stream stream)
         {
-            throw new NotImplementedException();
-        }
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceError("Layer '{0}' does not exist.", key);
 
+                this.Window.Music.Layer[key].Load(stream);
+            });
+        }
+        #endregion
+
+        #region Preset
+        /// <summary>
+        /// プリセットをロードし、既存のプリセットと統合します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="file">読み込まれる XML ファイルのパス。</param>
         public void LoadPreset(string file)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(file));
         }
 
+        /// <summary>
+        /// プリセットをロードし、既存のプリセットと統合します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="stream">読み込まれるストリーム。</param>
         public void LoadPreset(Stream stream)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(stream));
         }
 
+        /// <summary>
+        /// プリセットをクリアします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        public void ClearPreset()
+        {
+            this.Storyboard.AddAction(this.Window.Music.Preset.Clear);
+        }
+        #endregion
+
+        #region Control
+        /// <summary>
+        /// すべてのレイヤについて再生を開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
         public void Play()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 指定されたレイヤについて再生を開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">再生を開始するレイヤ。</param>
         public void Play(string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// すべてのレイヤについて再生を停止します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
         public void Stop()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 指定されたレイヤについて再生を停止します。
+        /// </summary>
+        /// <param name="key">再生を停止するレイヤ。</param>
         public void Stop(string key)
         {
             throw new NotImplementedException();
         }
+        #endregion
 
+        #region Push
+        /// <summary>
+        /// ハンドル列を適用します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="handles">送信するハンドル列。</param>
         public void Push(IEnumerable<Handle> handles)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
         }
 
-        public void Push(string handles)
+        /// <summary>
+        /// ハンドル列が記述された文字列を解析し、適用します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="code">解析され送信するハンドル列。</param>
+        public void Push(string code)
         {
-            throw new NotImplementedException();
+            IEnumerable<Handle> handles;
+
+            // TODO:
+            if (!HandleParser.TryParse(code, out handles))
+                throw new Exception();
+
+            this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
         }
 
+        /// <summary>
+        /// ハンドル列を適用します。
+        /// </summary>
+        /// <param name="handles">送信するハンドル列。</param>
         public void PushNow(IEnumerable<Handle> handles)
         {
-            throw new NotImplementedException();
+            this.Window.Music.Master.PushHandle(handles);
         }
 
-        public void PushNow(string handles)
+        /// <summary>
+        /// ハンドル列が記述された文字列を解析し、適用します。
+        /// </summary>
+        /// <param name="code">解析され送信するハンドル列。</param>
+        public void PushNow(string code)
         {
-            throw new NotImplementedException();
-        }
+            IEnumerable<Handle> handles;
 
+            // TODO:
+            if (!HandleParser.TryParse(code, out handles))
+                throw new Exception();
+
+            this.Window.Music.Master.PushHandle(handles);
+        }
+        #endregion
+
+        #region Setting
+        /// <summary>
+        /// ループの可否を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">設定先のレイヤのキー。</param>
+        /// <param name="looping">ループする場合は true、しない場合は false。</param>
         public void SetLoop(string key, bool looping)
         {
             throw new NotImplementedException();
         }
+        #endregion
         #endregion
     }
 }

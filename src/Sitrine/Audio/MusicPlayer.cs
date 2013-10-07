@@ -145,7 +145,7 @@ namespace Sitrine.Audio
         /// </summary>
         /// <param name="key">キーとなるレイヤ名。</param>
         /// <param name="tagetParts">通過させるハンドルのパート。</param>
-        public void AddLayer(string key, IEnumerable<int> tagetParts)
+        public void AddLayer(string key, IEnumerable<int> tagetParts = null)
         {
             this.layer[key] = new SequenceLayer(this.preset, this.master, tagetParts);
         }
