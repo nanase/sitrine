@@ -101,6 +101,21 @@ namespace Sitrine.Audio
             this.sequencer.OnTrackEvent += this.OnTrackEvent;
         }
 
+        /// <summary>
+        /// シーケンスを開始し、演奏を再生します。
+        /// </summary>
+        public void Play()
+        {
+            this.sequencer.Start();
+        }
+
+        /// <summary>
+        /// シーケンスを停止し、演奏を停止します。
+        /// </summary>
+        public void Stop()
+        {
+            this.sequencer.Stop();
+        }
         #endregion
 
         #region -- Private Methods --

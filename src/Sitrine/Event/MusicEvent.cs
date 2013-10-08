@@ -153,7 +153,7 @@ namespace Sitrine.Event
         /// </summary>
         public void Play()
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() => { foreach (var item in this.Window.Music.Layer.Values) item.Play(); });
         }
 
         /// <summary>
@@ -163,7 +163,13 @@ namespace Sitrine.Event
         /// <param name="key">再生を開始するレイヤ。</param>
         public void Play(string key)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceError("Layer '{0}' does not exist.", key);
+
+                this.Window.Music.Layer[key].Play();
+            });
         }
 
         /// <summary>
@@ -172,7 +178,7 @@ namespace Sitrine.Event
         /// </summary>
         public void Stop()
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() => { foreach (var item in this.Window.Music.Layer.Values) item.Stop(); });
         }
 
         /// <summary>
@@ -181,7 +187,13 @@ namespace Sitrine.Event
         /// <param name="key">再生を停止するレイヤ。</param>
         public void Stop(string key)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceError("Layer '{0}' does not exist.", key);
+
+                this.Window.Music.Layer[key].Stop();
+            });
         }
         #endregion
 
