@@ -33,7 +33,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// MIDI の演奏制御、メタデータに関するイベントを提供します。
     /// </summary>
-    public class MetaEvent : Event
+    class MetaEvent : Event
     {
         #region -- Public Properties --
         /// <summary>
@@ -100,7 +100,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// メタイベントの種類を表す列挙体です。
     /// </summary>
-    public enum MetaType
+    enum MetaType
     {
         /// <summary>
         /// シーケンスナンバー。

@@ -33,7 +33,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// 可変用のデータを持ったイベントを提供します。
     /// </summary>
-    public class SystemExclusiveEvent : Event
+    class SystemExclusiveEvent : Event
     {
         #region -- Public Properties --
         /// <summary>

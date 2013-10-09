@@ -33,7 +33,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// MIDI の命令となるイベントを抽象化したクラスです。
     /// </summary>
-    public abstract class Event
+    abstract class Event
     {
         #region -- Public Properties --
         /// <summary>
@@ -105,7 +105,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// イベントの種類を表す列挙体です。
     /// </summary>
-    public enum EventType
+    enum EventType
 	{
         /// <summary>
         /// 不明。イベントの種類を特定できません。

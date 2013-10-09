@@ -30,7 +30,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// ドラムまたはノイズのプリセットを表します。
     /// </summary>
-    public class DrumPreset
+    class DrumPreset
     {
         #region -- Private Fields --
         private readonly List<Handle> initHandles;

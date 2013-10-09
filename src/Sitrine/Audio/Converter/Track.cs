@@ -35,7 +35,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// イベントをグループ化したトラックを提供します。
     /// </summary>
-    public class Track
+    class Track
     {
         #region -- Private Fields --
         private readonly List<Event> events;

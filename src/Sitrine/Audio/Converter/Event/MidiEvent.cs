@@ -33,7 +33,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// MIDI の演奏に関わるイベントを提供します。
     /// </summary>
-    public class MidiEvent : Event
+    class MidiEvent : Event
     {
         #region -- Public Properties --
         /// <summary>

@@ -34,7 +34,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// XML ファイルからプリセットを読み込むためのメソッドを提供します。
     /// </summary>
-    public static class PresetReader
+    static class PresetReader
     {
         #region -- Private Fields --
         private static readonly XName xtype = XName.Get("type");

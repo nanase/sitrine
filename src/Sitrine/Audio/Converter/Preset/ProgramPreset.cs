@@ -30,7 +30,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// 音源プログラムのプリセットを表します。
     /// </summary>
-    public class ProgramPreset
+    class ProgramPreset
     {
         #region -- Private Fields --
         private readonly List<Handle> initHandles;

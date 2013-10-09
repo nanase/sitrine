@@ -26,7 +26,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *          http://www2s.biglobe.ne.jp/~yyagi/material/smfspec.html
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,7 +36,7 @@ namespace Sitrine.Audio
     /// <summary>
     /// MIDI に関する一連のイベントを格納したシーケンスを提供します。
     /// </summary>
-    public class SmfContainer
+    class SmfContainer
     {
         #region -- Private Fields --
         private readonly List<Track> tracks;
