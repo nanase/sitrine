@@ -42,6 +42,21 @@ namespace Sitrine.Audio
         private readonly Master master;
         #endregion
 
+        #region -- Public Properties --
+        public bool Looping
+        {
+            get
+            {
+                return (this.sequencer == null) ? false : this.sequencer.Looping;
+            }
+            set
+            {
+                if (this.sequencer != null)
+                    this.sequencer.Looping = value;
+            }
+        }
+        #endregion
+
         #region -- Constructor --
         /// <summary>
         /// パラメータを指定して新しい SequenceLayer クラスのインスタンスを初期化します。

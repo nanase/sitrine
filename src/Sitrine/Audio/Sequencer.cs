@@ -103,6 +103,8 @@ namespace Sitrine.Audio
                 this.RecalcTickTime();
             }
         }
+
+        public bool Looping { get; set; }
         #endregion
 
         #region -- Public Events --
@@ -215,7 +217,10 @@ namespace Sitrine.Audio
                         if (this.SequenceEnd != null)
                             this.SequenceEnd(this, new EventArgs());
 
-                        break;
+                        if (this.Looping)
+                            this.Tick = this.info.LoopBeginTick;
+                        else
+                            break;
                     }
                 }
             }

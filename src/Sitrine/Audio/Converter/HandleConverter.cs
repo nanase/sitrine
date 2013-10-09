@@ -33,7 +33,7 @@ namespace Sitrine.Audio
 {
     class HandleConverter
     {
-        #region -- Private Fields --   
+        #region -- Private Fields --
         private const int Part = 15 + 8;
 
         private readonly Preset preset;
@@ -71,7 +71,8 @@ namespace Sitrine.Audio
             this.info = new SequenceInfo()
             {
                 Resolution = input.Resolution,
-                EndOfTick = input.MaxTick
+                EndOfTick = input.MaxTick,
+                LoopBeginTick = this.DetectLoopBegin(input)
             };
 
             this.ResetHandles();
@@ -93,6 +94,12 @@ namespace Sitrine.Audio
         #endregion
 
         #region -- Private Methods --
+        private long DetectLoopBegin(SmfContainer input)
+        {
+            var k = input.Tracks.SelectMany(t => t.Events).OfType<MidiEvent>().Where(e => e.Type == EventType.ControlChange && e.Data1 == 111).LastOrDefault();
+            return (k == null) ? 0 : k.Tick;
+        }
+
         private void AddTempo(double tempo)
         {
             this.output.Add(new TempoItem(tempo, this.nowTick));

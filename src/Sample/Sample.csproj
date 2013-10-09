@@ -87,11 +87,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="sound.txt">
+    <Content Include="resource\sound.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resource\ux_preset.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="font\COPYRIGHT" />
-    <Content Include="message.txt">
+    <Content Include="resource\message.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

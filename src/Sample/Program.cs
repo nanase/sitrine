@@ -14,7 +14,7 @@ namespace Sample
     {
         static void Main()
         {
-            if (!File.Exists("message.txt"))
+            if (!File.Exists("resource/message.txt"))
                 return;
 
             using (FontLoader font = new FontLoader("font/VL-Gothic-Regular.ttf"))
@@ -55,13 +55,14 @@ namespace Sample
         public SampleStory(SitrineWindow window)
             : base(window)
         {
-            var file = File.ReadAllLines("message.txt");
-            var handle = new HandleStore("sound.txt");
+            var file = File.ReadAllLines("resource/message.txt");
+            var handle = new HandleStore("resource/sound.txt");
 
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
             Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
             Music.Push(handle["message_init"]);
+            Music.LoadPreset("resource/ux_preset.xml");
 
             Message.Position = new PointF(0, 160);
             Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);            

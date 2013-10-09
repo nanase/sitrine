@@ -88,12 +88,25 @@ namespace Sitrine.Event
         /// <param name="file">読み込まれる SMF ファイルのパス。</param>
         public void Load(string key, string file)
         {
+            this.Load(key, file, false);
+        }
+
+        /// <summary>
+        /// レイヤに指定された SMF ファイルをロードし、再生します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">レイヤのキー。</param>
+        /// <param name="file">読み込まれる SMF ファイルのパス。</param>
+        /// <param name="looping">ループ再生する場合は true、しない場合は false。</param>
+        public void Load(string key, string file, bool looping)
+        {
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
                     Trace.TraceError("Layer '{0}' does not exist.", key);
 
                 this.Window.Music.Layer[key].Load(file);
+                this.Window.Music.Layer[key].Looping = looping;
             });
         }
 
@@ -105,12 +118,25 @@ namespace Sitrine.Event
         /// <param name="stream">読み込まれるストリーム。</param>
         public void Load(string key, Stream stream)
         {
+            this.Load(key, stream, false);
+        }
+
+        /// <summary>
+        /// レイヤに指定されたストリームからロードし、再生します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="key">レイヤのキー。</param>
+        /// <param name="stream">読み込まれるストリーム。</param>
+        /// <param name="looping">ループ再生する場合は true、しない場合は false。</param>
+        public void Load(string key, Stream stream, bool looping)
+        {
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
                     Trace.TraceError("Layer '{0}' does not exist.", key);
 
                 this.Window.Music.Layer[key].Load(stream);
+                this.Window.Music.Layer[key].Looping = looping;
             });
         }
         #endregion
@@ -258,7 +284,13 @@ namespace Sitrine.Event
         /// <param name="looping">ループする場合は true、しない場合は false。</param>
         public void SetLoop(string key, bool looping)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(key))
+                    Trace.TraceError("Layer '{0}' does not exist.", key);
+
+                this.Window.Music.Layer[key].Looping = looping;
+            });
         }
         #endregion
         #endregion
