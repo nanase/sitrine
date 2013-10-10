@@ -50,4 +50,45 @@ namespace Sitrine
         }
         #endregion
     }
+
+    /// <summary>
+    /// 文字列をハンドル列に変換しようとして解析に失敗したときに発生する例外です。
+    /// </summary>
+    [Serializable]
+    public class UnableToParseHandleException : Exception
+    {
+        #region -- Constructors --
+        /// <summary>
+        /// 新しい UnableToParseHandleException クラスのインスタンスを初期化します。
+        /// </summary>
+        public UnableToParseHandleException()
+            : base("ハンドル列の解析に失敗しました。")
+        {
+        }
+
+        /// <summary>
+        /// メッセージを指定して新しい UnableToParseHandleException クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="message">例外に加えられるメッセージ。</param>
+        public UnableToParseHandleException(string message)
+            : base("ハンドル列の解析に失敗しました: " + message)
+        {
+        }
+
+        /// <summary>
+        /// メッセージと内部例外を指定して新しい UnableToParseHandleException クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="message">例外に加えられるメッセージ。</param>
+        /// <param name="inner">内部例外。</param>
+        public UnableToParseHandleException(string message, Exception inner)
+            : base("ハンドル列の解析に失敗しました: " + message, inner)
+        {
+        }
+
+        protected UnableToParseHandleException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+        #endregion
+    }
 }

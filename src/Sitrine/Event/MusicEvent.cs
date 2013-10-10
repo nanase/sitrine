@@ -243,9 +243,8 @@ namespace Sitrine.Event
         {
             IEnumerable<Handle> handles;
 
-            // TODO:
             if (!HandleParser.TryParse(code, out handles))
-                throw new Exception();
+                throw new UnableToParseHandleException();
 
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
         }
@@ -267,9 +266,8 @@ namespace Sitrine.Event
         {
             IEnumerable<Handle> handles;
 
-            // TODO:
             if (!HandleParser.TryParse(code, out handles))
-                throw new Exception();
+                throw new UnableToParseHandleException();
 
             this.Window.Music.Master.PushHandle(handles);
         }

@@ -60,9 +60,10 @@ namespace Sample
 
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
-            Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
             Music.Push(handle["message_init"]);
             Music.LoadPreset("resource/ux_preset.xml");
+
+            Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
 
             Message.Position = new PointF(0, 160);
             Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);            
