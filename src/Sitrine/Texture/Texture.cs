@@ -102,6 +102,13 @@ namespace Sitrine.Texture
                 }
             }
         }
+
+        /// <summary>
+        /// 処理をコンパイルせずにバッファに適用するかの真偽値を取得または設定します。
+        /// 描画するたびにコンパイル処理が発生するとパフォーマンスが低下します。
+        /// 頻繁な変更を行わない場合、このプロパティを false にするとパフォーマンスは向上します。
+        /// </summary>
+        public bool NoCompile { get; set; }
         #endregion
 
         #region -- Constructors --
@@ -168,10 +175,17 @@ namespace Sitrine.Texture
         /// </summary>
         public virtual void Render()
         {
-            if (this.listId == -1)
-                this.Compile(ListMode.CompileAndExecute);
+            if (this.NoCompile)
+            {
+                this.Execute();
+            }
             else
-                GL.CallList(this.listId);
+            {
+                if (this.listId == -1)
+                    this.Compile(ListMode.CompileAndExecute);
+                else
+                    GL.CallList(this.listId);
+            }
         }
         #endregion
 
@@ -233,24 +247,29 @@ namespace Sitrine.Texture
             this.listId = GL.GenLists(1);
             GL.NewList(this.listId, mode);
             {
-                GL.PushMatrix();
-
-                GL.BindTexture(TextureTarget.Texture2D, this.id);
-                GL.Translate(this.position.X, this.position.Y, 0.0f);
-                GL.Scale(this.bitmap.Width, this.bitmap.Height, 1.0);
-                GL.Color4(this.color);
-
-                GL.Begin(BeginMode.Quads);
-                {
-                    GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
-                    GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
-                    GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
-                    GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
-                }
-                GL.End();
-                GL.PopMatrix();
+                this.Execute();
             }
             GL.EndList();
+        }
+
+        private void Execute()
+        {
+            GL.PushMatrix();
+
+            GL.BindTexture(TextureTarget.Texture2D, this.id);
+            GL.Translate(this.position.X, this.position.Y, 0.0f);
+            GL.Scale(this.bitmap.Width, this.bitmap.Height, 1.0);
+            GL.Color4(this.color);
+
+            GL.Begin(BeginMode.Quads);
+            {
+                GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
+                GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
+                GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
+                GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
+            }
+            GL.End();
+            GL.PopMatrix();
         }
         #endregion
     }

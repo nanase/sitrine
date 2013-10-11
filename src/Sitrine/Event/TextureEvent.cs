@@ -24,8 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using OpenTK.Graphics;
 
 namespace Sitrine.Event
 {
@@ -99,7 +101,10 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
                     return;
+                }
 
                 var tex = this.Window.Textures[this.asignment[id]];
                 var color = tex.Color;
@@ -118,7 +123,10 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
                     return;
+                }
 
                 var tex = this.Window.Textures[this.asignment[id]];
                 var color = tex.Color;
@@ -137,7 +145,10 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
                     return;
+                }
 
                 this.Window.Textures.Remove(this.asignment[id], true);
             });
@@ -155,6 +166,64 @@ namespace Sitrine.Event
                     this.Window.Textures.Remove(key, true);
 
                 this.asignment.Clear();
+            });
+        }
+
+        /// <summary>
+        /// テクスチャの反射光の色を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="color">反射光の色。</param>
+        public void SetColor(int id, Color4 color)
+        {
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].Color = color;
+            });
+        }
+
+        /// <summary>
+        /// テクスチャの表示位置を設定します。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="position">表示位置。</param>
+        public void SetPosition(int id, PointF position)
+        {
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].Position = position;
+            });
+        }
+
+        /// <summary>
+        /// テクスチャの描画処理をコンパイルしないかどうかの真偽値を設定します。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="noCompile">コンパイルしないとき true、コンパイルするとき false。</param>
+        public void SetNoCompile(int id, bool noCompile)
+        {
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].NoCompile = noCompile;
             });
         }
         #endregion
