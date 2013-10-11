@@ -88,6 +88,9 @@ namespace Sitrine.Event
         /// <param name="file">読み込まれる SMF ファイルのパス。</param>
         public void Load(string key, string file)
         {
+            if (String.IsNullOrWhiteSpace(file))
+                throw new ArgumentException();
+
             this.Load(key, file, false);
         }
 
@@ -100,6 +103,9 @@ namespace Sitrine.Event
         /// <param name="looping">ループ再生する場合は true、しない場合は false。</param>
         public void Load(string key, string file, bool looping)
         {
+            if (String.IsNullOrWhiteSpace(file))
+                throw new ArgumentException();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
@@ -118,6 +124,12 @@ namespace Sitrine.Event
         /// <param name="stream">読み込まれるストリーム。</param>
         public void Load(string key, Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException();
+
+            if (!stream.CanRead)
+                throw new ArgumentException();
+
             this.Load(key, stream, false);
         }
 
@@ -130,6 +142,12 @@ namespace Sitrine.Event
         /// <param name="looping">ループ再生する場合は true、しない場合は false。</param>
         public void Load(string key, Stream stream, bool looping)
         {
+            if (stream == null)
+                throw new ArgumentNullException();
+
+            if (!stream.CanRead)
+                throw new ArgumentException();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
@@ -149,6 +167,9 @@ namespace Sitrine.Event
         /// <param name="file">読み込まれる XML ファイルのパス。</param>
         public void LoadPreset(string file)
         {
+            if (String.IsNullOrWhiteSpace(file))
+                throw new ArgumentException();
+
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(file));
         }
 
@@ -159,6 +180,12 @@ namespace Sitrine.Event
         /// <param name="stream">読み込まれるストリーム。</param>
         public void LoadPreset(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException();
+
+            if (!stream.CanRead)
+                throw new ArgumentException();
+
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(stream));
         }
 
@@ -231,6 +258,9 @@ namespace Sitrine.Event
         /// <param name="handles">送信するハンドル列。</param>
         public void Push(IEnumerable<Handle> handles)
         {
+            if (handles == null)
+                throw new ArgumentNullException();
+
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
         }
 
@@ -255,6 +285,9 @@ namespace Sitrine.Event
         /// <param name="handles">送信するハンドル列。</param>
         public void PushNow(IEnumerable<Handle> handles)
         {
+            if (handles == null)
+                throw new ArgumentNullException();
+
             this.Window.Music.Master.PushHandle(handles);
         }
 
