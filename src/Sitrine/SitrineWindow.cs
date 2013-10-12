@@ -237,7 +237,7 @@ namespace Sitrine
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            foreach (var story in this.stories)
+            foreach (var story in this.stories.ToArray())
                 story.Update();
 
             this.debugText.Update(e.Time);

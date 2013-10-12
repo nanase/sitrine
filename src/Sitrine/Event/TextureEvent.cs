@@ -226,6 +226,25 @@ namespace Sitrine.Event
                 this.Window.Textures[this.asignment[id]].NoCompile = noCompile;
             });
         }
+
+        public void AnimatePosition(int id, PointF to, int duration)
+        {
+            if (duration == 0)
+                return;
+
+            this.Storyboard.AddAction(() =>
+            {
+               if (!this.asignment.ContainsKey(id))
+               {
+                   Trace.TraceWarning("Texture ID not found: " + id);
+                   return;
+               }
+
+               AnimateStoryboard story = new AnimateStoryboard(this.Window);
+               story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, duration);
+               this.Window.AddStoryboard(story);
+           });
+        }
         #endregion
 
         #region -- Private Methods --
@@ -246,5 +265,42 @@ namespace Sitrine.Event
             }
         }
         #endregion
+
+        class AnimateStoryboard : Storyboard
+        {
+            // TODO:
+
+            public AnimateStoryboard(SitrineWindow window)
+                : base(window)
+            {
+            }
+
+            public void AnimatePosition(Texture.Texture texture, PointF to, int duration)
+            {
+                if (duration == 0)
+                    return;
+
+                PointF from = texture.Position;
+                bool noCompile = texture.NoCompile;
+
+                float dx = (to.X - from.X) / (float)duration;
+                float dy = (to.Y - from.Y) / (float)duration;
+
+                Process.Invoke(() => texture.NoCompile = true);
+
+                for (int i = 0, j = 0; i < duration; i++)
+                {
+                    Process.WaitFrame(1);
+                    Process.Invoke(() =>
+                    {
+                        texture.Position = new PointF(from.X + dx * j, from.Y + dy * j);
+                        j++;
+                    });
+                }
+
+                if (!noCompile)
+                    Process.Invoke(() => texture.NoCompile = false);
+            }
+        }
     }
 }

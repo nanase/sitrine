@@ -66,7 +66,7 @@ namespace Sample
             Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
 
             Message.Position = new PointF(0, 160);
-            Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);            
+            Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
 
             Process.Wait(0.5);
             Message.Interval = 2;
