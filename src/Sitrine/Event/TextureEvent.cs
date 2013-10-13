@@ -232,6 +232,9 @@ namespace Sitrine.Event
             if (duration == 0)
                 return;
 
+            if (duration < 0)
+                throw new ArgumentOutOfRangeException("duration");
+
             this.Storyboard.AddAction(() =>
             {
                if (!this.asignment.ContainsKey(id))
@@ -244,6 +247,31 @@ namespace Sitrine.Event
                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, duration);
                this.Window.AddStoryboard(story);
            });
+        }
+
+        public void AnimatePosition(int id, PointF to, double duration)
+        {
+            if (duration == 0.0)
+                return;
+
+            if (duration < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            if (this.Window.TargetUpdateFrequency < 0.0)
+                throw new Exception("TargetUpdateFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'updates_per_second' に値を指定してください。");
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, (int)Math.Round(this.Window.TargetUpdateFrequency * duration));
+                this.Window.AddStoryboard(story);
+            });
         }
         #endregion
 
