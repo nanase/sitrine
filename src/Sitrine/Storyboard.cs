@@ -201,6 +201,9 @@ namespace Sitrine
                     i--;
                 }
             }
+
+            if (this.Actions.Count == 0 && this.Listener.Count == 0)
+                this.Window.RemoveStoryboard(this);
         }
 
         internal void AddAction(Action action)
