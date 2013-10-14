@@ -227,6 +227,12 @@ namespace Sitrine.Event
             });
         }
 
+        /// <summary>
+        /// 指定された位置へ移動するアニメーションを開始します。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="to">移動先の位置座標。</param>
+        /// <param name="duration">アニメーションが完了するまでのフレーム時間。</param>
         public void AnimatePosition(int id, PointF to, int duration)
         {
             if (duration == 0)
@@ -249,6 +255,12 @@ namespace Sitrine.Event
            });
         }
 
+        /// <summary>
+        /// 指定された位置へ移動するアニメーションを開始します。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="to">移動先の位置座標。</param>
+        /// <param name="duration">アニメーションが完了するまでのフレーム時間。</param>
         public void AnimatePosition(int id, PointF to, double duration)
         {
             if (duration == 0.0)
