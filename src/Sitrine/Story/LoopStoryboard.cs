@@ -25,7 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 
-namespace Sitrine
+namespace Sitrine.Story
 {
     /// <summary>
     /// ストーリーボードの機能を拡張し、同一のアクションが指定回数分だけループするストーリーボードを提供します。

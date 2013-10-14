@@ -6,6 +6,7 @@ using System.Linq;
 using OpenTK.Input;
 using Sitrine;
 using Sitrine.Audio;
+using Sitrine.Story;
 using Sitrine.Utils;
 
 namespace Sample

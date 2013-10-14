@@ -77,7 +77,7 @@
     <Compile Include="Event\TextureEvent.cs" />
     <Compile Include="Event\MusicEvent.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="LoopStoryboard.cs" />
+    <Compile Include="Story\LoopStoryboard.cs" />
     <Compile Include="SitrineWindow.cs" />
     <Compile Include="Storyboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
