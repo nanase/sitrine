@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using Sitrine.Event;
+using Sitrine.Story;
 using Sitrine.Utils;
 
 namespace Sitrine
@@ -127,6 +128,14 @@ namespace Sitrine
                     return StoryboardState.Pausing;
             }
         }
+
+        /// <summary>
+        /// ストーリーボードが 1 秒間に更新される回数を取得します。
+        /// </summary>
+        public virtual double UpdateFrequency
+        {
+            get { return this.Window.TargetUpdateFrequency; }
+        }
         #endregion
 
         #region -- Constructors --
@@ -138,6 +147,9 @@ namespace Sitrine
         {
             if (window == null)
                 throw new ArgumentNullException();
+
+            if (window.TargetUpdateFrequency <= 0.0)
+                throw new Exception("TargetUpdateFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'updates_per_second' に値を指定してください。");
 
             this.Actions = new LinkedList<Action>();
             this.Listener = new List<Func<bool>>();
@@ -169,6 +181,17 @@ namespace Sitrine
 
             this.message = new MessageEvent(this, this.Window, options, size);
             Trace.WriteLine("message event", "Init");
+        }
+
+        /// <summary>
+        /// ストーリーボードの排他性をチェックします。
+        /// </summary>
+        /// <param name="x">IExclusiveStory を実装する 1つ目のオブジェクト。</param>
+        /// <param name="y">IExclusiveStory を実装する 2つ目のオブジェクト。</param>
+        /// <returns>true のとき、2つのオブジェクトはお互いに排他的であり、ストーリーボードとして共存できません。false のとき、ストーリーボードとして共存可能です。</returns>
+        public static bool CheckExclusive(IExclusiveStory x, IExclusiveStory y)
+        {
+            return x == y || (x.TargetObject == y.TargetObject && x.TargetProperty == y.TargetProperty);
         }
         #endregion
 

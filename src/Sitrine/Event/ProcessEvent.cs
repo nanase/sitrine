@@ -49,10 +49,7 @@ namespace Sitrine.Event
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            if (this.Window.TargetUpdateFrequency < 0.0)
-                throw new Exception("TargetUpdateFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'updates_per_second' に値を指定してください。");
-
-            this.Storyboard.AddAction(() => this.Storyboard.SetWait((int)Math.Round(this.Window.TargetUpdateFrequency * seconds)));
+            this.Storyboard.AddAction(() => this.Storyboard.SetWait((int)Math.Round(this.Storyboard.UpdateFrequency * seconds)));
         }
 
         /// <summary>

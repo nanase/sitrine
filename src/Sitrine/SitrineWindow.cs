@@ -26,10 +26,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Sitrine.Audio;
+using Sitrine.Story;
 using Sitrine.Texture;
 using Sitrine.Utils;
 
@@ -45,8 +47,12 @@ namespace Sitrine
 
         private readonly TextureList textures;
         private readonly MusicPlayer music;
-        private readonly List<Storyboard> stories;
         private readonly TextOptions textOptions;
+
+        private readonly List<Storyboard> stories;
+        private readonly List<RenderStoryboard> renderStories;
+        private readonly List<Storyboard> reservedStories;
+        private readonly List<Storyboard> removingStories;
 
         private Color backgroundColor = Color.Black;
         private Color foregroundColor = Color.FromArgb(0);
@@ -122,10 +128,14 @@ namespace Sitrine
                 throw new ArgumentNullException();
 
             this.music = new MusicPlayer(new MusicOptions());
-            this.textures = new TextureList();           
+            this.textures = new TextureList();
             this.TargetSize = options.TargetSize;
-            this.stories = new List<Storyboard>();
             this.textOptions = options.TextOptions;
+
+            this.stories = new List<Storyboard>();
+            this.renderStories = new List<RenderStoryboard>();
+            this.reservedStories = new List<Storyboard>();
+            this.removingStories = new List<Storyboard>();
 
             this.debugText = new DebugText(options.DebugTextOptions, this);
             Trace.Listeners.Add(new DebugTextListener(this.debugText));
@@ -148,7 +158,7 @@ namespace Sitrine
         /// <param name="Storyboard">追加されるストーリーボード。</param>
         public void AddStoryboard(Storyboard storyboard)
         {
-            this.stories.Add(storyboard);
+            this.reservedStories.Add(storyboard);
         }
 
         /// <summary>
@@ -157,7 +167,7 @@ namespace Sitrine
         /// <param name="Storyboard">除外されるストーリーボード。</param>
         public void RemoveStoryboard(Storyboard storyboard)
         {
-            this.stories.Remove(storyboard);
+            this.removingStories.Add(storyboard);
         }
         #endregion
 
@@ -214,6 +224,9 @@ namespace Sitrine
 
         protected void ProcessAfterRender(FrameEventArgs e)
         {
+            foreach (var story in this.renderStories)
+                story.Update();
+
             this.textures.Render();
 
             GL.PushMatrix();
@@ -237,11 +250,48 @@ namespace Sitrine
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            // TODO:
-            foreach (var story in this.stories.ToArray())
+            foreach (var story in this.stories)
                 story.Update();
 
+            if (this.removingStories.Count > 0)
+            {
+                foreach (var story in this.removingStories)
+                {
+                    if (story is RenderStoryboard)
+                        this.renderStories.Remove((RenderStoryboard)story);
+                    else
+                        this.stories.Remove(story);
+                }
+
+                this.removingStories.Clear();
+            }
+
+            this.DequeueStory();
+
             this.debugText.Update(e.Time);
+        }
+        #endregion
+
+        #region -- Private Methods --
+        private void DequeueStory()
+        {
+            for (int i = 0; i < this.reservedStories.Count; i++)
+            {
+                Storyboard story = this.reservedStories[i];
+
+                if (!(story is IExclusiveStory)
+                    || (!this.stories.Any(s => s is IExclusiveStory && Storyboard.CheckExclusive((IExclusiveStory)story, (IExclusiveStory)s))
+                      && !this.renderStories.Any(s => s is IExclusiveStory && Storyboard.CheckExclusive((IExclusiveStory)story, (IExclusiveStory)s))))
+                {
+                    if (story is RenderStoryboard)
+                        this.renderStories.Add((RenderStoryboard)story);
+                    else
+                        this.stories.Add(story);
+
+                    this.reservedStories.RemoveAt(i);
+                    i--;
+                }
+            }
         }
         #endregion
     }

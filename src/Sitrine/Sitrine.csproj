@@ -77,9 +77,11 @@
     <Compile Include="Event\TextureEvent.cs" />
     <Compile Include="Event\MusicEvent.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Story\IExclusiveStory.cs" />
     <Compile Include="Story\LoopStoryboard.cs" />
     <Compile Include="SitrineWindow.cs" />
-    <Compile Include="Storyboard.cs" />
+    <Compile Include="Story\RenderStoryboard.cs" />
+    <Compile Include="Story\Storyboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Texture\IAnimationTexture.cs" />
     <Compile Include="Texture\MessageTexture.cs" />

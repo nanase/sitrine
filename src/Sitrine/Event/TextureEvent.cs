@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using OpenTK.Graphics;
+using Sitrine.Story;
 
 namespace Sitrine.Event
 {
@@ -243,16 +244,16 @@ namespace Sitrine.Event
 
             this.Storyboard.AddAction(() =>
             {
-               if (!this.asignment.ContainsKey(id))
-               {
-                   Trace.TraceWarning("Texture ID not found: " + id);
-                   return;
-               }
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
 
-               AnimateStoryboard story = new AnimateStoryboard(this.Window);
-               story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, duration);
-               this.Window.AddStoryboard(story);
-           });
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, duration);
+                this.Window.AddStoryboard(story);
+            });
         }
 
         /// <summary>
@@ -306,29 +307,58 @@ namespace Sitrine.Event
         }
         #endregion
 
-        class AnimateStoryboard : Storyboard
+        class AnimateStoryboard : RenderStoryboard, IExclusiveStory
         {
-            // TODO:
+            #region -- Private Fields --
+            private object targetObject;
+            private string targetPropery;
+            #endregion
 
+            #region -- Public Properties --
+            public object TargetObject
+            {
+                get { return this.targetObject; }
+            }
+
+            public string TargetProperty
+            {
+                get { return this.targetPropery; }
+            }
+            #endregion
+
+            #region -- Constructors --
             public AnimateStoryboard(SitrineWindow window)
                 : base(window)
             {
             }
+            #endregion
 
+            #region -- OPublic Methods --
             public void AnimatePosition(Texture.Texture texture, PointF to, int duration)
             {
                 if (duration == 0)
                     return;
 
-                PointF from = texture.Position;
-                bool noCompile = texture.NoCompile;
+                this.targetObject = texture;
+                this.targetPropery = "position";
 
-                float dx = (to.X - from.X) / (float)duration;
-                float dy = (to.Y - from.Y) / (float)duration;
+                PointF from = new PointF();
+                bool noCompile = false;
+
+                float dx = 0f, dy = 0f;
 
                 Process.Invoke(() => texture.NoCompile = true);
 
-                for (int i = 0, j = 0; i < duration; i++)
+                Process.Invoke(() =>
+                {
+                    from = texture.Position;
+                    noCompile = texture.NoCompile;
+
+                    dx = (to.X - from.X) / (float)duration;
+                    dy = (to.Y - from.Y) / (float)duration;
+                });
+
+                for (int i = 0, j = 1; i < duration; i++)
                 {
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
@@ -338,9 +368,13 @@ namespace Sitrine.Event
                     });
                 }
 
-                if (!noCompile)
-                    Process.Invoke(() => texture.NoCompile = false);
+                Process.Invoke(() =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
             }
+            #endregion
         }
     }
 }
