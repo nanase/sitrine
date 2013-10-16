@@ -184,6 +184,16 @@ namespace Sitrine
         }
 
         /// <summary>
+        /// 指定された秒数をこのストーリーボードでのフレーム時間に変換します。
+        /// </summary>
+        /// <param name="seconds">秒数。</param>
+        /// <returns>フレーム時間。</returns>
+        public int GetFrameCount(double seconds)
+        {
+            return (int)Math.Round(this.UpdateFrequency * seconds);
+        }
+
+        /// <summary>
         /// ストーリーボードの排他性をチェックします。
         /// </summary>
         /// <param name="x">IExclusiveStory を実装する 1つ目のオブジェクト。</param>

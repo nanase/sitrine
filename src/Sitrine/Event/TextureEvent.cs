@@ -261,7 +261,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
-        /// <param name="duration">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが完了するまでの秒数。</param>
         public void AnimatePosition(int id, PointF to, double duration)
         {
             if (duration == 0.0)
@@ -270,8 +270,22 @@ namespace Sitrine.Event
             if (duration < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
 
-            if (this.Window.TargetUpdateFrequency < 0.0)
-                throw new Exception("TargetUpdateFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'updates_per_second' に値を指定してください。");
+            this.AnimatePosition(id, to, this.Storyboard.GetFrameCount(duration));
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="to">変化後の色。</param>
+        /// <param name="duration">アニメーションが完了するまでのフレーム時間。</param>
+        public void AnimateColor(int id, Color4 to, int duration)
+        {
+            if (duration == 0)
+                return;
+
+            if (duration < 0)
+                throw new ArgumentOutOfRangeException("duration");
 
             this.Storyboard.AddAction(() =>
             {
@@ -282,9 +296,26 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, (int)Math.Round(this.Window.TargetUpdateFrequency * duration));
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, duration);
                 this.Window.AddStoryboard(story);
             });
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="to">変化後の色。</param>
+        /// <param name="duration">アニメーションが完了するまでの秒数。</param>
+        public void AnimateColor(int id, Color4 to, double duration)
+        {
+            if (duration == 0.0)
+                return;
+
+            if (duration < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            this.AnimateColor(id, to, this.Storyboard.GetFrameCount(duration));
         }
         #endregion
 
@@ -333,7 +364,7 @@ namespace Sitrine.Event
             }
             #endregion
 
-            #region -- OPublic Methods --
+            #region -- Public Methods --
             public void AnimatePosition(Texture.Texture texture, PointF to, int duration)
             {
                 if (duration == 0)
@@ -364,6 +395,49 @@ namespace Sitrine.Event
                     Process.Invoke(() =>
                     {
                         texture.Position = new PointF(from.X + dx * j, from.Y + dy * j);
+                        j++;
+                    });
+                }
+
+                Process.Invoke(() =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
+            }
+
+            public void AnimateColor(Texture.Texture texture, Color4 to, int duration)
+            {
+                if (duration == 0)
+                    return;
+
+                this.targetObject = texture;
+                this.targetPropery = "color";
+
+                Color4 from = new Color4();
+                bool noCompile = false;
+
+                float dr = 0f, dg = 0f, db = 0f, da = 0f;
+
+                Process.Invoke(() => texture.NoCompile = true);
+
+                Process.Invoke(() =>
+                {
+                    from = texture.Color;
+                    noCompile = texture.NoCompile;
+
+                    dr = (to.R - from.R) / (float)duration;
+                    dg = (to.G - from.G) / (float)duration;
+                    db = (to.B - from.B) / (float)duration;
+                    da = (to.A - from.A) / (float)duration;
+                });
+
+                for (int i = 0, j = 1; i < duration; i++)
+                {
+                    Process.WaitFrame(1);
+                    Process.Invoke(() =>
+                    {
+                        texture.Color = new Color4(from.R + dr * j, from.G + dg * j, from.B + db * j, from.A + da * j);
                         j++;
                     });
                 }
