@@ -75,22 +75,57 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 新しいストーリーボードを追加し、開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="newStoryboard">追加されるストーリーボード。</param>
-        public void Start(Storyboard newStoryboard)
-        {
-            this.Storyboard.AddAction(() => this.Window.AddStoryboard(newStoryboard));
-        }
-
-        /// <summary>
         /// 指定された処理を予約し、遅延実行させます。
         /// </summary>
         /// <param name="action">予約する処理。</param>
         public void Invoke(Action action)
         {
             this.Storyboard.AddAction(action);
+        }
+        
+        /// <summary>
+        /// 新しいストーリーボードを追加し、開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="newStoryboard">追加されるストーリーボード。</param>
+        public void Fork(Storyboard newStoryboard)
+        {
+            this.Storyboard.AddAction(() => this.Window.AddStoryboard(newStoryboard));
+        }
+        
+        public void ForkIf(Func<bool> condition, Storyboard newStoryboard)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void ForkIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void ForkElseIf(Func<bool> condition, Storyboard newStoryboard)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void Switch(Storyboard newStoryboard)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void SwitchIf(Func<bool> condition, Storyboard newStoryboard)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void SwitchIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void SwitchElseIf(Func<bool> condition, Storyboard newStoryboard)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
