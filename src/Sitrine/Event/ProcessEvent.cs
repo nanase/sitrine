@@ -49,7 +49,7 @@ namespace Sitrine.Event
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            this.Storyboard.AddAction(() => this.Storyboard.SetWait((int)Math.Round(this.Storyboard.UpdateFrequency * seconds)));
+            this.WaitFrame(this.Storyboard.GetFrameCount(seconds));
         }
 
         /// <summary>
