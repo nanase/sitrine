@@ -192,6 +192,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// テクスチャの表示位置を設定します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="position">表示位置。</param>
@@ -211,6 +212,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// テクスチャの描画処理をコンパイルしないかどうかの真偽値を設定します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="noCompile">コンパイルしないとき true、コンパイルするとき false。</param>
@@ -230,6 +232,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// 指定された位置へ移動するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
@@ -258,6 +261,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// 指定された位置へ移動するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
@@ -275,6 +279,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
@@ -303,6 +308,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>

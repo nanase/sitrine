@@ -82,50 +82,123 @@ namespace Sitrine.Event
         {
             this.Storyboard.AddAction(action);
         }
-        
+
         /// <summary>
-        /// 新しいストーリーボードを追加し、開始します。
+        /// 新しいストーリーボードを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="newStoryboard">追加されるストーリーボード。</param>
+        /// <param name="newStoryboard">開始されるストーリーボード。</param>
         public void Fork(Storyboard newStoryboard)
         {
             this.Storyboard.AddAction(() => this.Window.AddStoryboard(newStoryboard));
         }
         
+        /// <summary>
+        /// 条件を満たした場合にのみ新しいストーリーボードを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="condition">条件判定処理。</param>
+        /// <param name="newStoryboard">開始されるストーリーボード。</param>
         public void ForkIf(Func<bool> condition, Storyboard newStoryboard)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (condition())
+                    this.Window.AddStoryboard(newStoryboard);
+            });
         }
-        
+
+        /// <summary>
+        /// 条件により開始するストーリーボードを選択し、開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="condition">条件判定処理。</param>
+        /// <param name="storyOnTrue">条件が true のときに開始されるストーリーボード。</param>
+        /// <param name="storyOnFalse">条件が false のときに開始されるストーリーボード。</param>
         public void ForkIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() => this.Window.AddStoryboard(condition() ? storyOnTrue : storyOnFalse));
         }
-        
+
+        /// <summary>
+        /// 条件を満たさない場合にのみ新しいストーリーボードを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="condition">条件判定処理。</param>
+        /// <param name="newStoryboard">開始されるストーリーボード。</param>
         public void ForkElseIf(Func<bool> condition, Storyboard newStoryboard)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!condition())
+                    this.Window.AddStoryboard(newStoryboard);
+            });
         }
-        
-        public void Switch(Storyboard newStoryboard)
+
+        /// <summary>
+        /// ストーリーボードを終了させ、指定したストーリーボードに動作を切り替えます。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="newStoryboard">開始されるストーリーボード。</param>
+        public void Yield(Storyboard newStoryboard)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                this.Window.AddStoryboard(newStoryboard);
+                this.Storyboard.Break();
+            });
         }
-        
-        public void SwitchIf(Func<bool> condition, Storyboard newStoryboard)
+
+        /// <summary>
+        /// 条件を満たした場合にのみストーリーボードを終了させ、指定したストーリーボードに動作を切り替えます。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="condition">条件判定処理。</param>
+        /// <param name="newStoryboard">開始されるストーリーボード。</param>
+        public void YieldIf(Func<bool> condition, Storyboard newStoryboard)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (condition())
+                {
+                    this.Window.AddStoryboard(newStoryboard);
+                    this.Storyboard.Break();
+                }
+            });
         }
-        
-        public void SwitchIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
+
+        /// <summary>
+        /// ストーリーボードを終了させ、条件により指定したストーリーボードに動作を切り替えます。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="condition">条件判定処理。</param>
+        /// <param name="storyOnTrue">条件が true のときに開始されるストーリーボード。</param>
+        /// <param name="storyOnFalse">条件が false のときに開始されるストーリーボード。</param>
+        public void YieldIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                this.Window.AddStoryboard(condition() ? storyOnTrue : storyOnFalse);
+                this.Storyboard.Break();
+            });
         }
-        
-        public void SwitchElseIf(Func<bool> condition, Storyboard newStoryboard)
+
+        /// <summary>
+        /// 条件を満たさない場合にのみストーリーボードを終了させ、指定したストーリーボードに動作を切り替えます。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="condition">条件判定処理。</param>
+        /// <param name="newStoryboard">開始されるストーリーボード。</param>
+        public void YieldElseIf(Func<bool> condition, Storyboard newStoryboard)
         {
-            throw new NotImplementedException();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!condition())
+                {
+                    this.Window.AddStoryboard(newStoryboard);
+                    this.Storyboard.Break();
+                }
+            });
         }
         #endregion
     }
