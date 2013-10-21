@@ -42,9 +42,10 @@ namespace Sitrine.Utils
         private readonly LinkedList<TextItem> textQueue;
 
         private double elapsed = 1.0;
+        private double elapsed_fps = 2.0;
         private readonly TextTexture debugTexture;
         private readonly TextTexture debugTextTexture;
-        private double fps_old = 0.0;
+        private double fps_now = 0.0;
         private bool textUpdated = false;
         private DateTime firstQueueTime;
 
@@ -109,7 +110,6 @@ namespace Sitrine.Utils
 
             this.window = window;
             this.textures = window.Textures;
-            this.fps_old = 60.0;
 
             this.textQueue = new LinkedList<TextItem>();
 
@@ -241,14 +241,21 @@ namespace Sitrine.Utils
         private void UpdateDebug(double time)
         {
             this.elapsed += time;
+            this.elapsed_fps += time;
+
+            if (this.elapsed_fps >= 2.0)
+            {
+                this.fps_now = this.window.RenderFrequency;
+                this.elapsed_fps = 0.0;
+            }
+
             if (this.elapsed >= 0.25)
             {
-                this.fps_old += (this.window.RenderFrequency - this.fps_old) * 0.2;
                 var storyboards = this.window.Storyboards.ToArray();
 
                 this.debugTexture.Clear();
                 this.debugTexture.Draw(string.Format("FPS: {0:f1}({1}), T: {2}, L: {3}, U: {4}, S: {5}, A: {6}, L: {7}, P: {8}, M: {9:f2}MB",
-                    this.fps_old,
+                    this.fps_now,
                     (int)Math.Round(1.0 / time),
                     this.textures.Count,
                     DebugText.loadCount - this.loadCountOld,
