@@ -73,6 +73,7 @@
     <Compile Include="Event\KeyboardEvent.cs" />
     <Compile Include="Event\MessageEvent.cs" />
     <Compile Include="Event\ProcessEvent.cs" />
+    <Compile Include="Event\ScreenEvent.cs" />
     <Compile Include="Event\StoryEvent.cs" />
     <Compile Include="Event\TextureEvent.cs" />
     <Compile Include="Event\MusicEvent.cs" />
