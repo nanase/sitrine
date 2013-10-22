@@ -236,7 +236,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
-        /// <param name="seconds">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
         public void AnimatePosition(int id, PointF to, int frame)
         {
             if (frame == 0)
@@ -294,7 +294,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
-        /// <param name="seconds">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
         public void AnimateColor(int id, Color4 to, int frame)
         {
             if (frame == 0)
@@ -406,10 +406,9 @@ namespace Sitrine.Event
 
                 float dx = 0f, dy = 0f;
 
-                Process.Invoke(() => texture.NoCompile = true);
-
                 Process.Invoke(() =>
                 {
+                    texture.NoCompile = true;
                     from = texture.Position;
                     noCompile = texture.NoCompile;
 
@@ -447,10 +446,9 @@ namespace Sitrine.Event
 
                 float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-                Process.Invoke(() => texture.NoCompile = true);
-
                 Process.Invoke(() =>
                 {
+                    texture.NoCompile = true;
                     from = texture.Color;
                     noCompile = texture.NoCompile;
 
