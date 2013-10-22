@@ -236,13 +236,13 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
-        /// <param name="duration">アニメーションが完了するまでのフレーム時間。</param>
-        public void AnimatePosition(int id, PointF to, int duration)
+        /// <param name="seconds">アニメーションが完了するまでのフレーム時間。</param>
+        public void AnimatePosition(int id, PointF to, int frame)
         {
-            if (duration == 0)
+            if (frame == 0)
                 return;
 
-            if (duration < 0)
+            if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
 
             this.Storyboard.AddAction(() =>
@@ -254,7 +254,7 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, duration);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame);
                 this.Window.AddStoryboard(story);
             });
         }
@@ -265,31 +265,13 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
-        /// <param name="duration">アニメーションが完了するまでの秒数。</param>
-        public void AnimatePosition(int id, PointF to, double duration)
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        public void AnimatePosition(int id, PointF to, double seconds)
         {
-            if (duration == 0.0)
+            if (seconds == 0.0)
                 return;
 
-            if (duration < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            this.AnimatePosition(id, to, this.Storyboard.GetFrameCount(duration));
-        }
-
-        /// <summary>
-        /// 指定された色へ変化するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
-        /// <param name="to">変化後の色。</param>
-        /// <param name="duration">アニメーションが完了するまでのフレーム時間。</param>
-        public void AnimateColor(int id, Color4 to, int duration)
-        {
-            if (duration == 0)
-                return;
-
-            if (duration < 0)
+            if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
 
             this.Storyboard.AddAction(() =>
@@ -301,7 +283,7 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, duration);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds));
                 this.Window.AddStoryboard(story);
             });
         }
@@ -312,16 +294,56 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
-        /// <param name="duration">アニメーションが完了するまでの秒数。</param>
-        public void AnimateColor(int id, Color4 to, double duration)
+        /// <param name="seconds">アニメーションが完了するまでのフレーム時間。</param>
+        public void AnimateColor(int id, Color4 to, int frame)
         {
-            if (duration == 0.0)
+            if (frame == 0)
                 return;
 
-            if (duration < 0.0)
+            if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
 
-            this.AnimateColor(id, to, this.Storyboard.GetFrameCount(duration));
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame);
+                this.Window.AddStoryboard(story);
+            });
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられた ID。</param>
+        /// <param name="to">変化後の色。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        public void AnimateColor(int id, Color4 to, double seconds)
+        {
+            if (seconds == 0.0)
+                return;
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds));
+                this.Window.AddStoryboard(story);
+            });
         }
         #endregion
 
@@ -371,9 +393,9 @@ namespace Sitrine.Event
             #endregion
 
             #region -- Public Methods --
-            public void AnimatePosition(Texture.Texture texture, PointF to, int duration)
+            public void AnimatePosition(Texture.Texture texture, PointF to, int frame)
             {
-                if (duration == 0)
+                if (frame == 0)
                     return;
 
                 this.targetObject = texture;
@@ -391,11 +413,11 @@ namespace Sitrine.Event
                     from = texture.Position;
                     noCompile = texture.NoCompile;
 
-                    dx = (to.X - from.X) / (float)duration;
-                    dy = (to.Y - from.Y) / (float)duration;
+                    dx = (to.X - from.X) / (float)frame;
+                    dy = (to.Y - from.Y) / (float)frame;
                 });
 
-                for (int i = 0, j = 1; i < duration; i++)
+                for (int i = 0, j = 1; i < frame; i++)
                 {
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
@@ -412,9 +434,9 @@ namespace Sitrine.Event
                 });
             }
 
-            public void AnimateColor(Texture.Texture texture, Color4 to, int duration)
+            public void AnimateColor(Texture.Texture texture, Color4 to, int frame)
             {
-                if (duration == 0)
+                if (frame == 0)
                     return;
 
                 this.targetObject = texture;
@@ -432,13 +454,13 @@ namespace Sitrine.Event
                     from = texture.Color;
                     noCompile = texture.NoCompile;
 
-                    dr = (to.R - from.R) / (float)duration;
-                    dg = (to.G - from.G) / (float)duration;
-                    db = (to.B - from.B) / (float)duration;
-                    da = (to.A - from.A) / (float)duration;
+                    dr = (to.R - from.R) / (float)frame;
+                    dg = (to.G - from.G) / (float)frame;
+                    db = (to.B - from.B) / (float)frame;
+                    da = (to.A - from.A) / (float)frame;
                 });
 
-                for (int i = 0, j = 1; i < duration; i++)
+                for (int i = 0, j = 1; i < frame; i++)
                 {
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
