@@ -61,6 +61,10 @@ namespace Sample
 
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
+            Screen.BackgroundColor = Color.FromArgb(10, 59, 118);
+            Screen.ForegroundColor = Color.Black;
+            Screen.AnimateForegroundColor(Color.FromArgb(0, Color.Black), 1.0);
+
             Music.Push(handle["message_init"]);
             Music.LoadPreset("resource/ux_preset.xml");
 
@@ -99,9 +103,6 @@ namespace Sample
         {
             this.AddStoryboard(new SampleStory(this));
             this.AddStoryboard(new FunctionKeyStory(this));
-
-            this.BackgroundColor = Color.FromArgb(10, 59, 118);
-
             base.OnLoad(e);
         }
     }

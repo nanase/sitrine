@@ -23,10 +23,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
 using OpenTK.Graphics;
+using Sitrine.Story;
 
 namespace Sitrine.Event
 {
@@ -40,15 +39,15 @@ namespace Sitrine.Event
         /// 前景色を取得または指定します。
         /// 設定は遅延実行されます。
         /// </summary>
-        public Color4 ForegroundColor
+        public Color ForegroundColor
         {
             get
             {
-                throw new NotImplementedException();
+                return this.Window.ForegroundColor;
             }
             set
             {
-                throw new NotImplementedException();
+                this.Storyboard.AddAction(() => this.Window.ForegroundColor = value);
             }
         }
 
@@ -56,15 +55,15 @@ namespace Sitrine.Event
         /// 背景色を取得または指定します。
         /// 設定は遅延実行されます。
         /// </summary>
-        public Color4 BackgroundColor
+        public Color BackgroundColor
         {
             get
             {
-                throw new NotImplementedException();
+                return this.Window.BackgroundColor;
             }
             set
             {
-                throw new NotImplementedException();
+                this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
             }
         }
         #endregion
@@ -83,9 +82,20 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
-        public void AnimateForegroundColor(Color4 color, int frames)
+        public void AnimateForegroundColor(Color color, int frames)
         {
-            throw new NotImplementedException();
+            if (frames == 0)
+                return;
+
+            if (frames < 0)
+                throw new ArgumentOutOfRangeException("frames");
+
+            this.Storyboard.AddAction(() =>
+            {
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimateForeground(color, frames);
+                this.Window.AddStoryboard(story);
+            });
         }
 
         /// <summary>
@@ -94,9 +104,20 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
-        public void AnimateForegroundColor(Color4 color, double seconds)
+        public void AnimateForegroundColor(Color color, double seconds)
         {
-            throw new NotImplementedException();
+            if (seconds == 0.0)
+                return;
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("seconds");
+
+            this.Storyboard.AddAction(() =>
+            {
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimateForeground(color, story.GetFrameCount(seconds));
+                this.Window.AddStoryboard(story);
+            });
         }
 
         /// <summary>
@@ -105,9 +126,20 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
-        public void AnimateBackgroundColor(Color4 color, int frames)
+        public void AnimateBackgroundColor(Color color, int frames)
         {
-            throw new NotImplementedException();
+            if (frames == 0)
+                return;
+
+            if (frames < 0)
+                throw new ArgumentOutOfRangeException("frames");
+
+            this.Storyboard.AddAction(() =>
+            {
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimateBackground(color, frames);
+                this.Window.AddStoryboard(story);
+            });
         }
 
         /// <summary>
@@ -116,10 +148,117 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
-        public void AnimateBackgroundColor(Color4 color, double seconds)
+        public void AnimateBackgroundColor(Color color, double seconds)
         {
-            throw new NotImplementedException();
+            if (seconds == 0.0)
+                return;
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("seconds");
+
+            this.Storyboard.AddAction(() =>
+            {
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                story.AnimateBackground(color, story.GetFrameCount(seconds));
+                this.Window.AddStoryboard(story);
+            });
         }
         #endregion
+
+        class AnimateStoryboard : RenderStoryboard, IExclusiveStory
+        {
+            #region -- Private Fields --
+            private object targetObject;
+            private string targetPropery;
+            #endregion
+
+            #region -- Public Properties --
+            public object TargetObject
+            {
+                get { return this.targetObject; }
+            }
+
+            public string TargetProperty
+            {
+                get { return this.targetPropery; }
+            }
+            #endregion
+
+            #region -- Constructors --
+            public AnimateStoryboard(SitrineWindow window)
+                : base(window)
+            {
+            }
+            #endregion
+
+            #region -- Public Methods --
+            public void AnimateForeground(Color to, int duration)
+            {
+                if (duration == 0)
+                    return;
+
+                this.targetObject = this.Window;
+                this.targetPropery = "foreground";
+
+                Color4 from = new Color4();
+
+                float dr = 0f, dg = 0f, db = 0f, da = 0f;
+
+                Process.Invoke(() =>
+                {
+                    from = this.Window.ForegroundColor;
+
+                    dr = (to.R / 255f - from.R) / (float)duration;
+                    dg = (to.G / 255f - from.G) / (float)duration;
+                    db = (to.B / 255f - from.B) / (float)duration;
+                    da = (to.A / 255f - from.A) / (float)duration;
+                });
+
+                for (int i = 0, j = 1; i < duration; i++)
+                {
+                    Process.WaitFrame(1);
+                    Process.Invoke(() =>
+                    {
+                        this.Window.ForegroundColor = (Color)new Color4(from.R + dr * j, from.G + dg * j, from.B + db * j, from.A + da * j);
+                        j++;
+                    });
+                }
+            }
+
+            public void AnimateBackground(Color to, int duration)
+            {
+                if (duration == 0)
+                    return;
+
+                this.targetObject = this.Window;
+                this.targetPropery = "background";
+
+                Color4 from = new Color4();
+
+                float dr = 0f, dg = 0f, db = 0f, da = 0f;
+
+                Process.Invoke(() =>
+                {
+                    from = this.Window.BackgroundColor;
+
+                    dr = (to.R / 255f - from.R) / (float)duration;
+                    dg = (to.G / 255f - from.G) / (float)duration;
+                    db = (to.B / 255f - from.B) / (float)duration;
+                    da = (to.A / 255f - from.A) / (float)duration;
+                });
+
+                for (int i = 0, j = 1; i < duration; i++)
+                {
+                    Process.WaitFrame(1);
+                    Process.Invoke(() =>
+                    {
+                        this.Window.BackgroundColor = (Color)new Color4(from.R + dr * j, from.G + dg * j, from.B + db * j, from.A + da * j);
+                        j++;
+                    });
+                }
+            }
+            #endregion
+        }
+
     }
 }
