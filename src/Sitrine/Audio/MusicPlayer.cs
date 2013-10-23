@@ -55,8 +55,6 @@ namespace Sitrine.Audio
 
         private volatile bool reqEnd;
         private Task Updater;
-        private Sequencer musicSequencer = null;
-        private Sequencer effectSequencer = null;
         #endregion
 
         #region -- Public Properties --
