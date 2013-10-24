@@ -77,7 +77,7 @@ namespace Sitrine
         /// <summary>
         /// 実行されるストーリーボードを表す列挙子を取得します。
         /// </summary>
-        public IEnumerable<Storyboard> Storyboards { get { return this.stories; } }
+        public IEnumerable<Storyboard> Storyboards { get { return this.stories.Union(this.renderStories); } }
 
         /// <summary>
         /// 描画サイズを取得します。描画サイズはウィンドウの表示サイズとは異なります。
