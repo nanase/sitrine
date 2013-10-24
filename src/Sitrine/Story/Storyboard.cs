@@ -60,7 +60,7 @@ namespace Sitrine
         /// リスナオブジェクトを格納するリスト。この変数は読み取り専用です。
         /// </summary>
         protected readonly List<Func<bool>> Listener;
-        
+
         /// <summary>
         /// このストーリーボードが所属するウィンドウ。この変数は読み取り専用です。
         /// </summary>
@@ -142,6 +142,11 @@ namespace Sitrine
         {
             get { return this.Window.TargetUpdateFrequency; }
         }
+
+        /// <summary>
+        /// ストーリーボードが終端に達したとき、自動的にストーリーボードを削除するかの真偽値を取得します。
+        /// </summary>
+        public bool AutoEnd { get; protected set; }
         #endregion
 
         #region -- Constructors --
@@ -159,6 +164,7 @@ namespace Sitrine
 
             this.Actions = new LinkedList<Action>();
             this.Listener = new List<Func<bool>>();
+            this.AutoEnd = true;
             this.Window = window;
             this.waitTime = 0;
 
@@ -242,7 +248,7 @@ namespace Sitrine
                 }
             }
 
-            if (this.Actions.Count == 0 && this.Listener.Count == 0)
+            if (this.AutoEnd && this.Actions.Count == 0 && this.Listener.Count == 0)
                 this.Window.RemoveStoryboard(this);
         }
 

@@ -66,6 +66,7 @@ namespace Sitrine.Story
         public LoopStoryboard(SitrineWindow window)
             : base(window)
         {
+            this.AutoEnd = false;
         }
         #endregion
 
@@ -88,6 +89,8 @@ namespace Sitrine.Story
                 if (this.loopCount == -1 || ++this.nowCount < this.loopCount)
                     foreach (var action in this.actionPool)
                         this.Actions.AddFirst(action);
+                else
+                    this.AutoEnd = true;
             }
 
             base.Update();
