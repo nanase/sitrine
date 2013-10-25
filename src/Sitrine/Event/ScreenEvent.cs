@@ -197,6 +197,8 @@ namespace Sitrine.Event
                 if (duration == 0)
                     return;
 
+                duration /= 2;
+
                 this.targetObject = this.Window;
                 this.targetPropery = "foreground";
 
@@ -229,6 +231,8 @@ namespace Sitrine.Event
             {
                 if (duration == 0)
                     return;
+
+                duration /= 2;
 
                 this.targetObject = this.Window;
                 this.targetPropery = "background";

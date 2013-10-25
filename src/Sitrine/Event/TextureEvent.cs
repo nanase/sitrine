@@ -398,6 +398,8 @@ namespace Sitrine.Event
                 if (frame == 0)
                     return;
 
+                frame /= 2;
+
                 this.targetObject = texture;
                 this.targetPropery = "position";
 
@@ -437,6 +439,8 @@ namespace Sitrine.Event
             {
                 if (frame == 0)
                     return;
+
+                frame /= 2;
 
                 this.targetObject = texture;
                 this.targetPropery = "color";
