@@ -135,8 +135,9 @@ namespace Sitrine.Event
         /// 指定された文字列の描画を開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="text"></param>
-        public void Show(string text)
+        /// <param name="text">表示されるテキスト。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent Show(string text)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -156,6 +157,8 @@ namespace Sitrine.Event
                 this.Window.Textures.AddLast(this.texture);
                 this.Storyboard.Pause();
             });
+
+            return this;
         }
         #endregion
     }

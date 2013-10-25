@@ -82,10 +82,11 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
-        public void AnimateForegroundColor(Color color, int frames)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent AnimateForegroundColor(Color color, int frames)
         {
             if (frames == 0)
-                return;
+                return this;
 
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("frames");
@@ -96,6 +97,8 @@ namespace Sitrine.Event
                 story.AnimateForeground(color, frames);
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
 
         /// <summary>
@@ -104,10 +107,11 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
-        public void AnimateForegroundColor(Color color, double seconds)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent AnimateForegroundColor(Color color, double seconds)
         {
             if (seconds == 0.0)
-                return;
+                return this;
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
@@ -118,6 +122,8 @@ namespace Sitrine.Event
                 story.AnimateForeground(color, story.GetFrameCount(seconds));
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
 
         /// <summary>
@@ -126,10 +132,11 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
-        public void AnimateBackgroundColor(Color color, int frames)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent AnimateBackgroundColor(Color color, int frames)
         {
             if (frames == 0)
-                return;
+                return this;
 
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("frames");
@@ -140,6 +147,8 @@ namespace Sitrine.Event
                 story.AnimateBackground(color, frames);
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
 
         /// <summary>
@@ -148,10 +157,11 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
-        public void AnimateBackgroundColor(Color color, double seconds)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent AnimateBackgroundColor(Color color, double seconds)
         {
             if (seconds == 0.0)
-                return;
+                return this;
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
@@ -162,6 +172,8 @@ namespace Sitrine.Event
                 story.AnimateBackground(color, story.GetFrameCount(seconds));
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
         #endregion
 

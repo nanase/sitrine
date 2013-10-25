@@ -56,12 +56,15 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられる ID。</param>
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
-        public void Create(int id, Bitmap bitmap)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Create(int id, Bitmap bitmap)
         {
             if (bitmap == null)
                 throw new ArgumentNullException();
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
+
+            return this;
         }
 
         /// <summary>
@@ -70,12 +73,15 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられる ID。</param>
         /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
-        public void Create(int id, Stream stream)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Create(int id, Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException();
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
+
+            return this;
         }
 
         /// <summary>
@@ -84,12 +90,15 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられる ID。</param>
         /// <param name="filename">ビットマップデータを格納したファイル名。</param>
-        public void Create(int id, string filename)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Create(int id, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentException();
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
+
+            return this;
         }
 
         /// <summary>
@@ -97,7 +106,8 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
-        public void Show(int id)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Show(int id)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -112,6 +122,8 @@ namespace Sitrine.Event
                 color.A = 1f;
                 tex.Color = color;
             });
+
+            return this;
         }
 
         /// <summary>
@@ -119,7 +131,8 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
-        public void Hide(int id)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Hide(int id)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -134,6 +147,8 @@ namespace Sitrine.Event
                 color.A = 0f;
                 tex.Color = color;
             });
+
+            return this;
         }
 
         /// <summary>
@@ -141,7 +156,8 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
-        public void Clear(int id)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Clear(int id)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -153,13 +169,16 @@ namespace Sitrine.Event
 
                 this.Window.Textures.Remove(this.asignment[id], true);
             });
+
+            return this;
         }
 
         /// <summary>
         /// 画面上のテクスチャをすべて解放します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        public void ClearAll()
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ClearAll()
         {
             this.Storyboard.AddAction(() =>
             {
@@ -168,6 +187,8 @@ namespace Sitrine.Event
 
                 this.asignment.Clear();
             });
+
+            return this;
         }
 
         /// <summary>
@@ -176,7 +197,8 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="color">反射光の色。</param>
-        public void SetColor(int id, Color4 color)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent SetColor(int id, Color4 color)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -188,6 +210,8 @@ namespace Sitrine.Event
 
                 this.Window.Textures[this.asignment[id]].Color = color;
             });
+
+            return this;
         }
 
         /// <summary>
@@ -196,7 +220,8 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="position">表示位置。</param>
-        public void SetPosition(int id, PointF position)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent SetPosition(int id, PointF position)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -208,6 +233,8 @@ namespace Sitrine.Event
 
                 this.Window.Textures[this.asignment[id]].Position = position;
             });
+
+            return this;
         }
 
         /// <summary>
@@ -216,7 +243,8 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="noCompile">コンパイルしないとき true、コンパイルするとき false。</param>
-        public void SetNoCompile(int id, bool noCompile)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent SetNoCompile(int id, bool noCompile)
         {
             this.Storyboard.AddAction(() =>
             {
@@ -228,6 +256,8 @@ namespace Sitrine.Event
 
                 this.Window.Textures[this.asignment[id]].NoCompile = noCompile;
             });
+
+            return this;
         }
 
         /// <summary>
@@ -237,10 +267,11 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
         /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
-        public void AnimatePosition(int id, PointF to, int frame)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimatePosition(int id, PointF to, int frame)
         {
             if (frame == 0)
-                return;
+                return this;
 
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
@@ -257,6 +288,8 @@ namespace Sitrine.Event
                 story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame);
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
 
         /// <summary>
@@ -266,10 +299,11 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        public void AnimatePosition(int id, PointF to, double seconds)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimatePosition(int id, PointF to, double seconds)
         {
             if (seconds == 0.0)
-                return;
+                return this;
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
@@ -286,6 +320,8 @@ namespace Sitrine.Event
                 story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds));
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
 
         /// <summary>
@@ -295,10 +331,11 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
         /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
-        public void AnimateColor(int id, Color4 to, int frame)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimateColor(int id, Color4 to, int frame)
         {
             if (frame == 0)
-                return;
+                return this;
 
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
@@ -315,6 +352,8 @@ namespace Sitrine.Event
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame);
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
 
         /// <summary>
@@ -324,10 +363,11 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        public void AnimateColor(int id, Color4 to, double seconds)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimateColor(int id, Color4 to, double seconds)
         {
             if (seconds == 0.0)
-                return;
+                return this;
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
@@ -344,6 +384,8 @@ namespace Sitrine.Event
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds));
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
         }
         #endregion
 

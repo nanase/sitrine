@@ -94,12 +94,15 @@ namespace Sitrine.Event
         /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
         /// </summary>
         /// <param name="callback">動作が再開したときに呼び出される処理。</param>
-        public void WaitForOK(Action callback = null)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public KeyboardEvent WaitForOK(Action callback = null)
         {
             if (this.Storyboard.State != StoryboardState.Started)
                 this.Listen(callback, this.okKeys);
             else
                 this.Storyboard.AddAction(() => this.Listen(callback, this.okKeys));
+
+            return this;
         }
 
         /// <summary>
@@ -107,12 +110,15 @@ namespace Sitrine.Event
         /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
         /// </summary>
         /// <param name="callback">動作が再開したときに呼び出される処理。</param>
-        public void WaitForCancel(Action callback = null)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public KeyboardEvent WaitForCancel(Action callback = null)
         {
             if (this.Storyboard.State != StoryboardState.Started)
                 this.Listen(callback, this.cancelKeys);
             else
                 this.Storyboard.AddAction(() => this.Listen(callback, this.cancelKeys));
+
+            return this;
         }
 
         /// <summary>
@@ -121,7 +127,8 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="callback">動作が再開した時に呼び出される処理。</param>
         /// <param name="keys">入力を待つキー。</param>
-        public void WaitFor(Action callback = null, params Key[] keys)
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public KeyboardEvent WaitFor(Action callback = null, params Key[] keys)
         {
             if (keys == null)
                 throw new ArgumentNullException();
@@ -133,6 +140,8 @@ namespace Sitrine.Event
                 this.Listen(callback, keys);
             else
                 this.Storyboard.AddAction(() => this.Listen(callback, keys));
+
+            return this;
         }
         #endregion
 
