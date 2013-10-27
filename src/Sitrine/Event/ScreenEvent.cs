@@ -25,7 +25,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Drawing;
 using OpenTK.Graphics;
+using Sitrine.Animate;
 using Sitrine.Story;
+using Sitrine.Utils;
 
 namespace Sitrine.Event
 {
@@ -82,8 +84,9 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateForegroundColor(Color color, int frames)
+        public ScreenEvent AnimateForegroundColor(Color color, int frames, Func<double, double> easing = null)
         {
             if (frames == 0)
                 return this;
@@ -94,7 +97,7 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateForeground(color, frames);
+                story.AnimateForeground(color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -107,8 +110,9 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateForegroundColor(Color color, double seconds)
+        public ScreenEvent AnimateForegroundColor(Color color, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -119,7 +123,7 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateForeground(color, story.GetFrameCount(seconds));
+                story.AnimateForeground(color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -132,8 +136,9 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateBackgroundColor(Color color, int frames)
+        public ScreenEvent AnimateBackgroundColor(Color color, int frames, Func<double, double> easing = null)
         {
             if (frames == 0)
                 return this;
@@ -144,7 +149,7 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateBackground(color, frames);
+                story.AnimateBackground(color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -157,8 +162,9 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateBackgroundColor(Color color, double seconds)
+        public ScreenEvent AnimateBackgroundColor(Color color, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -169,7 +175,7 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateBackground(color, story.GetFrameCount(seconds));
+                story.AnimateBackground(color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -204,12 +210,13 @@ namespace Sitrine.Event
             #endregion
 
             #region -- Public Methods --
-            public void AnimateForeground(Color to, int duration)
+            public void AnimateForeground(Color to, int duration, Func<double, double> easing = null)
             {
                 if (duration == 0)
                     return;
 
                 duration /= 2;
+                easing = easing ?? EasingFunctions.Linear;
 
                 this.targetObject = this.Window;
                 this.targetPropery = "foreground";
@@ -222,10 +229,10 @@ namespace Sitrine.Event
                 {
                     from = this.Window.ForegroundColor;
 
-                    dr = (to.R / 255f - from.R) / (float)duration;
-                    dg = (to.G / 255f - from.G) / (float)duration;
-                    db = (to.B / 255f - from.B) / (float)duration;
-                    da = (to.A / 255f - from.A) / (float)duration;
+                    dr = (to.R / 255f - from.R);
+                    dg = (to.G / 255f - from.G);
+                    db = (to.B / 255f - from.B);
+                    da = (to.A / 255f - from.A);
                 });
 
                 for (int i = 0, j = 1; i < duration; i++)
@@ -233,18 +240,22 @@ namespace Sitrine.Event
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
                     {
-                        this.Window.ForegroundColor = (Color)new Color4(from.R + dr * j, from.G + dg * j, from.B + db * j, from.A + da * j);
-                        j++;
+                        float f = (float)easing(j++ / (double)duration);
+                        this.Window.ForegroundColor = (Color)new Color4((from.R + dr * f).Clamp(1f, 0f),
+                                                                        (from.G + dg * f).Clamp(1f, 0f),
+                                                                        (from.B + db * f).Clamp(1f, 0f),
+                                                                        (from.A + da * f).Clamp(1f, 0f));
                     });
                 }
             }
 
-            public void AnimateBackground(Color to, int duration)
+            public void AnimateBackground(Color to, int duration, Func<double, double> easing = null)
             {
                 if (duration == 0)
                     return;
 
                 duration /= 2;
+                easing = easing ?? EasingFunctions.Linear;
 
                 this.targetObject = this.Window;
                 this.targetPropery = "background";
@@ -257,10 +268,10 @@ namespace Sitrine.Event
                 {
                     from = this.Window.BackgroundColor;
 
-                    dr = (to.R / 255f - from.R) / (float)duration;
-                    dg = (to.G / 255f - from.G) / (float)duration;
-                    db = (to.B / 255f - from.B) / (float)duration;
-                    da = (to.A / 255f - from.A) / (float)duration;
+                    dr = (to.R / 255f - from.R);
+                    dg = (to.G / 255f - from.G);
+                    db = (to.B / 255f - from.B);
+                    da = (to.A / 255f - from.A);
                 });
 
                 for (int i = 0, j = 1; i < duration; i++)
@@ -268,8 +279,11 @@ namespace Sitrine.Event
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
                     {
-                        this.Window.BackgroundColor = (Color)new Color4(from.R + dr * j, from.G + dg * j, from.B + db * j, from.A + da * j);
-                        j++;
+                        float f = (float)easing(j++ / (double)duration);
+                        this.Window.BackgroundColor = (Color)new Color4((from.R + dr * f).Clamp(1f, 0f),
+                                                                        (from.G + dg * f).Clamp(1f, 0f),
+                                                                        (from.B + db * f).Clamp(1f, 0f),
+                                                                        (from.A + da * f).Clamp(1f, 0f));
                     });
                 }
             }

@@ -28,7 +28,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using OpenTK.Graphics;
+using Sitrine.Animate;
 using Sitrine.Story;
+using Sitrine.Utils;
 
 namespace Sitrine.Event
 {
@@ -267,8 +269,9 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
         /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(int id, PointF to, int frame)
+        public TextureEvent AnimatePosition(int id, PointF to, int frame, Func<double, double> easing = null)
         {
             if (frame == 0)
                 return this;
@@ -285,7 +288,7 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -299,8 +302,9 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(int id, PointF to, double seconds)
+        public TextureEvent AnimatePosition(int id, PointF to, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -317,7 +321,7 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds));
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -331,8 +335,9 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
         /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(int id, Color4 to, int frame)
+        public TextureEvent AnimateColor(int id, Color4 to, int frame, Func<double, double> easing = null)
         {
             if (frame == 0)
                 return this;
@@ -349,7 +354,7 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -363,8 +368,9 @@ namespace Sitrine.Event
         /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(int id, Color4 to, double seconds)
+        public TextureEvent AnimateColor(int id, Color4 to, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -381,7 +387,7 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds));
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -435,12 +441,13 @@ namespace Sitrine.Event
             #endregion
 
             #region -- Public Methods --
-            public void AnimatePosition(Texture.Texture texture, PointF to, int frame)
+            public void AnimatePosition(Texture.Texture texture, PointF to, int frame, Func<double, double> easing = null)
             {
                 if (frame == 0)
                     return;
 
                 frame /= 2;
+                easing = easing ?? EasingFunctions.Linear;
 
                 this.targetObject = texture;
                 this.targetPropery = "position";
@@ -456,8 +463,8 @@ namespace Sitrine.Event
                     from = texture.Position;
                     noCompile = texture.NoCompile;
 
-                    dx = (to.X - from.X) / (float)frame;
-                    dy = (to.Y - from.Y) / (float)frame;
+                    dx = (to.X - from.X);
+                    dy = (to.Y - from.Y);
                 });
 
                 for (int i = 0, j = 1; i < frame; i++)
@@ -465,8 +472,8 @@ namespace Sitrine.Event
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
                     {
-                        texture.Position = new PointF(from.X + dx * j, from.Y + dy * j);
-                        j++;
+                        float f = (float)easing(j++ / (double)frame);
+                        texture.Position = new PointF(from.X + dx * f, from.Y + dy * f);
                     });
                 }
 
@@ -477,12 +484,13 @@ namespace Sitrine.Event
                 });
             }
 
-            public void AnimateColor(Texture.Texture texture, Color4 to, int frame)
+            public void AnimateColor(Texture.Texture texture, Color4 to, int frame, Func<double, double> easing = null)
             {
                 if (frame == 0)
                     return;
 
                 frame /= 2;
+                easing = easing ?? EasingFunctions.Linear;
 
                 this.targetObject = texture;
                 this.targetPropery = "color";
@@ -498,10 +506,10 @@ namespace Sitrine.Event
                     from = texture.Color;
                     noCompile = texture.NoCompile;
 
-                    dr = (to.R - from.R) / (float)frame;
-                    dg = (to.G - from.G) / (float)frame;
-                    db = (to.B - from.B) / (float)frame;
-                    da = (to.A - from.A) / (float)frame;
+                    dr = (to.R - from.R);
+                    dg = (to.G - from.G);
+                    db = (to.B - from.B);
+                    da = (to.A - from.A);
                 });
 
                 for (int i = 0, j = 1; i < frame; i++)
@@ -509,8 +517,11 @@ namespace Sitrine.Event
                     Process.WaitFrame(1);
                     Process.Invoke(() =>
                     {
-                        texture.Color = new Color4(from.R + dr * j, from.G + dg * j, from.B + db * j, from.A + da * j);
-                        j++;
+                        float f = (float)easing(j++ / (double)frame);
+                        texture.Color = new Color4((from.R + dr * f).Clamp(1f, 0f),
+                                                   (from.G + dg * f).Clamp(1f, 0f),
+                                                   (from.B + db * f).Clamp(1f, 0f),
+                                                   (from.A + da * f).Clamp(1f, 0f));
                     });
                 }
 
