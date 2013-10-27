@@ -23,14 +23,22 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Sitrine.Utils
 {
+    /// <summary>
+    /// 拡張メソッドを提供します。
+    /// </summary>
     public static class Extensions
     {
+        /// <summary>
+        /// 指定された値を最大値、最小値を使ってクランプします。
+        /// </summary>
+        /// <typeparam name="T">IComparable&lt;T&gt; を実装した型。</typeparam>
+        /// <param name="value">クランプされる値。</param>
+        /// <param name="max">最大値。</param>
+        /// <param name="min">最小値。</param>
+        /// <returns>クランプの結果。</returns>
         public static T Clamp<T>(this T value, T max, T min)
              where T : IComparable<T>
         {
