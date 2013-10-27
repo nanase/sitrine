@@ -28,17 +28,77 @@ namespace Sitrine.Animate
 {
     using EFunc = System.Func<double, double>;
 
+    /// <summary>
+    /// 値の連続的変化の動作を記述したイージング関数群を提供します。
+    /// </summary>
     public static class EasingFunctions
     {
         #region -- Public Static Fields --
         #region Presets
-        // refer to https://github.com/jquery/jquery/blob/master/src/effects/Tween.js#L100
+        /*　Copyright 2013 jQuery Foundation and other contributors
+         *  http://jquery.com/
+         *
+         *  Permission is hereby granted, free of charge, to any person obtaining
+         *  a copy of this software and associated documentation files (the
+         *  "Software"), to deal in the Software without restriction, including
+         *  without limitation the rights to use, copy, modify, merge, publish,
+         *  distribute, sublicense, and/or sell copies of the Software, and to
+         *  permit persons to whom the Software is furnished to do so, subject to
+         *  the following conditions:
+         *
+         *  The above copyright notice and this permission notice shall be
+         *  included in all copies or substantial portions of the Software.
+         *
+         *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+         *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+         *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+         *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+         *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+         *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+         *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+         */
+
+        // refer to https://github.com/jquery/jquery/blob/2.0.3/src/effects.js#L663
+
+        /// <summary>
+        /// 直線的に変化するイージング関数。この変数は読み取り専用です。
+        /// </summary>
         public static readonly EFunc Linear = x => x;
         public static readonly EFunc Swing = x => 0.5 - Math.Cos(x * Math.PI) / 2;
         #endregion
 
+        #region Entensions
+        /* Copyright 2013 jQuery Foundation and other contributors,
+         * http://jqueryui.com/
+         * 
+         * This software consists of voluntary contributions made by many
+         * individuals (AUTHORS.txt, http://jqueryui.com/about) For exact
+         * contribution history, see the revision history and logs, available
+         * at http://jquery-ui.googlecode.com/svn/
+         * 
+         * Permission is hereby granted, free of charge, to any person obtaining
+         * a copy of this software and associated documentation files (the
+         * "Software"), to deal in the Software without restriction, including
+         * without limitation the rights to use, copy, modify, merge, publish,
+         * distribute, sublicense, and/or sell copies of the Software, and to
+         * permit persons to whom the Software is furnished to do so, subject to
+         * the following conditions:
+         * 
+         * The above copyright notice and this permission notice shall be
+         * included in all copies or substantial portions of the Software.
+         * 
+         * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+         * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+         * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+         * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+         * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+         * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+         * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+         */
+
+        // refer to https://github.com/jquery/jquery-ui/blob/1.10.3/ui/jquery.ui.effect.js#L1236
+
         #region Base
-        // refer to https://github.com/jquery/jquery-ui/blob/master/ui/jquery.ui.effect.js#L1236
         public static readonly EFunc QuadEaseIn = x => Math.Pow(x, 2);
         public static readonly EFunc CubicEaseIn = x => Math.Pow(x, 3);
         public static readonly EFunc QuartEaseIn = x => Math.Pow(x, 4);
@@ -81,6 +141,7 @@ namespace Sitrine.Animate
         public static readonly EFunc ElasticEaseInOut = x => x < 0.5 ? ElasticEaseIn(x * 2) / 2 : 1 - ElasticEaseIn(x * -2 + 2) / 2;
         public static readonly EFunc BackEaseInOut = x => x < 0.5 ? BackEaseIn(x * 2) / 2 : 1 - BackEaseIn(x * -2 + 2) / 2;
         public static readonly EFunc BounceEaseInOut = x => x < 0.5 ? BounceEaseIn(x * 2) / 2 : 1 - BounceEaseIn(x * -2 + 2) / 2;
+        #endregion
         #endregion
         #endregion
     }
