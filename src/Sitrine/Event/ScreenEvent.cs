@@ -181,6 +181,54 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// 前景色をフェードインし、完全透明にします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="frames">アニメーションが行われるフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent FadeIn(int frames, Func<double, double> easing = null)
+        {
+            return this.AnimateForegroundColor(Color.FromArgb(0, Color.Black), frames, easing);
+        }
+
+        /// <summary>
+        /// 前景色をフェードインし、完全透明にします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="seconds">アニメーションが行われる秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent FadeIn(double seconds, Func<double, double> easing = null)
+        {
+            return this.AnimateForegroundColor(Color.FromArgb(0, Color.Black), seconds, easing);
+        }
+
+        /// <summary>
+        /// 前景色をフェードアウトし、完全不透明にします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="frames">アニメーションが行われるフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent FadeOut(int frames, Func<double, double> easing = null)
+        {
+            return this.AnimateForegroundColor(Color.Black, frames, easing);
+        }
+
+        /// <summary>
+        /// 前景色をフェードアウトし、完全不透明にします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="seconds">アニメーションが行われる秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent FadeOut(double seconds, Func<double, double> easing = null)
+        {
+            return this.AnimateForegroundColor(Color.Black, seconds, easing);
+        }
         #endregion
 
         class AnimateStoryboard : RenderStoryboard, IExclusiveStory
