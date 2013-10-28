@@ -70,6 +70,25 @@ namespace Sitrine.Story
         }
         #endregion
 
+        #region -- Public Static Methods --
+        /// <summary>
+        /// 指定したストーリーを実行する LoopStoryboard クラスのインスタンスを作成します。
+        /// </summary>
+        /// <param name="window">ストーリーボードが実行されるウィンドウオブジェクト。</param>
+        /// <param name="storyevents">ストーリーイベントが記述されたメソッド。</param>
+        /// <param name="loopCount">ループの回数。-1 を設定すると無限にループを行います。</param>
+        /// <returns>生成されたストーリーボード。</returns>
+        public static LoopStoryboard Create(SitrineWindow window, Action<Storyboard> storyevents, int loopCount = -1)
+        {
+            LoopStoryboard loopstory = new LoopStoryboard(window);
+            storyevents(loopstory);
+            loopstory.LoopCount = loopCount;
+            loopstory.StartLooping();
+
+            return loopstory;
+        }
+        #endregion
+
         #region -- Protected Methods --
         /// <summary>
         /// ストーリーボードにキューイングされているアクションを確定し、ループを開始します。
