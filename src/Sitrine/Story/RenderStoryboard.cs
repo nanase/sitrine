@@ -39,6 +39,9 @@ namespace Sitrine.Story
         {
             get
             {
+                if (this.Window.TargetRenderFrequency <= 0.0)
+                    throw new Exception("TargetRenderFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'frames_per_second' に値を指定してください。");
+
                 return this.Window.TargetRenderFrequency;
             }
         }
@@ -52,10 +55,8 @@ namespace Sitrine.Story
         public RenderStoryboard(SitrineWindow window)
             : base(window)
         {
-            if (window.TargetRenderFrequency <= 0.0)
-                throw new Exception("TargetRenderFrequency が設定されていません。GameWindow.Run メソッド呼び出し時にパラメータ 'frames_per_second' に値を指定してください。");
         }
         #endregion
-        
+
     }
 }
