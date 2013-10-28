@@ -78,7 +78,7 @@ namespace Sitrine.Audio
         public MusicPlayer(MusicOptions options)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             this.bufferSize = options.BufferSize;
             this.bufferCount = options.BufferCount;

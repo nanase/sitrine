@@ -57,7 +57,7 @@ namespace Sitrine.Utils
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.brushIndex = value;
             }
@@ -92,10 +92,10 @@ namespace Sitrine.Utils
         public TextRenderer(TextOptions options, Bitmap baseBitmap)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             if (baseBitmap == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("baseBitmap");
 
             this.options = options;
             this.bitmap = baseBitmap;
@@ -110,10 +110,10 @@ namespace Sitrine.Utils
         public TextRenderer(TextOptions options, Texture.Texture texture)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             if (texture == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("texture");
 
             this.options = options;
             this.bitmap = texture.BaseBitmap;

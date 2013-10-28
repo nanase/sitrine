@@ -119,7 +119,7 @@ namespace Sitrine.Texture
         public Texture(Bitmap bitmap)
         {
             if (bitmap == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("bitmap");
 
             this.bitmap = bitmap;
 
@@ -198,7 +198,7 @@ namespace Sitrine.Texture
         public static void Update(int id, Bitmap bitmap)
         {
             if (bitmap == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("bitmap");
 
             DebugText.IncrementUpdateCount();
             GL.BindTexture(TextureTarget.Texture2D, id);
@@ -215,7 +215,7 @@ namespace Sitrine.Texture
         public static void Load(int id, Bitmap bitmap)
         {
             if (bitmap == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("bitmap");
 
             DebugText.IncrementLoadCount();
             GL.BindTexture(TextureTarget.Texture2D, id);

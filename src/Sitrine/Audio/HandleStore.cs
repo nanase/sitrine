@@ -49,7 +49,7 @@ namespace Sitrine.Audio
         public HandleStore(string file)
         {
             if (file == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("file");
 
             if (!this.AddFromFile(file))
                 throw new Exception("ハンドルの読み取りに失敗しました。");
@@ -81,7 +81,7 @@ namespace Sitrine.Audio
         public bool AddFromFile(string file)
         {
             if (file == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("file");
 
             using (FileStream fs = new FileStream(file, FileMode.Open))
                 return this.AddFromStream(fs);

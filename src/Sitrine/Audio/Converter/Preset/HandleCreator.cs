@@ -47,14 +47,14 @@ namespace Sitrine.Audio
             float data2;
 
             if (!Enum.TryParse(name, true, out handleType))
-                throw new ArgumentException();
+                throw new ArgumentException("ハンドル名の変換に失敗しました。", "name");
 
             data1 = (string.IsNullOrWhiteSpace(type)) ? 0 : HandleCreator.ParseOperators(handleType, type);
 
             if (string.IsNullOrWhiteSpace(value))
                 data2 = 0.0f;
             else if (!float.TryParse(value, out data2))
-                throw new ArgumentException();
+                throw new ArgumentException("データ値の変換に失敗しました。", "value");
 
             return new Handle(0, handleType, data1, data2);
         }
@@ -131,7 +131,7 @@ namespace Sitrine.Audio
                     return (int)Enum.Parse(typeof(PortamentOperate), @operator, true);
 
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException("オペレータの変換に失敗しました。", "@operator");
             }
         }
         #endregion

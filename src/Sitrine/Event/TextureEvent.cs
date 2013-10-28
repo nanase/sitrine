@@ -62,7 +62,7 @@ namespace Sitrine.Event
         public TextureEvent Create(int id, Bitmap bitmap)
         {
             if (bitmap == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("bitmap");
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
 
@@ -79,7 +79,7 @@ namespace Sitrine.Event
         public TextureEvent Create(int id, Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
 
@@ -376,7 +376,7 @@ namespace Sitrine.Event
                 return this;
 
             if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
+                throw new ArgumentOutOfRangeException("seconds");
 
             this.Storyboard.AddAction(() =>
             {

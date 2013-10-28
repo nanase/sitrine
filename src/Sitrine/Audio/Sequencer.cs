@@ -118,7 +118,7 @@ namespace Sitrine.Audio
         public Sequencer(IEnumerable<SequenceItem> handles, SequenceInfo info)
         {
             if (handles == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("handles");
 
             this.handles = new List<SequenceItem>(handles);
             this.info = info;

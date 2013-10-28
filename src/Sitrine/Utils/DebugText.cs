@@ -93,10 +93,10 @@ namespace Sitrine.Utils
         public DebugText(TextOptions options, SitrineWindow window)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             if (window == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("window");
 
             this.textOptions = options;
 

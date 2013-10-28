@@ -51,7 +51,7 @@ namespace Sitrine.Audio
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 if (value % 2 == 1)
                     throw new ArgumentException("バッファサイズは偶数である必要があります。");
@@ -72,7 +72,7 @@ namespace Sitrine.Audio
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.bufferCount = value;
             }
@@ -90,7 +90,8 @@ namespace Sitrine.Audio
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
+
                 this.samplingRate = value;
             }
         }
@@ -107,7 +108,8 @@ namespace Sitrine.Audio
             set
             {
                 if (value <= 0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
+
                 this.updateInterval = value;
             }
         }

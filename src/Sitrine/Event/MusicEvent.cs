@@ -307,7 +307,7 @@ namespace Sitrine.Event
         public MusicEvent Push(IEnumerable<Handle> handles)
         {
             if (handles == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("handles");
 
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
 
@@ -340,7 +340,7 @@ namespace Sitrine.Event
         public MusicEvent PushNow(IEnumerable<Handle> handles)
         {
             if (handles == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("handles");
 
             this.Window.Music.Master.PushHandle(handles);
 

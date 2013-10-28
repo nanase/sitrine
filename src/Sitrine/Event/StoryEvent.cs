@@ -52,10 +52,10 @@ namespace Sitrine.Event
         public StoryEvent(Storyboard storyboard, SitrineWindow window)
         {
             if (storyboard == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stroyboard");
 
             if (window == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("window");
 
             this.Storyboard = storyboard;
             this.Window = window;

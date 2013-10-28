@@ -67,7 +67,13 @@ namespace Sitrine.Texture
         public int Interval
         {
             get { return this.interval; }
-            set { if (value <= 0) throw new ArgumentOutOfRangeException(); else this.interval = value; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("value");
+                else
+                    this.interval = value;
+            }
         }
 
         /// <summary>
@@ -76,7 +82,13 @@ namespace Sitrine.Texture
         public int ProgressCount
         {
             get { return this.progressCount; }
-            set { if (value <= 0) throw new ArgumentOutOfRangeException(); else this.progressCount = value; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("value");
+                else
+                    this.progressCount = value;
+            }
         }
         #endregion
 
@@ -90,7 +102,7 @@ namespace Sitrine.Texture
             : base(size)
         {
             if (renderer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("renderer");
 
             this.renderer = renderer;
             this.tokenQueue = new Queue<object>();
@@ -105,7 +117,7 @@ namespace Sitrine.Texture
             : base(size)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             this.renderer = new TextRenderer(options, this.BaseBitmap);
             this.tokenQueue = new Queue<object>();

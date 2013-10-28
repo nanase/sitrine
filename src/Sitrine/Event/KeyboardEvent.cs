@@ -52,9 +52,10 @@ namespace Sitrine.Event
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("value");
+
                 if (value.Length == 0)
-                    throw new ArgumentException();
+                    throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
 
                 this.okKeys = value;
             }
@@ -72,9 +73,10 @@ namespace Sitrine.Event
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("value");
+
                 if (value.Length == 0)
-                    throw new ArgumentException();
+                    throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
 
                 this.cancelKeys = value;
             }
@@ -131,10 +133,10 @@ namespace Sitrine.Event
         public KeyboardEvent WaitFor(Action callback = null, params Key[] keys)
         {
             if (keys == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("keys");
 
             if (keys.Length == 0)
-                throw new ArgumentException();
+                throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
 
             if (this.Storyboard.State != StoryboardState.Started)
                 this.Listen(callback, keys);

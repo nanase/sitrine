@@ -163,7 +163,7 @@ namespace Sitrine
         public Storyboard(SitrineWindow window)
         {
             if (window == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("window");
 
             this.Actions = new LinkedList<Action>();
             this.Listener = new List<Func<bool>>();
@@ -190,7 +190,7 @@ namespace Sitrine
         public void InitalizeMessage(TextOptions options, Size size)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             if (this.message != null && this.message is IDisposable)
                 ((IDisposable)this.message).Dispose();
@@ -258,7 +258,7 @@ namespace Sitrine
         internal void AddAction(Action action)
         {
             if (action == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("action");
 
             this.Actions.AddFirst(action);
         }
@@ -266,7 +266,7 @@ namespace Sitrine
         internal void AddActionNow(Action action)
         {
             if (action == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("action");
 
             this.Actions.AddLast(action);
         }
@@ -274,7 +274,7 @@ namespace Sitrine
         internal void AddListener(Func<bool> listener)
         {
             if (listener == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("listener");
 
             this.Listener.Add(listener);
         }
@@ -282,7 +282,7 @@ namespace Sitrine
         internal void SetWait(int frame)
         {
             if (frame < 0)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("frame");
 
             this.waitTime = frame;
         }

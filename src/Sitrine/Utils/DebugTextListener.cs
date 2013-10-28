@@ -45,7 +45,7 @@ namespace Sitrine.Utils
         public DebugTextListener(DebugText debugText)
         {
             if (debugText == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("debugText");
 
             this.debugText = debugText;
             this.startupTime = DateTime.Now;

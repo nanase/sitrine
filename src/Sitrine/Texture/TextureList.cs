@@ -55,7 +55,7 @@ namespace Sitrine.Texture
         public int AddLast(Texture item)
         {
             if (item == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("item");
 
             int count = this.Count;
             int index = (count > 0) ? this.Keys[count - 1] + 1 : 0;
@@ -73,7 +73,7 @@ namespace Sitrine.Texture
         public int AddFirst(Texture item)
         {
             if (item == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("item");
 
             int count = this.Count;
             int index = (count > 0) ? this.Keys[0] - 1 : 0;
@@ -119,7 +119,7 @@ namespace Sitrine.Texture
         public bool Remove(Texture item, bool dispose)
         {
             if (item == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("item");
 
             int index = this.IndexOfValue(item);
 

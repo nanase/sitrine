@@ -67,10 +67,10 @@ namespace Sitrine.Audio
         public SequenceLayer(Preset preset, Master master, IEnumerable<int> targetParts = null)
         {
             if (preset == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preset");
 
             if (master == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("master");
 
             this.preset = preset;
             this.master = master;
@@ -86,7 +86,7 @@ namespace Sitrine.Audio
         public void Load(string file)
         {
             if (file == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("file");
 
             using (FileStream fs = new FileStream(file, FileMode.Open))
                 this.Load(fs);

@@ -125,7 +125,7 @@ namespace Sitrine
             : base(options.WindowSize.Width, options.WindowSize.Height, GraphicsMode.Default, options.Title)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             this.music = new MusicPlayer(new MusicOptions());
             this.textures = new TextureList();

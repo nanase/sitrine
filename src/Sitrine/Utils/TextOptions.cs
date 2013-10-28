@@ -53,10 +53,10 @@ namespace Sitrine.Utils
             set
             {
                 if (float.IsNaN(value) || float.IsInfinity(value))
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 if (value < 0.0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.lineHeight = value;
             }
@@ -74,10 +74,10 @@ namespace Sitrine.Utils
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("value");
 
                 if (value.Length == 0)
-                    throw new ArgumentException();
+                    throw new ArgumentException("少なくとも 1 つのブラシを指定する必要があります。");
 
                 this.brushes = value;
             }
@@ -105,7 +105,7 @@ namespace Sitrine.Utils
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.shadowIndex = value;
             }
@@ -123,7 +123,7 @@ namespace Sitrine.Utils
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("value");
 
                 this.font = value;
             }
@@ -141,7 +141,7 @@ namespace Sitrine.Utils
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException("value");
 
                 this.format = value;
             }
@@ -157,10 +157,10 @@ namespace Sitrine.Utils
         public TextOptions(Font font, int lineHeight)
         {
             if (font == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("font");
 
             if (lineHeight < 0)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("lineHeight");
 
             this.font = font;
             this.LineHeight = lineHeight;
@@ -180,10 +180,10 @@ namespace Sitrine.Utils
         public void SetSolidBrushes(params Color[] colors)
         {
             if (colors == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("colors");
 
             if (colors.Length == 0)
-                throw new ArgumentException();
+                throw new ArgumentException("少なくとも 1 つの色を指定する必要があります。");
 
             this.brushes = new Brush[colors.Length];
 

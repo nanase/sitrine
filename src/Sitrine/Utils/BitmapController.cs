@@ -51,21 +51,21 @@ namespace Sitrine.Utils
         {
             get
             {
-                if (x < 0 || y < 0)
-                    throw new ArgumentOutOfRangeException();
+                if (x < 0 || x >= this.data.Width)
+                    throw new ArgumentOutOfRangeException("x");
 
-                if (x >= this.data.Width || y >= this.data.Height)
-                    throw new ArgumentOutOfRangeException();
+                if (y < 0 || y >= this.data.Height)
+                    throw new ArgumentOutOfRangeException("y");
 
                 return Color.FromArgb(*((int*)this.scan0 + (this.data.Width * y + x)));
             }
             set
             {
-                if (x < 0 || y < 0)
-                    throw new ArgumentOutOfRangeException();
+                if (x < 0 || x >= this.data.Width)
+                    throw new ArgumentOutOfRangeException("x");
 
-                if (x >= this.data.Width || y >= this.data.Height)
-                    throw new ArgumentOutOfRangeException();
+                if (y < 0 || y >= this.data.Height)
+                    throw new ArgumentOutOfRangeException("y");
 
                 int* dst = (int*)this.scan0 + (this.data.Width * y + x);
                 *dst = value.ToArgb();
@@ -97,7 +97,7 @@ namespace Sitrine.Utils
         public BitmapController(Bitmap bitmap, ImageLockMode flags)
         {
             if (bitmap == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("bitmap");
 
             this.bitmap = bitmap;
             this.data = bitmap.LockBits(new Rectangle(Point.Empty, bitmap.Size), flags, PixelFormat.Format32bppArgb);

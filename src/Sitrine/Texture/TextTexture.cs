@@ -55,7 +55,7 @@ namespace Sitrine.Texture
             : base(size)
         {
             if (renderer == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("renderer");
 
             this.renderer = renderer;
         }
@@ -69,7 +69,7 @@ namespace Sitrine.Texture
             : base(size)
         {
             if (options == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("options");
 
             this.renderer = new TextRenderer(options, this.BaseBitmap);
         }        
