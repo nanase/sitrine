@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using OpenTK.Input;
 using Sitrine;
+using Sitrine.Animate;
 using Sitrine.Audio;
 using Sitrine.Story;
 using Sitrine.Utils;
@@ -15,9 +16,6 @@ namespace Sample
     {
         static void Main()
         {
-            if (!File.Exists("resource/message.txt"))
-                return;
-
             using (FontLoader font = new FontLoader("font/VL-Gothic-Regular.ttf"))
             using (FontLoader debugFont = new FontLoader("font/88 Zen.ttf"))
             {
@@ -45,8 +43,11 @@ namespace Sample
                     TextOptions = textOptions
                 };
 
-                using (SampleWindow window = new SampleWindow(options))
+                using (SitrineWindow window = new SitrineWindow(options))
+                {
+                    window.AddStoryboard(new SampleStory(window));
                     window.Run(30.0, 60.0);
+                }
             }
         }
     }
@@ -56,54 +57,31 @@ namespace Sample
         public SampleStory(SitrineWindow window)
             : base(window)
         {
+            #region Initalize
             var file = File.ReadAllLines("resource/message.txt");
             var handle = new HandleStore("resource/sound.txt");
-
             this.InitalizeMessage(window.TextOptions, new Size(320, 80));
 
-            Screen.BackgroundColor = Color.FromArgb(10, 59, 118);
-            Screen.ForegroundColor = Color.Black;
-            Screen.AnimateForegroundColor(Color.FromArgb(0, Color.Black), 1.0);
-
-            Music.Push(handle["message_init"]);
-            Music.LoadPreset("resource/ux_preset.xml");
-
-            Music.AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
-
+            Message.Interval = 2;
+            Message.ProgressCount = 2;
             Message.Position = new PointF(0, 160);
             Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
 
-            Process.Wait(0.5);
-            Message.Interval = 2;
-            Message.ProgressCount = 2;
+            Screen.BackgroundColor = Color.FromArgb(10, 59, 118);
+            Screen.ForegroundColor = Color.Black;
+            #endregion
+
+            Process.Loop(e => e.Keyboard.WaitFor(window.ToggleDebugVisibility, Key.F3));
+
+            Music.Push(handle["message_init"])
+                 .LoadPreset("resource/ux_preset.xml")
+                 .AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
+
+            Screen.FadeIn(5.0, EasingFunctions.QuadEaseOut);
+            Process.Wait(1.0);
 
             for (int i = 0; i < file.Length; i += 4)
                 Message.Show(String.Join("\n", file.Skip(i).Take(4)));
-        }
-    }
-
-    class FunctionKeyStory : LoopStoryboard
-    {
-        public FunctionKeyStory(SitrineWindow window)
-            : base(window)
-        {
-            Keyboard.WaitFor(window.ToggleDebugVisibility, Key.F3);
-            this.StartLooping();
-        }
-    }
-
-    class SampleWindow : SitrineWindow
-    {
-        public SampleWindow(WindowOptions options)
-            : base(options)
-        {
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            this.AddStoryboard(new SampleStory(this));
-            this.AddStoryboard(new FunctionKeyStory(this));
-            base.OnLoad(e);
         }
     }
 }
