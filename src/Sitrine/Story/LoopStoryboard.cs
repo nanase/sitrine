@@ -51,7 +51,7 @@ namespace Sitrine.Story
             protected set
             {
                 if (value < -1)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.loopCount = value;
             }

@@ -53,7 +53,7 @@ namespace Sitrine.Utils
         public FontLoader(string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentException();
+                throw new ArgumentNullException("filename");
 
             this.fontCollection = new PrivateFontCollection();
             this.fontCollection.AddFontFile(filename);

@@ -94,7 +94,7 @@ namespace Sitrine.Audio
             var preset = document.Elements("ux").Select(e => e.Elements("preset")).FirstOrDefault();
 
             if (preset == null)
-                throw new ArgumentException();
+                throw new InvalidDataException("XML を読み取れません。プリセットタグが見つかりません。");
 
             var programs = preset.Elements("program");
 
@@ -107,24 +107,24 @@ namespace Sitrine.Audio
                 int num = 0, msb = 0, lsb = 0;
 
                 if (!int.TryParse(number, out num))
-                    throw new ArgumentException();
+                    throw new InvalidDataException("認識できないパートナンバーが検出されました。");
 
                 if (!string.IsNullOrWhiteSpace(str_msb) && !int.TryParse(str_msb, out msb))
-                    throw new ArgumentException();
+                    throw new InvalidDataException("認識できない MSB 値が検出されました。");
 
                 if (!string.IsNullOrWhiteSpace(str_lsb) && !int.TryParse(str_lsb, out lsb))
-                    throw new ArgumentException();
+                    throw new InvalidDataException("認識できない LSB 値が検出されました。");
 
                 if (program.Elements(PresetReader.xfinal).Count() > 1)
-                    throw new ArgumentException();
+                    throw new InvalidDataException("複数の 'final' のアイテムが検出されました。'final' は最大で 1 つのアイテムのみ許可されます。");
 
                 yield return new ProgramPreset(num, msb, lsb,
                     program.Elements()
-                    .Where(h => h.Name.LocalName.ToLower() != "final")
-                    .Select(h => HandleCreator.Create(h.Name.LocalName.ToLower(), h.GetAttribute(PresetReader.xtype), h.GetAttribute(PresetReader.xvalue))),
+                           .Where(h => h.Name.LocalName.ToLower() != "final")
+                           .Select(h => HandleCreator.Create(h.Name.LocalName.ToLower(), h.GetAttribute(PresetReader.xtype), h.GetAttribute(PresetReader.xvalue))),
                     program.Elements(PresetReader.xfinal)
-                    .SelectMany(f => f.Elements())
-                    .Select(h => HandleCreator.Create(h.Name.LocalName.ToLower(), h.GetAttribute(PresetReader.xtype), h.GetAttribute(PresetReader.xvalue))));
+                           .SelectMany(f => f.Elements())
+                           .Select(h => HandleCreator.Create(h.Name.LocalName.ToLower(), h.GetAttribute(PresetReader.xtype), h.GetAttribute(PresetReader.xvalue))));
             }
         }
 
@@ -133,7 +133,7 @@ namespace Sitrine.Audio
             var preset = document.Elements("ux").Select(e => e.Elements("preset")).Select(e => e.Elements("drum")).FirstOrDefault();
 
             if (preset == null)
-                throw new ArgumentException();
+                throw new ArgumentNullException("preset");
 
             var notes = preset.Elements("note");
 
@@ -144,15 +144,15 @@ namespace Sitrine.Audio
                 int num = 0, note_num = 0;
 
                 if (!int.TryParse(number, out num))
-                    throw new ArgumentException();
+                    throw new InvalidDataException("数値を読み取れません。");
 
                 if (!int.TryParse(note_number, out note_num))
-                    throw new ArgumentException();
+                    throw new InvalidDataException("ノート値を読み取れません。");
 
                 yield return new DrumPreset(num, note_num,
                     note.Elements()
-                    .Where(h => h.Name.LocalName.ToLower() != "final")
-                    .Select(h => HandleCreator.Create(h.Name.LocalName.ToLower(), h.GetAttribute(PresetReader.xtype), h.GetAttribute(PresetReader.xvalue))));
+                        .Where(h => h.Name.LocalName.ToLower() != "final")
+                        .Select(h => HandleCreator.Create(h.Name.LocalName.ToLower(), h.GetAttribute(PresetReader.xtype), h.GetAttribute(PresetReader.xvalue))));
             }
         }
         #endregion

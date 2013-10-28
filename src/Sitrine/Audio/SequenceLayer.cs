@@ -99,10 +99,10 @@ namespace Sitrine.Audio
         public void Load(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
-                throw new ArgumentException();
+                throw new NotSupportedException();
 
             SmfContainer container = new SmfContainer(stream);
             HandleConverter hc = new HandleConverter(this.preset);

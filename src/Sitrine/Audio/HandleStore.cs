@@ -62,10 +62,10 @@ namespace Sitrine.Audio
         public HandleStore(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
-                throw new ArgumentException();
+                throw new NotSupportedException();
 
             if (!this.AddFromStream(stream))
                 throw new Exception("ハンドルの読み取りに失敗しました。");
@@ -98,10 +98,10 @@ namespace Sitrine.Audio
             IEnumerable<Handle> handles;
 
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
-                throw new ArgumentException();
+                throw new NotSupportedException();
 
             using (StreamReader sr = new StreamReader(stream))
                 lines = sr.ReadToEnd().Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);

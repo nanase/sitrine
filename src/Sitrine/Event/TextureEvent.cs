@@ -96,7 +96,7 @@ namespace Sitrine.Event
         public TextureEvent Create(int id, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentException();
+                throw new ArgumentNullException("filename");
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
 

@@ -96,7 +96,7 @@ namespace Sitrine.Event
         public MusicEvent Load(string key, string file)
         {
             if (String.IsNullOrWhiteSpace(file))
-                throw new ArgumentException();
+                throw new ArgumentNullException("file");
 
             this.Load(key, file, false);
 
@@ -114,7 +114,7 @@ namespace Sitrine.Event
         public MusicEvent Load(string key, string file, bool looping)
         {
             if (String.IsNullOrWhiteSpace(file))
-                throw new ArgumentException();
+                throw new ArgumentNullException("file");
 
             this.Storyboard.AddAction(() =>
             {
@@ -138,10 +138,10 @@ namespace Sitrine.Event
         public MusicEvent Load(string key, Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
-                throw new ArgumentException();
+                throw new NotSupportedException();
 
             this.Load(key, stream, false);
 
@@ -159,10 +159,10 @@ namespace Sitrine.Event
         public MusicEvent Load(string key, Stream stream, bool looping)
         {
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
-                throw new ArgumentException();
+                throw new NotSupportedException();
 
             this.Storyboard.AddAction(() =>
             {
@@ -187,7 +187,7 @@ namespace Sitrine.Event
         public MusicEvent LoadPreset(string file)
         {
             if (String.IsNullOrWhiteSpace(file))
-                throw new ArgumentException();
+                throw new ArgumentNullException("file");
 
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(file));
 
@@ -203,10 +203,10 @@ namespace Sitrine.Event
         public MusicEvent LoadPreset(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
-                throw new ArgumentException();
+                throw new NotSupportedException();
 
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(stream));
 

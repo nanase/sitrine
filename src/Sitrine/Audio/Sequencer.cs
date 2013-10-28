@@ -60,7 +60,7 @@ namespace Sitrine.Audio
             set
             {
                 if (value < 0)
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.eventIndex = 0;
 
@@ -85,7 +85,7 @@ namespace Sitrine.Audio
             set
             {
                 if (value < 1)
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.interval = value;
             }
@@ -97,7 +97,7 @@ namespace Sitrine.Audio
             set
             {
                 if (value <= 0.0)
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException("value");
 
                 this.tempoFactor = value;
                 this.RecalcTickTime();
