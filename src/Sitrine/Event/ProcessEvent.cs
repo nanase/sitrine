@@ -50,7 +50,7 @@ namespace Sitrine.Event
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            this.WaitFrame(this.Storyboard.GetFrameCount(seconds));
+            this.Storyboard.AddAction(() => this.Storyboard.SetWait(this.Storyboard.GetFrameCount(seconds)));
 
             return this;
         }
@@ -107,7 +107,7 @@ namespace Sitrine.Event
 
             return this;
         }
-        
+
         /// <summary>
         /// 条件を満たした場合にのみ新しいストーリーボードを開始します。
         /// このメソッドは遅延実行されます。
