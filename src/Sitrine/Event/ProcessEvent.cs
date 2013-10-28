@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
+using Sitrine.Story;
 
 namespace Sitrine.Event
 {
@@ -233,6 +234,19 @@ namespace Sitrine.Event
                     this.Storyboard.Break();
                 }
             });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定されたストーリーエベントをループするようなストーリーボードを開始します。
+        /// </summary>
+        /// <param name="storyevents">ストーリーイベントが記述されたメソッド。</param>
+        /// <param name="loopCount">ループの回数。-1 を設定すると無限にループを行います。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ProcessEvent Loop(Action<Storyboard> storyevents, int loopCount = -1)
+        {
+            this.Storyboard.AddAction(() => this.Window.AddStoryboard(LoopStoryboard.Create(this.Window, storyevents, loopCount)));
 
             return this;
         }
