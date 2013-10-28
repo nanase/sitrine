@@ -57,6 +57,5 @@ namespace Sitrine.Story
         {
         }
         #endregion
-
     }
 }

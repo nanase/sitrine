@@ -38,7 +38,7 @@ namespace Sitrine.Audio
         private int updateInterval = 10;
         #endregion
 
-        #region -- Public Properties --]
+        #region -- Public Properties --
         /// <summary>
         /// バッファのサイズを取得または設定します。この値は偶数である必要があります。
         /// </summary>

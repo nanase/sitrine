@@ -22,7 +22,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-
 namespace Sitrine.Story
 {
     /// <summary>
@@ -30,6 +29,7 @@ namespace Sitrine.Story
     /// </summary>
     public interface IExclusiveStory
     {
+        #region -- Properties --
         /// <summary>
         /// 排他的操作が行われるオブジェクトを取得します。
         /// </summary>
@@ -39,5 +39,6 @@ namespace Sitrine.Story
         /// 排他的操作が行われるオブジェクトのプロパティ名を取得します。
         /// </summary>
         string TargetProperty { get; }
+        #endregion
     }
 }

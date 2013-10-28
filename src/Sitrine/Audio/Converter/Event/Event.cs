@@ -67,6 +67,17 @@ namespace Sitrine.Audio
 
         #region -- Public Methods --
         /// <summary>
+        /// このインスタンスを表す文字列を取得します。
+        /// </summary>
+        /// <returns>このインスタンスを表す文字列。</returns>
+        public override string ToString()
+        {
+            return string.Format("{0}", this.Type);
+        }
+        #endregion
+
+        #region -- Public Static Methods --
+        /// <summary>
         /// デルタタイムを解析します。
         /// </summary>
         /// <param name="br">解析元となるバイトリーダ。</param>
@@ -78,7 +89,7 @@ namespace Sitrine.Audio
 
             int deltaTime = 0;
             byte current;
-            
+
             do
             {
                 current = br.ReadByte();
@@ -89,15 +100,6 @@ namespace Sitrine.Audio
             } while ((current & 0x80) == 0x80);
 
             return deltaTime;
-        }
-
-        /// <summary>
-        /// このインスタンスを表す文字列を取得します。
-        /// </summary>
-        /// <returns>このインスタンスを表す文字列。</returns>
-        public override string ToString()
-        {
-            return string.Format("{0}", this.Type);
         }
         #endregion
     }

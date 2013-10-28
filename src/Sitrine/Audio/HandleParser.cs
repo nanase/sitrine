@@ -33,7 +33,7 @@ namespace Sitrine.Audio
     /// </summary>
     public class HandleParser
     {
-        #region -- Public Methods --
+        #region -- Public Static Methods --
         /// <summary>
         /// 指定された文字列を解析し、複数のハンドルを出力します。
         /// </summary>

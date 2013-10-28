@@ -46,7 +46,7 @@ namespace Sitrine.Audio
         private static readonly XName xnote = XName.Get("note");
         #endregion
 
-        #region -- Public Methods --
+        #region -- Public Static Methods --
         /// <summary>
         /// XML を格納したファイルを読み込み、プログラムプリセットを生成します。
         /// </summary>
@@ -88,7 +88,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region -- Private Methods --
+        #region -- Private Static Methods --
         private static IEnumerable<ProgramPreset> Load(XDocument document)
         {
             var preset = document.Elements("ux").Select(e => e.Elements("preset")).FirstOrDefault();

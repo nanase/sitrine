@@ -195,8 +195,6 @@ namespace Sitrine.Audio
 
             AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * this.bufferSize, this.samplingRate);
         }
-
-
         #endregion
     }
 }

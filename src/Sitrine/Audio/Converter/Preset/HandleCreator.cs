@@ -32,7 +32,7 @@ namespace Sitrine.Audio
     /// </summary>
     static class HandleCreator
     {
-        #region -- Public Methods --
+        #region -- Public Static Methods --
         /// <summary>
         /// ハンドル名、タイプ、値から新しいハンドルを生成します。
         /// </summary>

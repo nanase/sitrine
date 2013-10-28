@@ -309,7 +309,7 @@ namespace Sitrine.Texture
             }
             #endregion
 
-            #region -- Public Methods --
+            #region -- Public Static Methods --
             public static bool Create(out ControlToken token, string source, ref int index)
             {
                 char operate;

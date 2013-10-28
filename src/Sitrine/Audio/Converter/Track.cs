@@ -68,7 +68,7 @@ namespace Sitrine.Audio
         }
         #endregion
 
-        #region -- Public Methods --
+        #region -- Private Methods --
         private void LoadFromStream(BinaryReader br)
         {
             // トラックのデータ長

@@ -208,7 +208,9 @@ namespace Sitrine
         {
             return (int)Math.Round(this.UpdateFrequency * seconds);
         }
+        #endregion
 
+        #region -- Public Static Methods --
         /// <summary>
         /// ストーリーボードの排他性をチェックします。
         /// </summary>
