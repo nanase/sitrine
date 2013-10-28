@@ -60,7 +60,7 @@
     <Compile Include="Audio\HandleParser.cs" />
     <Compile Include="Audio\HandleStore.cs" />
     <Compile Include="Audio\SequenceLayer.cs" />
-    <Compile Include="Audio\Utils\Extension.cs" />
+    <Compile Include="Audio\Utils\Extensions.cs" />
     <Compile Include="Audio\Converter\Preset\HandleCreator.cs" />
     <Compile Include="Audio\Converter\Event\MetaEvent.cs" />
     <Compile Include="Audio\Converter\Event\MidiEvent.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="Utils\BitmapController.cs" />
     <Compile Include="Utils\DebugText.cs" />
     <Compile Include="Utils\DebugTextListener.cs" />
-    <Compile Include="Utils\Extension.cs" />
+    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\FontLoader.cs" />
     <Compile Include="Utils\TextOptions.cs" />
     <Compile Include="Utils\TextRenderer.cs" />
