@@ -170,6 +170,33 @@ namespace Sitrine.Utils
                  FormatFlags = StringFormatFlags.NoWrap
             };
         }
+
+        /// <summary>
+        /// フォントファミリを指定して新しい TextOptions クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="fontFamily">フォントファミリ。</param>
+        /// <param name="fontSize">フォントのサイズ。単位はピクセルです。</param>
+        /// <param name="lineHeight">行の高さ。</param>
+        /// <param name="style">フォントのスタイル。</param>
+        public TextOptions(FontFamily fontFamily, int fontSize, int lineHeight, FontStyle style = FontStyle.Regular)
+        {
+            if (fontFamily == null)
+                throw new ArgumentNullException("fontFamily");
+
+            if (fontSize < 0)
+                throw new ArgumentOutOfRangeException("fontSize");
+
+            if (lineHeight < 0)
+                throw new ArgumentOutOfRangeException("lineHeight");
+
+            this.font = new Font(fontFamily, fontSize, style, GraphicsUnit.Pixel);
+            this.LineHeight = lineHeight;
+            this.brushes = new Brush[0];
+            this.format = new StringFormat(StringFormat.GenericTypographic)
+            {
+                FormatFlags = StringFormatFlags.NoWrap
+            };
+        }
         #endregion
 
         #region -- Public Methods --
