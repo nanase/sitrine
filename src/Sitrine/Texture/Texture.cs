@@ -60,12 +60,12 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの幅を取得します。
         /// </summary>
-        public int Width { get { return this.bitmap.Width; } }
+        public virtual int Width { get { return this.bitmap.Width; } }
 
         /// <summary>
         /// ビットマップの高さを取得します。
         /// </summary>
-        public int Height { get { return this.bitmap.Height; } }
+        public virtual int Height { get { return this.bitmap.Height; } }
 
         /// <summary>
         /// ビットマップの画面上の位置を取得または設定します。
@@ -238,8 +238,8 @@ namespace Sitrine.Texture
         }
         #endregion
 
-        #region -- Private Methods --
-        private void Compile(ListMode mode = ListMode.Compile)
+        #region -- Protected Methods --
+        protected virtual void Compile(ListMode mode = ListMode.Compile)
         {
             if (this.listId != -1)
                 GL.DeleteLists(this.listId, 1);
