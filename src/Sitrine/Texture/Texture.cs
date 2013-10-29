@@ -77,10 +77,11 @@ namespace Sitrine.Texture
             {
                 this.position = value;
 
-                if (this.listId != -1)
+                if (!this.RequiredRecompile)
                 {
                     GL.DeleteLists(this.listId, 1);
                     this.listId = -1;
+                    this.RequiredRecompile = true;
                 }
             }
         }
@@ -95,10 +96,11 @@ namespace Sitrine.Texture
             {
                 this.color = value;
 
-                if (this.listId != -1)
+                if (!this.RequiredRecompile)
                 {
                     GL.DeleteLists(this.listId, 1);
                     this.listId = -1;
+                    this.RequiredRecompile = true;
                 }
             }
         }
@@ -109,6 +111,10 @@ namespace Sitrine.Texture
         /// 頻繁な変更を行わない場合、このプロパティを false にするとパフォーマンスは向上します。
         /// </summary>
         public bool NoCompile { get; set; }
+        #endregion
+
+        #region -- Protected Properties --
+        protected bool RequiredRecompile { get; set; }
         #endregion
 
         #region -- Constructors --
@@ -134,6 +140,7 @@ namespace Sitrine.Texture
         public Texture(string filename)
             : this(new Bitmap(filename))
         {
+            this.RequiredRecompile = true;
         }
 
         /// <summary>
@@ -143,6 +150,7 @@ namespace Sitrine.Texture
         public Texture(Stream stream)
             : this(new Bitmap(stream))
         {
+            this.RequiredRecompile = true;
         }
 
         /// <summary>
@@ -152,6 +160,7 @@ namespace Sitrine.Texture
         public Texture(Size size)
             : this(new Bitmap(size.Width, size.Height))
         {
+            this.RequiredRecompile = true;
         }
         #endregion
 
@@ -181,7 +190,7 @@ namespace Sitrine.Texture
             }
             else
             {
-                if (this.listId == -1)
+                if (this.RequiredRecompile)
                     this.Compile(ListMode.CompileAndExecute);
                 else
                     GL.CallList(this.listId);
@@ -250,8 +259,12 @@ namespace Sitrine.Texture
                 this.Execute();
             }
             GL.EndList();
-        }
 
+            this.RequiredRecompile = false;
+        }
+        #endregion
+
+        #region -- Private Methods --
         private void Execute()
         {
             GL.PushMatrix();
