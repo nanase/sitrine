@@ -30,6 +30,7 @@ using System.IO;
 using OpenTK.Graphics;
 using Sitrine.Animate;
 using Sitrine.Story;
+using Sitrine.Texture;
 using Sitrine.Utils;
 
 namespace Sitrine.Event
@@ -390,6 +391,63 @@ namespace Sitrine.Event
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された ID とビットマップからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent CreateSpriteAnimation(int id, Bitmap bitmap, int countX, int countY)
+        {
+            if (bitmap == null)
+                throw new ArgumentNullException("bitmap");
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(bitmap, countX, countY)));
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された ID とビットマップデータを格納するストリームからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent CreateSpriteAnimation(int id, Stream stream, int countX, int countY)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(stream, countX, countY)));
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された ID とビットマップファイルからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="filename">ビットマップデータを格納したファイル名。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent CreateSpriteAnimation(int id, string filename, int countX, int countY)
+        {
+            if (string.IsNullOrWhiteSpace(filename))
+                throw new ArgumentNullException("filename");
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(filename, countX, countY)));
 
             return this;
         }
