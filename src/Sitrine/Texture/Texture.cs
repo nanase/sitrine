@@ -38,6 +38,7 @@ namespace Sitrine.Texture
         #region -- Private Fields --
         private Color4 color = Color4.White;
         private PointF position = new PointF();
+        private float width, height;
         private bool disposed = false;
         #endregion
 
@@ -45,12 +46,30 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの表示上の基準となる幅を取得します。
         /// </summary>
-        public virtual float Width { get; set; }
+        public virtual float Width
+        {
+            get { return this.width; }
+            set
+            {
+                this.width = value;
+
+                this.RequestRecompile();
+            }
+        }
 
         /// <summary>
         /// ビットマップの表示上の基準となる高さを取得します。
         /// </summary>
-        public virtual float Height { get; set; }
+        public virtual float Height
+        {
+            get { return this.height; }
+            set
+            {
+                this.height = value;
+
+                this.RequestRecompile();
+            }
+        }
 
         /// <summary>
         /// ビットマップの画面上の位置を取得または設定します。
