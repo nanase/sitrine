@@ -151,6 +151,7 @@ namespace Sitrine.Texture
         }
 
         protected abstract void Compile(ListMode mode = ListMode.Compile);
+        protected abstract void Execute();
 
         /// <summary>
         /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
