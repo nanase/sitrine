@@ -126,7 +126,20 @@ namespace Sitrine.Texture
         /// <summary>
         /// 画面上にテクスチャを表示します。
         /// </summary>
-        public abstract void Render();
+        public virtual void Render()
+        {
+            if (this.NoCompile)
+            {
+                this.Execute();
+            }
+            else
+            {
+                if (this.RequiredRecompile)
+                    this.Compile(ListMode.CompileAndExecute);
+                else
+                    GL.CallList(this.ListID);
+            }
+        }
         #endregion
 
         #region -- Protected Methods --
@@ -154,7 +167,25 @@ namespace Sitrine.Texture
             }
         }
 
-        protected abstract void Compile(ListMode mode = ListMode.Compile);
+        /// <summary>
+        /// ディスプレイリストに対するコンパイルを実行します。
+        /// </summary>
+        /// <param name="mode">コンパイル時のモード。</param>
+        protected virtual void Compile(ListMode mode = ListMode.Compile)
+        {
+            if (this.ListID != -1)
+                GL.DeleteLists(this.ListID, 1);
+
+            this.ListID = GL.GenLists(1);
+            GL.NewList(this.ListID, mode);
+            {
+                this.Execute();
+            }
+            GL.EndList();
+
+            this.RequiredRecompile = false;
+        }
+
         protected abstract void Execute();
 
         /// <summary>
