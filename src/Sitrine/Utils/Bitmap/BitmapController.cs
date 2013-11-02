@@ -140,7 +140,7 @@ namespace Sitrine.Utils
 
         #region -- Public Methods --
         /// <summary>
-        /// このオブジェクトで使用されているリソースを解放します。ビットマップは解放されません。
+        /// このオブジェクトで使用されているすべてのリソースを解放します。ビットマップは解放されません。
         /// </summary>
         public void Dispose()
         {
@@ -150,6 +150,10 @@ namespace Sitrine.Utils
         #endregion
 
         #region -- Protected Methods --
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
