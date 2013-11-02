@@ -31,7 +31,7 @@ using Sitrine.Utils;
 namespace Sitrine.Texture
 {
     /// <summary>
-    /// ビットマップを画面上に描画するためのテクスチャクラスです。
+    /// テクスチャマッピングを用いてビットマップを画面上に描画するためのテクスチャクラスです。
     /// </summary>
     public abstract class Texture : IDisposable
     {
@@ -108,8 +108,14 @@ namespace Sitrine.Texture
         #endregion
 
         #region -- Protected Properties --
+        /// <summary>
+        /// 再コンパイルの必要性を表す真偽値を取得します。
+        /// </summary>
         protected bool RequiredRecompile { get; private set; }
 
+        /// <summary>
+        /// ディスプレイリストの ID を取得または設定します。
+        /// </summary>
         protected int ListID { get; set; }
         #endregion
 
@@ -143,16 +149,25 @@ namespace Sitrine.Texture
         #endregion
 
         #region -- Protected Methods --
+        /// <summary>
+        /// テクスチャをロードし、画面上に表示できる状態にします。
+        /// </summary>
         protected virtual void Load()
         {
             DebugText.IncrementLoadCount();
         }
 
+        /// <summary>
+        /// テクスチャデータを更新します。
+        /// </summary>
         protected virtual void Update()
         {
             DebugText.IncrementUpdateCount();
         }
 
+        /// <summary>
+        /// 再コンパイルを要求します。
+        /// </summary>
         protected void RequestRecompile()
         {
             if (!this.RequiredRecompile)
@@ -186,6 +201,9 @@ namespace Sitrine.Texture
             this.RequiredRecompile = false;
         }
 
+        /// <summary>
+        /// 描画処理を実行します。
+        /// </summary>
         protected abstract void Execute();
 
         /// <summary>
