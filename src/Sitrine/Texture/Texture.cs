@@ -24,8 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Sitrine.Utils;
@@ -35,37 +33,24 @@ namespace Sitrine.Texture
     /// <summary>
     /// ビットマップを画面上に描画するためのテクスチャクラスです。
     /// </summary>
-    public class Texture : IDisposable
+    public abstract class Texture : IDisposable
     {
         #region -- Private Fields --
-        private readonly int id;
-        private readonly Bitmap bitmap;
-
-        private int listId = -1;
         private Color4 color = Color4.White;
         private PointF position = new PointF();
+        private bool disposed = false;
         #endregion
 
         #region -- Public Properties --
         /// <summary>
-        /// OpenGL で使われているテクスチャの ID を取得します。
+        /// ビットマップの表示上の基準となる幅を取得します。
         /// </summary>
-        public int ID { get { return this.id; } }
+        public virtual float Width { get; set; }
 
         /// <summary>
-        /// 表示されるビットマップオブジェクトを取得します。
+        /// ビットマップの表示上の基準となる高さを取得します。
         /// </summary>
-        public Bitmap BaseBitmap { get { return this.bitmap; } }
-
-        /// <summary>
-        /// ビットマップの幅を取得します。
-        /// </summary>
-        public virtual int Width { get { return this.bitmap.Width; } }
-
-        /// <summary>
-        /// ビットマップの高さを取得します。
-        /// </summary>
-        public virtual int Height { get { return this.bitmap.Height; } }
+        public virtual float Height { get; set; }
 
         /// <summary>
         /// ビットマップの画面上の位置を取得または設定します。
@@ -77,12 +62,7 @@ namespace Sitrine.Texture
             {
                 this.position = value;
 
-                if (!this.RequiredRecompile)
-                {
-                    GL.DeleteLists(this.listId, 1);
-                    this.listId = -1;
-                    this.RequiredRecompile = true;
-                }
+                this.RequestRecompile();
             }
         }
 
@@ -96,12 +76,7 @@ namespace Sitrine.Texture
             {
                 this.color = value;
 
-                if (!this.RequiredRecompile)
-                {
-                    GL.DeleteLists(this.listId, 1);
-                    this.listId = -1;
-                    this.RequiredRecompile = true;
-                }
+                this.RequestRecompile();
             }
         }
 
@@ -115,53 +90,8 @@ namespace Sitrine.Texture
 
         #region -- Protected Properties --
         protected bool RequiredRecompile { get; set; }
-        #endregion
 
-        #region -- Constructors --
-        /// <summary>
-        /// ビットマップを指定して新しい Texture クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="bitmap">関連付けられるビットマップ。</param>
-        public Texture(Bitmap bitmap)
-        {
-            if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
-
-            this.bitmap = bitmap;
-
-            GL.GenTextures(1, out this.id);
-            Texture.Load(this.id, bitmap);
-        }
-
-        /// <summary>
-        /// ビットマップを格納するファイル名を指定して新しい Texture クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="filename">読み込まれるファイル。</param>
-        public Texture(string filename)
-            : this(new Bitmap(filename))
-        {
-            this.RequiredRecompile = true;
-        }
-
-        /// <summary>
-        /// ビットマップを格納するストリームを指定して新しい Texture クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="stream">読み取り可能なストリーム。</param>
-        public Texture(Stream stream)
-            : this(new Bitmap(stream))
-        {
-            this.RequiredRecompile = true;
-        }
-
-        /// <summary>
-        /// サイズを指定して空のビットマップに関連付けられた新しい Texture クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="size">ビットマップのサイズ。</param>
-        public Texture(Size size)
-            : this(new Bitmap(size.Width, size.Height))
-        {
-            this.RequiredRecompile = true;
-        }
+        protected int ListID { get; set; }
         #endregion
 
         #region -- Public Methods --
@@ -170,119 +100,64 @@ namespace Sitrine.Texture
         /// </summary>
         public virtual void Dispose()
         {
-            int id = this.id;
-            GL.DeleteTextures(1, ref id);
-
-            if (this.listId != -1)
-                GL.DeleteLists(this.listId, 1);
-
-            this.bitmap.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
         /// 画面上にテクスチャを表示します。
         /// </summary>
-        public virtual void Render()
-        {
-            if (this.NoCompile)
-            {
-                this.Execute();
-            }
-            else
-            {
-                if (this.RequiredRecompile)
-                    this.Compile(ListMode.CompileAndExecute);
-                else
-                    GL.CallList(this.listId);
-            }
-        }
-        #endregion
-
-        #region -- Public Static Methods --
-        /// <summary>
-        /// 指定されたテクスチャ ID にビットマップを差し替えます。
-        /// </summary>
-        /// <param name="id">テクスチャ ID。</param>
-        /// <param name="bitmap">差し替えるビットマップ。</param>
-        public static void Update(int id, Bitmap bitmap)
-        {
-            if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
-
-            DebugText.IncrementUpdateCount();
-            GL.BindTexture(TextureTarget.Texture2D, id);
-
-            using (BitmapController bc = new BitmapController(bitmap, ImageLockMode.ReadOnly))
-                GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bitmap.Width, bitmap.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bc.Scan0);
-        }
-
-        /// <summary>
-        /// 指定されたテクスチャ ID にビットマップを割り当てます。
-        /// </summary>
-        /// <param name="id">テクスチャ ID。</param>
-        /// <param name="bitmap">割り当てるビットマップ。</param>
-        public static void Load(int id, Bitmap bitmap)
-        {
-            if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
-
-            DebugText.IncrementLoadCount();
-            GL.BindTexture(TextureTarget.Texture2D, id);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-
-            using (BitmapController bc = new BitmapController(bitmap, ImageLockMode.ReadOnly))
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bc.Scan0);
-        }
-
-        /// <summary>
-        /// 指定されたテクスチャ ID にファイル名が指し示すビットマップを割り当てます。
-        /// </summary>
-        /// <param name="id">テクスチャ ID。</param>
-        /// <param name="filename">読み込まれるファイル。</param>
-        public static void Load(int id, string filename)
-        {
-            using (Bitmap bitmap = new Bitmap(filename))
-                Texture.Load(id, bitmap);
-        }
+        public abstract void Render();
         #endregion
 
         #region -- Protected Methods --
-        protected virtual void Compile(ListMode mode = ListMode.Compile)
+        protected virtual void Load()
         {
-            if (this.listId != -1)
-                GL.DeleteLists(this.listId, 1);
+            DebugText.IncrementLoadCount();
+        }
 
-            this.listId = GL.GenLists(1);
-            GL.NewList(this.listId, mode);
+        protected virtual void Update()
+        {
+            DebugText.IncrementUpdateCount();
+        }
+
+        protected void RequestRecompile()
+        {
+            if (!this.RequiredRecompile)
             {
-                this.Execute();
+                GL.DeleteLists(this.ListID, 1);
+                this.ListID = -1;
+                this.RequiredRecompile = true;
             }
-            GL.EndList();
+        }
 
-            this.RequiredRecompile = false;
+        protected abstract void Compile(ListMode mode = ListMode.Compile);
+
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.ListID != -1)
+                        GL.DeleteLists(this.ListID, 1);
+                }
+
+                this.ListID = -1;
+
+                this.disposed = true;
+            }
         }
         #endregion
 
-        #region -- Private Methods --
-        private void Execute()
+        #region -- Destructors --
+        ~Texture()
         {
-            GL.PushMatrix();
-
-            GL.BindTexture(TextureTarget.Texture2D, this.id);
-            GL.Translate(this.position.X, this.position.Y, 0.0f);
-            GL.Scale(this.bitmap.Width, this.bitmap.Height, 1.0);
-            GL.Color4(this.color);
-
-            GL.Begin(BeginMode.Quads);
-            {
-                GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
-                GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
-                GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
-                GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
-            }
-            GL.End();
-            GL.PopMatrix();
+            this.Dispose(false);
         }
         #endregion
     }
