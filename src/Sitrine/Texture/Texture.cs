@@ -108,7 +108,7 @@ namespace Sitrine.Texture
         #endregion
 
         #region -- Protected Properties --
-        protected bool RequiredRecompile { get; set; }
+        protected bool RequiredRecompile { get; private set; }
 
         protected int ListID { get; set; }
         #endregion
