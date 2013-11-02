@@ -91,13 +91,13 @@
     <Compile Include="Texture\TextTexture.cs" />
     <Compile Include="Texture\Texture.cs" />
     <Compile Include="Texture\TextureList.cs" />
-    <Compile Include="Utils\BitmapController.cs" />
+    <Compile Include="Utils\Bitmap\BitmapController.cs" />
     <Compile Include="Utils\DebugText.cs" />
     <Compile Include="Utils\DebugTextListener.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\FontLoader.cs" />
-    <Compile Include="Utils\TextOptions.cs" />
-    <Compile Include="Utils\TextRenderer.cs" />
+    <Compile Include="Utils\Bitmap\TextOptions.cs" />
+    <Compile Include="Utils\Bitmap\TextRenderer.cs" />
     <Compile Include="WindowOptions.cs" />
   </ItemGroup>
   <ItemGroup>
