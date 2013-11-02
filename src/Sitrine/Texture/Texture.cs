@@ -144,8 +144,6 @@ namespace Sitrine.Texture
         {
             if (!this.RequiredRecompile)
             {
-                GL.DeleteLists(this.ListID, 1);
-                this.ListID = -1;
                 if (this.ListID != -1)
                 {
                     GL.DeleteLists(this.ListID, 1);
