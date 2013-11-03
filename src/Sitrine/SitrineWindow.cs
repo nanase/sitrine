@@ -54,8 +54,9 @@ namespace Sitrine
         private readonly List<Storyboard> reservedStories;
         private readonly List<Storyboard> removingStories;
 
+        private readonly SolidTexture foreground;
+
         private Color backgroundColor = Color.Black;
-        private Color foregroundColor = Color.FromArgb(0);
         #endregion
 
         #region -- Public Properties --
@@ -107,11 +108,11 @@ namespace Sitrine
         {
             get
             {
-                return this.foregroundColor;
+                return (Color)this.foreground.Color;
             }
             set
             {
-                this.foregroundColor = value;
+                this.foreground.Color = (Color4)value;
             }
         }
         #endregion
@@ -131,6 +132,8 @@ namespace Sitrine
             this.textures = new TextureList();
             this.TargetSize = options.TargetSize;
             this.textOptions = options.TextOptions;
+            this.foreground = new SolidTexture();
+            this.foreground.Color = new Color4(0, 0, 0, 0);
 
             this.stories = new List<Storyboard>();
             this.renderStories = new List<RenderStoryboard>();
@@ -228,17 +231,9 @@ namespace Sitrine
                 story.Update();
 
             this.textures.Render();
-
-            GL.PushMatrix();
-            {
-                GL.Disable(EnableCap.Texture2D);
-                GL.Color4(this.foregroundColor);
-                GL.Rect(0, 0, this.TargetSize.Width, this.TargetSize.Height);
-                GL.Enable(EnableCap.Texture2D);
-            }
-            GL.PopMatrix();
-
+            this.foreground.Render();
             this.debugText.Render();
+
             this.SwapBuffers();
         }
 
