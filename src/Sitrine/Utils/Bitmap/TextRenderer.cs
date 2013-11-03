@@ -37,9 +37,8 @@ namespace Sitrine.Utils
         private static readonly PointF foreOffset;
         private static readonly PointF shadowOffset;
 
-        private readonly Graphics graphics;
-        private readonly Bitmap bitmap;
-        private readonly TextOptions options;
+        private BitmapLoader loader;
+        private TextOptions options;
 
         private int brushIndex = 0;
         #endregion
@@ -88,36 +87,17 @@ namespace Sitrine.Utils
         /// テキストオプションと描画先のビットマップを指定して新しい TextRenderer クラスの新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="options">使用されるテキストオプション。</param>
-        /// <param name="baseBitmap">描画先のビットマップ。</param>
-        public TextRenderer(TextOptions options, Bitmap baseBitmap)
+        /// <param name="bitmapLoader">描画先のビットマップ。</param>
+        public TextRenderer(TextOptions options, BitmapLoader bitmapLoader)
         {
             if (options == null)
                 throw new ArgumentNullException("options");
 
-            if (baseBitmap == null)
-                throw new ArgumentNullException("baseBitmap");
+            if (bitmapLoader == null)
+                throw new ArgumentNullException("bitmapLoader");
 
             this.options = options;
-            this.bitmap = baseBitmap;
-            this.graphics = Graphics.FromImage(baseBitmap);
-        }
-
-        /// <summary>
-        /// テキストオプションと描画先のテクスチャを指定して新しい TextRenderer クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="options">使用されるテキストオプション。</param>
-        /// <param name="texture">描画先のテクスチャ。</param>
-        public TextRenderer(TextOptions options, Texture.Texture texture)
-        {
-            if (options == null)
-                throw new ArgumentNullException("options");
-
-            if (texture == null)
-                throw new ArgumentNullException("texture");
-
-            this.options = options;
-            this.bitmap = texture.BaseBitmap;
-            this.graphics = Graphics.FromImage(texture.BaseBitmap);
+            this.loader = bitmapLoader;
         }
         #endregion
 
@@ -185,7 +165,7 @@ namespace Sitrine.Utils
         /// <param name="y">描画される原点の Y 座標。</param>
         public void DrawString(string text, int brushIndex, float x, float y)
         {
-            this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
+            this.loader.Graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             int i = 0;
             bool shadow = (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length);
@@ -196,10 +176,10 @@ namespace Sitrine.Utils
                 float y_offset = i * (this.options.LineHeight + 1.0f) + y;
 
                 if (shadow)
-                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRenderer.shadowOffset.X + x, TextRenderer.shadowOffset.Y + y_offset, this.options.Format);
+                    this.loader.Graphics.DrawString(line, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRenderer.shadowOffset.X + x, TextRenderer.shadowOffset.Y + y_offset, this.options.Format);
 
                 if (fore)
-                    this.graphics.DrawString(line, this.options.Font, this.options.Brushes[brushIndex], TextRenderer.foreOffset.X + x, TextRenderer.foreOffset.Y + y_offset, this.options.Format);
+                    this.loader.Graphics.DrawString(line, this.options.Font, this.options.Brushes[brushIndex], TextRenderer.foreOffset.X + x, TextRenderer.foreOffset.Y + y_offset, this.options.Format);
 
                 i++;
             }
@@ -275,15 +255,15 @@ namespace Sitrine.Utils
         /// <returns>描画された矩形領域のサイズを返します。</returns>
         public SizeF DrawChars(string text, int brushIndex, float x, float y)
         {
-            this.graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
+            this.loader.Graphics.TextRenderingHint = (this.options.Antialiasing) ? TextRenderingHint.AntiAlias : TextRenderingHint.SingleBitPerPixel;
 
             if (this.options.DrawShadow && this.options.ShadowIndex > 0 && this.options.ShadowIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRenderer.shadowOffset.X + x, TextRenderer.shadowOffset.Y + y, this.options.Format);
+                this.loader.Graphics.DrawString(text, this.options.Font, this.options.Brushes[this.options.ShadowIndex], TextRenderer.shadowOffset.X + x, TextRenderer.shadowOffset.Y + y, this.options.Format);
 
             if (brushIndex >= 0 && brushIndex < this.options.Brushes.Length)
-                this.graphics.DrawString(text, this.options.Font, this.options.Brushes[brushIndex], TextRenderer.foreOffset.X + x, TextRenderer.foreOffset.Y + y, this.options.Format);
+                this.loader.Graphics.DrawString(text, this.options.Font, this.options.Brushes[brushIndex], TextRenderer.foreOffset.X + x, TextRenderer.foreOffset.Y + y, this.options.Format);
 
-            return this.graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
+            return this.loader.Graphics.MeasureString(text, this.options.Font, PointF.Empty, this.options.Format);
         }
         #endregion
 
@@ -292,7 +272,7 @@ namespace Sitrine.Utils
         /// </summary>
         public void Clear()
         {
-            this.graphics.Clear(Color.Transparent);
+            this.loader.Graphics.Clear(Color.Transparent);
         }
 
         /// <summary>
@@ -300,7 +280,8 @@ namespace Sitrine.Utils
         /// </summary>
         public void Flush()
         {
-            this.graphics.Flush();
+            this.loader.Graphics.Flush();
+            this.loader.Flush();
         }
 
         /// <summary>
