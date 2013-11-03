@@ -42,19 +42,21 @@ namespace Sitrine.Audio
         private readonly int samplingRate;
         private readonly int updateInterval;
 
-        private readonly AudioContext context;
-        private readonly int source;
-        private readonly int[] buffers;
-        private readonly short[] sbuf;
-        private readonly float[] fbuf;
+        private AudioContext context;
+        private int source;
+        private int[] buffers;
+        private short[] sbuf;
+        private float[] fbuf;
 
-        private readonly Master master;
-        private readonly Preset preset;
+        private Master master;
+        private Preset preset;
 
-        private readonly Dictionary<string, SequenceLayer> layer;
+        private Dictionary<string, SequenceLayer> layer;
 
         private volatile bool reqEnd;
         private Task updater;
+
+        private bool disposed = false;
         #endregion
 
         #region -- Public Properties --
@@ -127,15 +129,8 @@ namespace Sitrine.Audio
         /// </summary>
         public void Dispose()
         {
-            this.reqEnd = true;
-            this.Updater.Wait();
-            this.Updater.Dispose();
-
-            AL.SourceStop(this.source);
-            AL.DeleteBuffers(this.buffers);
-            AL.DeleteSource(this.source);
-
-            this.context.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -146,6 +141,54 @@ namespace Sitrine.Audio
         public void AddLayer(string key, IEnumerable<int> tagetParts = null)
         {
             this.layer[key] = new SequenceLayer(this.preset, this.master, tagetParts);
+        }
+        #endregion
+
+        #region -- Protected Methods --
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
+        protected void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.updater != null)
+                    {
+                        this.reqEnd = true;
+                        this.updater.Wait();
+                        this.updater.Dispose();
+                    }
+
+                    if (this.source != -1)
+                        AL.SourceStop(this.source);
+
+                    if (this.buffers != null)
+                        AL.DeleteBuffers(this.buffers);
+
+                    if (this.source != -1)
+                        AL.DeleteSource(this.source);
+
+                    if (this.context != null)
+                        this.context.Dispose();
+                }
+
+                this.updater = null;
+                this.source = -1;
+                this.buffers = null;
+                this.context = null;
+
+                this.sbuf = null;
+                this.fbuf = null;
+
+                this.master = null;
+                this.preset = null;
+                this.layer = null;
+
+                this.disposed = true;
+            }
         }
         #endregion
 
@@ -194,6 +237,13 @@ namespace Sitrine.Audio
                 this.sbuf[i] = (short)(this.fbuf[i] * short.MaxValue);
 
             AL.BufferData(buffer, ALFormat.Stereo16, this.sbuf, sizeof(short) * this.bufferSize, this.samplingRate);
+        }
+        #endregion
+
+        #region -- Destructors --
+        ~MusicPlayer()
+        {
+            this.Dispose(false);
         }
         #endregion
     }
