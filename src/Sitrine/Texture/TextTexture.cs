@@ -22,7 +22,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using System;
 using System.Drawing;
 using Sitrine.Utils;
 
@@ -31,33 +30,17 @@ namespace Sitrine.Texture
     /// <summary>
     /// 変化を伴わない単純な文字列を描画するテクスチャです。
     /// </summary>
-    public class TextTexture : Texture
+    public class TextTexture : TextTextureBase
     {
-        #region -- Private Fields --
-        private readonly TextRenderer renderer;
-        private bool updated;
-        #endregion
-
-        #region -- Public Properties --
-        /// <summary>
-        /// 描画に使用するレンダラを取得します。
-        /// </summary>
-        public TextRenderer Renderer { get { return this.renderer; } } 
-        #endregion
-
-        #region -- Constructors --
+         #region -- Constructors --
         /// <summary>
         /// テキストレンダラと描画サイズを指定して新しい TextTexture クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="renderer">テキストレンダラ。</param>
         /// <param name="size">描画サイズ。</param>
         public TextTexture(TextRenderer renderer, Size size)
-            : base(size)
+            : base(renderer, size)
         {
-            if (renderer == null)
-                throw new ArgumentNullException("renderer");
-
-            this.renderer = renderer;
         }
 
         /// <summary>
@@ -66,13 +49,9 @@ namespace Sitrine.Texture
         /// <param name="options">テキストオプション。</param>
         /// <param name="size">描画サイズ。</param>
         public TextTexture(TextOptions options, Size size)
-            : base(size)
+            : base(options, size)
         {
-            if (options == null)
-                throw new ArgumentNullException("options");
-
-            this.renderer = new TextRenderer(options, this.BaseBitmap);
-        }        
+        }
         #endregion
 
         #region -- Public Methods --
@@ -80,9 +59,9 @@ namespace Sitrine.Texture
         /// 指定された文字列を描画します。
         /// </summary>
         /// <param name="text">描画される文字列。</param>
-        public void Draw(string text)
+        public　override void Draw(string text)
         {
-            this.renderer.DrawString(text, 0.0f, 0.0f);
+            this.Renderer.DrawString(text, 0.0f, 0.0f);
             this.updated = true;
         }
 
@@ -92,44 +71,11 @@ namespace Sitrine.Texture
         /// <param name="text">描画される文字列。</param>
         /// <param name="x">描画位置の X 座標。</param>
         /// <param name="y">描画位置の Y 座標。</param>
-        public void Draw(string text, float x, float y)
+        public override void Draw(string text, float x, float y)
         {
-            this.renderer.DrawString(text, x, y);
+            this.Renderer.DrawString(text, x, y);
             this.updated = true;
-        }
-
-        /// <summary>
-        /// 描画を確定させ、画面上に文字列を表示します。
-        /// </summary>
-        public override void Render()
-        {
-            if (this.updated)
-            {
-                this.updated = false;
-                this.renderer.Flush();
-                Texture.Update(this.ID, this.BaseBitmap);
-            }
-
-            base.Render();
-        }
-
-        /// <summary>
-        /// ビットマップをクリアします。
-        /// </summary>
-        public void Clear()
-        {
-            this.renderer.Clear();
-            this.updated = true;
-        }
-
-        /// <summary>
-        /// このオブジェクトで使用されているリソースを解放します。
-        /// </summary>
-        public override void Dispose()
-        {
-            this.renderer.Dispose();
-            base.Dispose();
-        }
-        #endregion
+        }        
+        #endregion        
     }
 }
