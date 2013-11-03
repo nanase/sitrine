@@ -26,13 +26,14 @@ using System;
 using System.Drawing;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
+using Sitrine.Utils;
 
 namespace Sitrine.Texture
 {
     /// <summary>
     /// 同一の画像から領域を分割し、アニメーション表示させるためのテクスチャです。
     /// </summary>
-    public class SpriteAnimation : Texture, IAnimationTexture
+    public class SpriteAnimation : BitmapTexture, IAnimationTexture
     {
         #region -- Private Fields --
         private int x, y;
@@ -87,36 +88,12 @@ namespace Sitrine.Texture
 
         #region -- Constructors --
         /// <summary>
-        /// ファイル名を指定して新しい SpriteAnimation クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="filename">読み込まれる画像ファイル名。</param>
-        /// <param name="countX">横方向の分割数。</param>
-        /// <param name="countY">縦方向の分割数。</param>
-        public SpriteAnimation(string filename, int countX, int countY)
-            : base(filename)
-        {
-            this.Initalize(countX, countY);
-        }
-
-        /// <summary>
-        /// ストリームを指定して新しい SpriteAnimation クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="stream">読み込まれるストリーム。</param>
-        /// <param name="countX">横方向の分割数。</param>
-        /// <param name="countY">縦方向の分割数。</param>
-        public SpriteAnimation(Stream stream, int countX, int countY)
-            : base(stream)
-        {
-            this.Initalize(countX, countY);
-        }
-
-        /// <summary>
         /// ビットマップを指定して新しい SpriteAnimation クラスのインスタンスを初期化します。
         /// </summary>
-        /// <param name="bitmap">読み込まれるビットマップ。</param>
+        /// <param name="bitmap">ビットマップローダ。</param>
         /// <param name="countX">横方向の分割数。</param>
         /// <param name="countY">縦方向の分割数。</param>
-        public SpriteAnimation(Bitmap bitmap, int countX, int countY)
+        public SpriteAnimation(BitmapLoader bitmap, int countX, int countY)
             : base(bitmap)
         {
             this.Initalize(countX, countY);
@@ -194,7 +171,7 @@ namespace Sitrine.Texture
 
             GL.PushMatrix();
 
-            GL.BindTexture(TextureTarget.Texture2D, this.ID);
+            GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
             GL.Translate(this.Position.X, this.Position.Y, 0.0f);
             GL.Scale(this.Width, this.Height, 1.0);
             GL.Color4(this.Color);
