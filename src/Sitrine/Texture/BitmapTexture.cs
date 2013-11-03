@@ -149,20 +149,21 @@ namespace Sitrine.Texture
         protected override void Execute()
         {
             GL.PushMatrix();
-
-            GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
-            GL.Translate(this.Position.X, this.Position.Y, 0.0f);
-            GL.Scale(this.Width, this.Height, 1.0f);
-            GL.Color4(this.Color);
-
-            GL.Begin(BeginMode.Quads);
             {
-                GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
-                GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
-                GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
-                GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
+                GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
+                GL.Translate(this.Position.X, this.Position.Y, 0.0f);
+                GL.Scale(this.Width, this.Height, 1.0f);
+                GL.Color4(this.Color);
+
+                GL.Begin(BeginMode.Quads);
+                {
+                    GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
+                    GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
+                    GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
+                    GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
+                }
+                GL.End();
             }
-            GL.End();
             GL.PopMatrix();
         }
         #endregion
