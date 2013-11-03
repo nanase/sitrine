@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
+using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using Sitrine.Utils;
 
@@ -70,6 +71,15 @@ namespace Sitrine.Texture
             this.Height = loader.BaseBitmap.Height;
 
             this.Load();
+        }
+
+        /// <summary>
+        /// サイズを指定して空のビットマップを作成し、新しい BitmapTexture クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="size">ビットマップのサイズ。</param>
+        public BitmapTexture(Size size)
+            : this(new BitmapLoader(new Bitmap(size.Width, size.Height)))
+        {
         }
         #endregion
 
