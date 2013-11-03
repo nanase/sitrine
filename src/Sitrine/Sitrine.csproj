@@ -73,6 +73,7 @@
     <Compile Include="Audio\Converter\Track.cs" />
     <Compile Include="Texture\BitmapTexture.cs" />
     <Compile Include="Texture\SolidTexture.cs" />
+    <Compile Include="Texture\TextTextureBase.cs" />
     <Compile Include="Utils\Bitmap\BitmapLoader.cs" />
     <Compile Include="Event\KeyboardEvent.cs" />
     <Compile Include="Event\MessageEvent.cs" />
