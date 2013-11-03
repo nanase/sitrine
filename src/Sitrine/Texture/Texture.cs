@@ -111,7 +111,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// 再コンパイルの必要性を表す真偽値を取得します。
         /// </summary>
-        protected bool RequiredRecompile { get; private set; }
+        protected bool RequiredRecompile { get; set; }
 
         /// <summary>
         /// ディスプレイリストの ID を取得または設定します。
