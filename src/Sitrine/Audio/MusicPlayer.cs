@@ -54,7 +54,7 @@ namespace Sitrine.Audio
         private readonly Dictionary<string, SequenceLayer> layer;
 
         private volatile bool reqEnd;
-        private Task Updater;
+        private Task updater;
         #endregion
 
         #region -- Public Properties --
@@ -101,7 +101,7 @@ namespace Sitrine.Audio
             AL.SourceQueueBuffers(this.source, this.buffers.Length, this.buffers);
             AL.SourcePlay(this.source);
 
-            this.Updater = Task.Factory.StartNew(this.Update);
+            this.updater = Task.Factory.StartNew(this.Update);
         }
         #endregion
 
