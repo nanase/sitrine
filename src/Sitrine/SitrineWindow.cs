@@ -214,6 +214,9 @@ namespace Sitrine
             else
                 GL.Viewport((this.Width - TargetSize.Width * factor) / 2, (this.Height - TargetSize.Height * factor) / 2,
                     TargetSize.Width * factor, TargetSize.Height * factor);
+
+            this.foreground.Width = this.TargetSize.Width;
+            this.foreground.Height = this.TargetSize.Height;
         }
 
 
