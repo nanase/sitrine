@@ -65,7 +65,10 @@ namespace Sitrine.Event
             if (bitmap == null)
                 throw new ArgumentNullException("bitmap");
 
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(bitmap)));
+            BitmapLoader loader = new BitmapLoader(bitmap);
+            
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
+            this.Storyboard.AddResource(loader);
 
             return this;
         }
@@ -82,7 +85,10 @@ namespace Sitrine.Event
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(stream)));
+            BitmapLoader loader = new BitmapLoader(stream);
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
+            this.Storyboard.AddResource(loader);
 
             return this;
         }
@@ -99,7 +105,10 @@ namespace Sitrine.Event
             if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentNullException("filename");
 
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new Texture.Texture(filename)));
+            BitmapLoader loader = new BitmapLoader(filename);
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
+            this.Storyboard.AddResource(loader);
 
             return this;
         }
@@ -409,7 +418,10 @@ namespace Sitrine.Event
             if (bitmap == null)
                 throw new ArgumentNullException("bitmap");
 
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(bitmap, countX, countY)));
+            BitmapLoader loader = new BitmapLoader(bitmap);
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
 
             return this;
         }
@@ -428,7 +440,10 @@ namespace Sitrine.Event
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(stream, countX, countY)));
+            BitmapLoader loader = new BitmapLoader(stream);
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
 
             return this;
         }
@@ -447,7 +462,10 @@ namespace Sitrine.Event
             if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentNullException("filename");
 
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(filename, countX, countY)));
+            BitmapLoader loader = new BitmapLoader(filename);
+
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
 
             return this;
         }
