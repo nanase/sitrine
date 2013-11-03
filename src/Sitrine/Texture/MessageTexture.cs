@@ -34,17 +34,15 @@ namespace Sitrine.Texture
     /// <summary>
     /// 文字列をアニメーション表示するためのテクスチャクラスです。
     /// </summary>
-    public class MessageTexture : Texture, IAnimationTexture
+    public class MessageTexture : TextTextureBase, IAnimationTexture
     {
         #region -- Private Fields --
-        private readonly TextRenderer renderer;
-        private readonly Queue<object> tokenQueue;
+        private readonly Queue<object> tokenQueue = new Queue<object>();
 
         private int interval = 1;
         private int time = 0;
         private bool endInterval = true;
         private int progressCount = 1;
-        private bool updated;
         private PointF charPosition;
         #endregion
 
@@ -99,13 +97,8 @@ namespace Sitrine.Texture
         /// <param name="renderer">テキストレンダラ。</param>
         /// <param name="size">描画サイズ。</param>
         public MessageTexture(TextRenderer renderer, Size size)
-            : base(size)
+            : base(renderer, size)
         {
-            if (renderer == null)
-                throw new ArgumentNullException("renderer");
-
-            this.renderer = renderer;
-            this.tokenQueue = new Queue<object>();
         }
 
         /// <summary>
@@ -114,13 +107,8 @@ namespace Sitrine.Texture
         /// <param name="options">テキストオプション。</param>
         /// <param name="size">描画サイズ。</param>
         public MessageTexture(TextOptions options, Size size)
-            : base(size)
+            : base(options, size)
         {
-            if (options == null)
-                throw new ArgumentNullException("options");
-
-            this.renderer = new TextRenderer(options, this.BaseBitmap);
-            this.tokenQueue = new Queue<object>();
         }
         #endregion
 
@@ -129,7 +117,18 @@ namespace Sitrine.Texture
         /// 指定された文字を解析し、描画を予約します。
         /// </summary>
         /// <param name="text">表示される文字列およびコマンド。</param>
-        public void Draw(string text)
+        public override void Draw(string text)
+        {
+            this.Draw(text, 0f, 0f);
+        }
+
+        /// <summary>
+        /// 文字列を指定された座標に描画します。
+        /// </summary>
+        /// <param name="text">描画される文字列。</param>
+        /// <param name="x">描画位置の X 座標。</param>
+        /// <param name="y">描画位置の Y 座標。</param>
+        public override void Draw(string text, float x, float y)
         {
             if (!this.Parse(text))
             {
@@ -139,7 +138,7 @@ namespace Sitrine.Texture
 
             this.TextureEnd = null;
             this.TextureUpdate = null;
-            this.Start();
+            this.Start(x, y);
         }
 
         /// <summary>
@@ -162,21 +161,21 @@ namespace Sitrine.Texture
                         char c = (char)token;
                         if (c == '\n')
                         {
-                            this.charPosition = new PointF(0.0f, this.charPosition.Y + this.renderer.Options.LineHeight + 1.0f);
+                            this.charPosition = new PointF(0.0f, this.charPosition.Y + this.Renderer.Options.LineHeight + 1.0f);
                         }
                         else if (c == ' ')
                         {
-                            this.charPosition = new PointF(this.charPosition.X + this.renderer.Options.Font.Size / 2.0f, this.charPosition.Y);
+                            this.charPosition = new PointF(this.charPosition.X + this.Renderer.Options.Font.Size / 2.0f, this.charPosition.Y);
                         }
                         else if (c == '　')
                         {
-                            this.charPosition = new PointF(this.charPosition.X + this.renderer.Options.Font.Size, this.charPosition.Y);
+                            this.charPosition = new PointF(this.charPosition.X + this.Renderer.Options.Font.Size, this.charPosition.Y);
                         }
                         else
                         {
                             this.updated = true;
                             string ch = c.ToString();
-                            SizeF charSize = this.renderer.DrawChars(c.ToString(), this.charPosition);
+                            SizeF charSize = this.Renderer.DrawChars(c.ToString(), this.charPosition);
                             charSize.Height = 0.0f;
                             this.charPosition = PointF.Add(this.charPosition, charSize);
                         }
@@ -218,28 +217,23 @@ namespace Sitrine.Texture
         /// </summary>
         public void Start()
         {
-            this.renderer.Clear();
-            this.renderer.Flush();
-
-            this.updated = true;
-            this.charPosition = PointF.Empty;
-            this.time = 0;
-            this.endInterval = false;
+            this.Start(0f, 0f);
         }
 
         /// <summary>
-        /// ビットマップに変更を確定させ、画面上にメッセージを表示します。
+        /// ビットマップをクリアし、指定された座標を始点にして文字列描画を開始します。
         /// </summary>
-        public override void Render()
+        /// <param name="x">始点の X 座標。</param>
+        /// <param name="y">始点の Y 座標。</param>
+        public void Start(float x, float y)
         {
-            if (this.updated)
-            {
-                this.updated = false;
-                this.renderer.Flush();
-                Texture.Update(this.ID, this.BaseBitmap);
-            }
+            this.Renderer.Clear();
+            this.Renderer.Flush();
 
-            base.Render();
+            this.updated = true;
+            this.charPosition = new PointF(x, y);
+            this.time = 0;
+            this.endInterval = false;
         }
         #endregion
 
@@ -250,16 +244,16 @@ namespace Sitrine.Texture
             {
                 case '\\':
                     this.updated = true;
-                    SizeF charSize = this.renderer.DrawChars("\\", this.charPosition);
+                    SizeF charSize = this.Renderer.DrawChars("\\", this.charPosition);
                     charSize.Height = 0.0f;
                     this.charPosition = PointF.Add(this.charPosition, charSize);
                     break;
 
                 case 'c':
-                    if (this.renderer.Options.Brushes.Length <= token.Parameter)
+                    if (this.Renderer.Options.Brushes.Length <= token.Parameter)
                         Trace.TraceWarning("Out of brush index: {0}", token.Parameter);
                     else
-                        this.renderer.BrushIndex = token.Parameter;
+                        this.Renderer.BrushIndex = token.Parameter;
 
                     break;
 
