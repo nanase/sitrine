@@ -92,7 +92,7 @@ namespace Sitrine.Texture
 
         #region -- Constructors --
         /// <summary>
-        /// テキストレンダラと描画サイズを指定して新しい MessegeTexture クラスのインスタンスを初期化します。
+        /// テキストレンダラと描画サイズを指定して新しい MessageTexture クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="renderer">テキストレンダラ。</param>
         /// <param name="size">描画サイズ。</param>
