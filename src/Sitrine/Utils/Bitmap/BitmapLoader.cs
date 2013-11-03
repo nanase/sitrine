@@ -207,6 +207,8 @@ namespace Sitrine.Utils
 
             this.bitmapBytes = 4 * bitmap.Width * bitmap.Height;
             this.bitmapData = Marshal.AllocHGlobal(this.bitmapBytes);
+
+            this.Flush();
         }
         #endregion
 
