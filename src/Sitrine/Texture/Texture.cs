@@ -46,7 +46,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの表示上の基準となる幅を取得します。
         /// </summary>
-        public virtual float Width
+        public float Width
         {
             get { return this.width; }
             set
@@ -60,7 +60,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの表示上の基準となる高さを取得します。
         /// </summary>
-        public virtual float Height
+        public float Height
         {
             get { return this.height; }
             set
