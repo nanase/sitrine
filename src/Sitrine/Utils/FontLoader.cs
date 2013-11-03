@@ -34,8 +34,10 @@ namespace Sitrine.Utils
     public class FontLoader : IDisposable
     {
         #region -- Private Fields --
-        private readonly PrivateFontCollection fontCollection;
-        private readonly FontFamily family;
+        private PrivateFontCollection fontCollection;
+        private FontFamily family;
+
+        private bool disposed = false;
         #endregion
 
         #region -- Public Properties --
@@ -71,8 +73,41 @@ namespace Sitrine.Utils
         /// </summary>
         public void Dispose()
         {
-            this.family.Dispose();
-            this.fontCollection.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region -- Protected Methods --
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
+        protected void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.family != null)
+                        this.family.Dispose();
+
+                    if (this.fontCollection != null)
+                        this.fontCollection.Dispose();
+                }
+
+                this.family = null;
+                this.fontCollection = null;
+
+                this.disposed = true;
+            }
+        }
+        #endregion
+
+        #region -- Destructors --
+        ~FontLoader()
+        {
+            this.Dispose(false);
         }
         #endregion
     }
