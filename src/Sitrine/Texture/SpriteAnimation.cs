@@ -173,7 +173,7 @@ namespace Sitrine.Texture
 
             GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
             GL.Translate(this.Position.X, this.Position.Y, 0.0f);
-            GL.Scale(this.Width, this.Height, 1.0);
+            GL.Scale(this.Width, this.Height, 1.0f);
             GL.Color4(this.Color);
 
             GL.Begin(BeginMode.Quads);
