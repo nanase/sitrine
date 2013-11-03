@@ -41,6 +41,7 @@ namespace Sitrine.Utils
         private TextOptions options;
 
         private int brushIndex = 0;
+        private bool disposed = false;
         #endregion
 
         #region -- Public Properties --
@@ -289,7 +290,37 @@ namespace Sitrine.Utils
         /// </summary>
         public void Dispose()
         {
-            this.graphics.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region -- Protected Methods --
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.loader != null)
+                        this.loader.Dispose();
+                }
+
+                this.loader = null;
+
+                this.disposed = true;
+            }
+        }
+        #endregion
+
+        #region -- Destructors --
+        ~TextRenderer()
+        {
+            this.Dispose(false);
         }
         #endregion
     }
