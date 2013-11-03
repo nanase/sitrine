@@ -131,7 +131,7 @@ namespace Sitrine.Utils
 
         #region -- Public Methods --
         /// <summary>
-        /// ビットマップの変更を適用し、ヒープにコピーする。
+        /// ビットマップの変更を適用し、ヒープにコピーします。
         /// </summary>
         public void Flush()
         {
