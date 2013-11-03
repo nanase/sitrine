@@ -41,7 +41,7 @@ namespace Sitrine.Texture
         /// テクスチャの更新を実行します。
         /// </summary>
         /// <returns>テクスチャが更新された時 true、それ以外の時 false。</returns>
-        bool Update();
+        bool UpdateFrame();
 
         /// <summary>
         /// アニメーションを開始します。

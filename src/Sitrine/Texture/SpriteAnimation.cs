@@ -128,7 +128,7 @@ namespace Sitrine.Texture
         /// フレームを更新し、必要であればアニメーションのフレームを 1 つ進めます。
         /// </summary>
         /// <returns>フレームが更新されたとき true、それ以外のとき false。</returns>
-        public bool Update()
+        public bool UpdateFrame()
         {
             if (++this.counter > this.interval)
             {

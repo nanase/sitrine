@@ -146,7 +146,7 @@ namespace Sitrine.Texture
         /// 予約された文字列を指定された文字数だけ描画します。
         /// </summary>
         /// <returns>ビットマップに変更が加わりフラッシュの必要があるときは true、それ以外のとき false。</returns>
-        public bool Update()
+        public bool UpdateFrame()
         {
             if (this.endInterval)
                 return false;

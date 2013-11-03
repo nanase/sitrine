@@ -41,7 +41,7 @@ namespace Sitrine.Texture
             foreach (Texture item in this.Values)
             {
                 if (item is IAnimationTexture)
-                    ((IAnimationTexture)item).Update();
+                    ((IAnimationTexture)item).UpdateFrame();
 
                 item.Render();
             }
