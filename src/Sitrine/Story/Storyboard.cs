@@ -35,7 +35,7 @@ namespace Sitrine
     /// <summary>
     /// シナリオのストーリーボードとなるイベントを格納し、遅延実行させるための仕組みを提供します。
     /// </summary>
-    public abstract class Storyboard
+    public abstract class Storyboard : IDisposable
     {
         #region -- Private Fields --
         #region Events
@@ -48,6 +48,8 @@ namespace Sitrine
         #endregion
 
         private int waitTime;
+        private List<IDisposable> disposableResources;
+        private bool disposed = false;
         #endregion
 
         #region -- Protected Fields --
@@ -169,6 +171,7 @@ namespace Sitrine
             this.Listener = new List<Func<bool>>();
             this.AutoEnd = true;
             this.Window = window;
+            this.disposableResources = new List<IDisposable>();
             this.waitTime = 0;
 
             this.process = new ProcessEvent(this, this.Window);
@@ -208,6 +211,20 @@ namespace Sitrine
         {
             return (int)Math.Round(this.UpdateFrequency * seconds);
         }
+
+        public void AddResource(IDisposable disposableResource)
+        {
+            this.disposableResources.Add(disposableResource);
+        }
+
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
+        public virtual void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
         #endregion
 
         #region -- Public Static Methods --
@@ -220,6 +237,28 @@ namespace Sitrine
         public static bool CheckExclusive(IExclusiveStory x, IExclusiveStory y)
         {
             return x == y || (x.TargetObject == y.TargetObject && x.TargetProperty == y.TargetProperty);
+        }
+        #endregion
+
+        #region -- Private Methods --
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.disposableResources != null)
+                        this.disposableResources.ForEach(s => s.Dispose());
+                }
+
+                this.disposableResources = null;
+
+                this.disposed = true;
+            }
         }
         #endregion
 
@@ -306,6 +345,13 @@ namespace Sitrine
             this.waitTime = 0;
 
             this.Window.RemoveStoryboard(this);
+        }
+        #endregion
+
+        #region -- Destructors --
+        ~Storyboard()
+        {
+            this.Dispose(false);
         }
         #endregion
     }

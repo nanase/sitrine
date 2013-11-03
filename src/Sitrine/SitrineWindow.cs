@@ -255,6 +255,8 @@ namespace Sitrine
             {
                 foreach (var story in this.removingStories)
                 {
+                    story.Dispose();
+
                     if (story is RenderStoryboard)
                         this.renderStories.Remove((RenderStoryboard)story);
                     else
