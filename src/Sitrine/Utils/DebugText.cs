@@ -43,8 +43,8 @@ namespace Sitrine.Utils
 
         private double elapsed = 1.0;
         private double elapsed_fps = 2.0;
-        private readonly TextTexture debugTexture;
-        private readonly TextTexture debugTextTexture;
+        private TextTexture debugTexture;
+        private TextTexture debugTextTexture;
         private double fps_now = 0.0;
         private bool textUpdated = false;
         private DateTime firstQueueTime;
@@ -52,6 +52,8 @@ namespace Sitrine.Utils
         private long loadCountOld;
         private long updateCountOld;
         private long actionCountOld;
+
+        private bool disposed = false;
         #endregion
 
         #region -- Private Static Fields --
@@ -153,8 +155,8 @@ namespace Sitrine.Utils
         /// </summary>
         public void Dispose()
         {
-            this.debugTexture.Dispose();
-            this.debugTextTexture.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
         #endregion
 
@@ -208,6 +210,32 @@ namespace Sitrine.Utils
         public static void IncrementActionCount(long value)
         {
             DebugText.actionCount += (value < 0 ? 0 : value);
+        }
+        #endregion
+
+        #region -- Protected Methods --
+        /// <summary>
+        /// このオブジェクトによって使用されているアンマネージリソースを解放し、オプションでマネージリソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージリソースとアンマネージリソースの両方を解放する場合は true。アンマネージリソースだけを解放する場合は false。</param>
+        protected void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.debugTexture != null)
+                        this.debugTexture.Dispose();
+
+                    if (this.debugTextTexture != null)
+                        this.debugTextTexture.Dispose();
+                }
+
+                this.debugTexture = null;
+                this.debugTextTexture = null;
+
+                this.disposed = true;
+            }
         }
         #endregion
 
@@ -321,6 +349,13 @@ namespace Sitrine.Utils
 
                 this.textUpdated = true;
             }
+        }
+        #endregion
+
+        #region -- Destructors --
+        ~DebugText()
+        {
+            this.Dispose(false);
         }
         #endregion
 
