@@ -155,8 +155,6 @@ namespace Sitrine.Texture
         /// </summary>
         public override void Render()
         {
-            GL.CallList(this.lists[nowFrame]);
-
             if (this.NoCompile)
             {
                 this.Execute(this.nowFrame);
