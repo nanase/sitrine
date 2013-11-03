@@ -78,12 +78,12 @@ namespace Sitrine.Texture
         /// <summary>
         /// アニメーションの 1 フレームの幅を取得します。
         /// </summary>
-        public override int Width { get { return this.BaseBitmap.Width / this.x; } }
+        public int FrameWidth { get { return this.Loader.BaseBitmap.Width / this.x; } }
 
         /// <summary>
         /// アニメーションの 1 フレームの高さを取得します。
         /// </summary>
-        public override int Height { get { return this.BaseBitmap.Height / this.y; } }
+        public int FrameHeight { get { return this.Loader.BaseBitmap.Height / this.y; } }
         #endregion
 
         #region -- Constructors --
