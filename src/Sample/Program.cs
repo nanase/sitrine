@@ -59,12 +59,12 @@ namespace Sample
             #region Initalize
             var file = File.ReadAllLines("resource/message.txt");
             var handle = new HandleStore("resource/sound.txt");
-            this.InitalizeMessage(window.TextOptions, new Size(320, 80));
+            var message = this.CreateMessage(window.TextOptions, new Size(320, 80));
 
-            Message.Interval = 2;
-            Message.ProgressCount = 2;
-            Message.Position = new PointF(0, 160);
-            Message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
+            message.Interval = 2;
+            message.ProgressCount = 2;
+            message.Position = new PointF(0, 160);
+            message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
 
             Screen.BackgroundColor = Color.FromArgb(10, 59, 118);
             Screen.ForegroundColor = Color.Black;
@@ -80,7 +80,7 @@ namespace Sample
             Process.Wait(1.0);
 
             for (int i = 0; i < file.Length; i += 4)
-                Message.Show(String.Join("\n", file.Skip(i).Take(4)));
+                message.Show(String.Join("\n", file.Skip(i).Take(4)));
         }
     }
 }
