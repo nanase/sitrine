@@ -38,15 +38,6 @@ namespace Sitrine
     public abstract class Storyboard : IDisposable
     {
         #region -- Private Fields --
-        #region Events
-        private TextureEvent texture;
-        private ProcessEvent process;
-        private MessageEvent message;
-        private KeyboardEvent keyboard;
-        private MusicEvent music;
-        private ScreenEvent screen;
-        #endregion
-
         private int waitTime;
         private List<IDisposable> disposableResources;
         private bool disposed = false;
@@ -74,41 +65,27 @@ namespace Sitrine
         /// <summary>
         /// テクスチャイベントを取得します。
         /// </summary>
-        public TextureEvent Texture { get { return this.texture; } }
+        public TextureEvent Texture { get { return new TextureEvent(this, this.Window); } }
 
         /// <summary>
         /// プロセスイベントを取得します。
         /// </summary>
-        public ProcessEvent Process { get { return this.process; } }
+        public ProcessEvent Process { get { return new ProcessEvent(this, this.Window); } }
 
         /// <summary>
         /// キーボードイベントを取得します。
         /// </summary>
-        public KeyboardEvent Keyboard { get { return this.keyboard; } }
+        public KeyboardEvent Keyboard { get { return new KeyboardEvent(this, this.Window); } }
 
         /// <summary>
         /// ミュージックイベントを取得します。
         /// </summary>
-        public MusicEvent Music { get { return this.music; } }
+        public MusicEvent Music { get { return new MusicEvent(this, this.Window); } }
 
         /// <summary>
         /// スクリーンイベントを取得します。
         /// </summary>
-        public ScreenEvent Screen { get { return this.screen; } }
-
-        /// <summary>
-        /// メッセージイベントを取得します。
-        /// </summary>
-        public MessageEvent Message
-        {
-            get
-            {
-                if (this.message == null)
-                    throw new EventNotInitalizedException("MessageEvent", "Storyboard.InitalizeMessage");
-                else
-                    return this.message;
-            }
-        }
+        public ScreenEvent Screen { get { return new ScreenEvent(this, this.Window); } }
         #endregion
 
         /// <summary>
@@ -174,32 +151,22 @@ namespace Sitrine
             this.disposableResources = new List<IDisposable>();
             this.waitTime = 0;
 
-            this.process = new ProcessEvent(this, this.Window);
-            this.texture = new TextureEvent(this, this.Window);
-            this.keyboard = new KeyboardEvent(this, this.Window);
-            this.music = new MusicEvent(this, this.Window);
-            this.screen = new ScreenEvent(this, this.Window);
-
             Trace.WriteLine("Storyboard", "Init");
         }
         #endregion
 
         #region -- Public Methods --
         /// <summary>
-        /// メッセージイベントを指定されたパラメータで初期化します。
+        /// メッセージイベントを指定されたパラメータで生成します。
         /// </summary>
         /// <param name="options">メッセージ表示に用いるテキストオプション。</param>
         /// <param name="size">メッセージ表示の描画サイズ。</param>
-        public void InitalizeMessage(TextOptions options, Size size)
+        public MessageEvent CreateMessage(TextOptions options, Size size)
         {
             if (options == null)
                 throw new ArgumentNullException("options");
 
-            if (this.message != null && this.message is IDisposable)
-                ((IDisposable)this.message).Dispose();
-
-            this.message = new MessageEvent(this, this.Window, options, size);
-            Trace.WriteLine("message event", "Init");
+            return new MessageEvent(this, this.Window, options, size);
         }
 
         /// <summary>
