@@ -46,66 +46,6 @@ namespace Sitrine.Event
         public MessageTexture Texture { get { return this.texture; } }
 
         /// <summary>
-        /// 画面左上を原点にしたメッセージの座標を取得または設定します。設定は遅延実行されます。
-        /// </summary>
-        public PointF Position
-        {
-            get
-            {
-                return this.texture.Position;
-            }
-            set
-            {
-                this.Storyboard.AddAction(() => this.texture.Position = value);
-            }
-        }
-
-        /// <summary>
-        /// メッセージの反射色 (ベースとなる色) を取得または設定します。設定は遅延実行されます。
-        /// </summary>
-        public Color4 Color
-        {
-            get
-            {
-                return this.texture.Color;
-            }
-            set
-            {
-                this.Storyboard.AddAction(() => this.texture.Color = value);
-            }
-        }
-
-        /// <summary>
-        /// メッセージの文字が更新されるフレーム間隔を取得または設定します。設定は遅延実行されます。
-        /// </summary>
-        public int Interval
-        {
-            get
-            {
-                return this.texture.Interval;
-            }
-            set
-            {
-                this.Storyboard.AddAction(() => this.texture.Interval = value);
-            }
-        }
-
-        /// <summary>
-        /// メッセージの文字が更新されるたびに描画される文字数を取得または設定します。設定は遅延実行されます。
-        /// </summary>
-        public int ProgressCount
-        {
-            get
-            {
-                return this.texture.ProgressCount;
-            }
-            set
-            {
-                this.Storyboard.AddAction(() => this.texture.ProgressCount = value);
-            }
-        }
-
-        /// <summary>
         /// メッセージが更新されるたびに実行されるイベントを取得または設定します。
         /// </summary>
         public EventHandler TextureUpdate { get; set; }
@@ -157,6 +97,58 @@ namespace Sitrine.Event
                 this.Window.Textures.AddLast(this.texture);
                 this.Storyboard.Pause();
             });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 画面左上を原点にしたメッセージの座標を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent SetPosition(PointF value)
+        {
+            this.Storyboard.AddAction(() => this.texture.Position = value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// メッセージの反射色 (ベースとなる色) を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent SetColor(Color4 value)
+        {
+            this.Storyboard.AddAction(() => this.texture.Color = value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// メッセージの文字が更新されるフレーム間隔を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent SetInterval(int value)
+        {
+            this.Storyboard.AddAction(() => this.texture.Interval = value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// メッセージの文字が更新されるたびに描画される文字数を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent SetProgressCount(int value)
+        {
+            this.Storyboard.AddAction(() => this.texture.ProgressCount = value);
 
             return this;
         }
