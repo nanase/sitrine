@@ -39,50 +39,6 @@ namespace Sitrine.Event
         private Key[] cancelKeys = new[] { Key.BackSpace, Key.X };
         #endregion
 
-        #region -- Public Properties --
-        /// <summary>
-        /// OK (肯定) 入力に用いる Key 列挙体の配列を取得または設定します。
-        /// </summary>
-        public Key[] OKKeys
-        {
-            get
-            {
-                return this.okKeys;
-            }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                if (value.Length == 0)
-                    throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
-
-                this.okKeys = value;
-            }
-        }
-
-        /// <summary>
-        /// キャンセル (否定) 入力に用いる Key 列挙体の配列を取得または設定します。
-        /// </summary>
-        public Key[] CancelKeys
-        {
-            get
-            {
-                return this.cancelKeys;
-            }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                if (value.Length == 0)
-                    throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
-
-                this.cancelKeys = value;
-            }
-        }
-        #endregion
-
         #region -- Constructors --
         internal KeyboardEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
@@ -91,6 +47,47 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
+        #region Setter
+        /// <summary>
+        /// OK (肯定) 入力に用いる Key 列挙体の配列を取得または設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public KeyboardEvent SetOKKeys(params Key[] value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            if (value.Length == 0)
+                throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
+
+            this.okKeys = value;
+
+            return this;
+        }
+
+        /// <summary>
+        /// キャンセル (否定) 入力に用いる Key 列挙体の配列を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public KeyboardEvent SetCancelKeys(params Key[] value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            if (value.Length == 0)
+                throw new ArgumentException("キー配列は少なくとも 1 つの要素が必要です。");
+
+            this.cancelKeys = value;
+
+            return this;
+        }
+        #endregion
+
+        #region Actions
         /// <summary>
         /// OK キーが入力されるまでストーリーボードを停止します。
         /// このメソッドはストーリーボードが開始している場合に限り遅延実行します。それ以外のとき、即時に実行を開始します。
@@ -145,6 +142,8 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        #endregion
         #endregion
 
         #region -- Private Methods --
