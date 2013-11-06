@@ -71,36 +71,7 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
-        /// <summary>
-        /// 指定された文字列の描画を開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="text">表示されるテキスト。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MessageEvent Show(string text)
-        {
-            this.Storyboard.AddAction(() =>
-            {
-                this.texture.Draw(text);
-
-                if (this.TextureUpdate != null)
-                    this.texture.TextureUpdate += this.TextureUpdate;
-
-                this.texture.TextureEnd += (s, e2) =>
-                    {
-                        if (this.TextureEnd != null)
-                            this.TextureEnd(s, e2);
-
-                        this.Storyboard.Keyboard.WaitForOK(() => this.Window.Textures.Remove(this.texture, false));
-                    };
-
-                this.Window.Textures.AddLast(this.texture);
-                this.Storyboard.Pause();
-            });
-
-            return this;
-        }
-
+        #region Setter
         /// <summary>
         /// 画面左上を原点にしたメッセージの座標を設定します。
         /// このメソッドは遅延実行されます。
@@ -152,6 +123,39 @@ namespace Sitrine.Event
 
             return this;
         }
+        #endregion
+
+        #region Action
+        /// <summary>
+        /// 指定された文字列の描画を開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="text">表示されるテキスト。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent Show(string text)
+        {
+            this.Storyboard.AddAction(() =>
+            {
+                this.texture.Draw(text);
+
+                if (this.TextureUpdate != null)
+                    this.texture.TextureUpdate += this.TextureUpdate;
+
+                this.texture.TextureEnd += (s, e2) =>
+                {
+                    if (this.TextureEnd != null)
+                        this.TextureEnd(s, e2);
+
+                    this.Storyboard.Keyboard.WaitForOK(() => this.Window.Textures.Remove(this.texture, false));
+                };
+
+                this.Window.Textures.AddLast(this.texture);
+                this.Storyboard.Pause();
+            });
+
+            return this;
+        }
+        #endregion
         #endregion
     }
 }
