@@ -78,7 +78,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MessageEvent SetPosition(PointF value)
+        public MessageEvent Position(PointF value)
         {
             this.Storyboard.AddAction(() => this.texture.Position = value);
 
@@ -91,7 +91,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MessageEvent SetColor(Color4 value)
+        public MessageEvent Color(Color4 value)
         {
             this.Storyboard.AddAction(() => this.texture.Color = value);
 
@@ -104,7 +104,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MessageEvent SetInterval(int value)
+        public MessageEvent Interval(int value)
         {
             this.Storyboard.AddAction(() => this.texture.Interval = value);
 
@@ -117,7 +117,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MessageEvent SetProgressCount(int value)
+        public MessageEvent ProgressCount(int value)
         {
             this.Storyboard.AddAction(() => this.texture.ProgressCount = value);
 
