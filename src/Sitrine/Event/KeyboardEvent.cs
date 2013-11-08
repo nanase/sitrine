@@ -54,7 +54,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public KeyboardEvent SetOKKeys(params Key[] value)
+        public KeyboardEvent OKKeys(params Key[] value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
@@ -73,7 +73,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public KeyboardEvent SetCancelKeys(params Key[] value)
+        public KeyboardEvent CancelKeys(params Key[] value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
