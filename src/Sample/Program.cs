@@ -61,13 +61,13 @@ namespace Sample
             var handle = new HandleStore("resource/sound.txt");
             var message = this.CreateMessage(window.TextOptions, new Size(320, 80));
 
-            message.Interval = 2;
-            message.ProgressCount = 2;
-            message.Position = new PointF(0, 160);
-            message.TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
+            message.Interval(2)
+                   .ProgressCount(2)
+                   .Position(new PointF(0, 160))
+                   .TextureUpdate = (s, e2) => Music.PushNow(handle["message_progress"]);
 
-            Screen.BackgroundColor = Color.FromArgb(10, 59, 118);
-            Screen.ForegroundColor = Color.Black;
+            Screen.BackgroundColor(Color.FromArgb(10, 59, 118))
+                  .ForegroundColor(Color.Black);
             #endregion
 
             Process.Loop(e => e.Keyboard.WaitFor(window.ToggleDebugVisibility, Key.F3));
