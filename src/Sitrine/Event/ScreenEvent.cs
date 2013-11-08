@@ -36,40 +36,6 @@ namespace Sitrine.Event
     /// </summary>
     public class ScreenEvent : StoryEvent
     {
-        #region -- Public Properties --
-        /// <summary>
-        /// 前景色を取得または指定します。
-        /// 設定は遅延実行されます。
-        /// </summary>
-        public Color ForegroundColor
-        {
-            get
-            {
-                return this.Window.ForegroundColor;
-            }
-            set
-            {
-                this.Storyboard.AddAction(() => this.Window.ForegroundColor = value);
-            }
-        }
-
-        /// <summary>
-        /// 背景色を取得または指定します。
-        /// 設定は遅延実行されます。
-        /// </summary>
-        public Color BackgroundColor
-        {
-            get
-            {
-                return this.Window.BackgroundColor;
-            }
-            set
-            {
-                this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
-            }
-        }
-        #endregion
-
         #region -- Constructors --
         internal ScreenEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
@@ -78,6 +44,35 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
+        #region Setter
+        /// <summary>
+        /// 前景色を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent ForegroundColor(Color value)
+        {
+            this.Storyboard.AddAction(() => this.Window.ForegroundColor = value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// 背景色を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent BackgroundColor(Color value)
+        {
+            this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
+
+            return this;
+        }
+        #endregion
+
+        #region Action
         /// <summary>
         /// 前景色を指定された色までアニメーション表示します。
         /// このメソッドは遅延実行されます。
@@ -229,6 +224,7 @@ namespace Sitrine.Event
         {
             return this.AnimateForegroundColor(Color.Black, seconds, easing);
         }
+        #endregion
         #endregion
 
         class AnimateStoryboard : RenderStoryboard, IExclusiveStory
