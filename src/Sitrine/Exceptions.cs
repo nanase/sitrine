@@ -91,4 +91,45 @@ namespace Sitrine
         }
         #endregion
     }
+
+    /// <summary>
+    /// キーを指定すべきイベントでキーの指定がなかったときに発生する例外です。
+    /// </summary>
+    [Serializable]
+    public class KeyNotSpecifiedException : Exception
+    {
+        #region -- Constructors --
+        /// <summary>
+        /// 新しい KeyNotSpecifiedException クラスのインスタンスを初期化します。
+        /// </summary>
+        public KeyNotSpecifiedException()
+            : base("キーが指定されていません。")
+        {
+        }
+
+        /// <summary>
+        /// メッセージを指定して新しい KeyNotSpecifiedException クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="message">例外に加えられるメッセージ。</param>
+        public KeyNotSpecifiedException(string message)
+            : base("キーが指定されていません:" + message)
+        {
+        }
+
+        /// <summary>
+        /// メッセージと内部例外を指定して新しい KeyNotSpecifiedException クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="message">例外に加えられるメッセージ。</param>
+        /// <param name="inner">内部例外。</param>
+        public KeyNotSpecifiedException(string message, Exception inner)
+            : base("キーが指定されていません:" + message, inner)
+        {
+        }
+
+        protected KeyNotSpecifiedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+        #endregion
+    }
 }
