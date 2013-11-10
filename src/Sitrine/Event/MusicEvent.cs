@@ -232,7 +232,7 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Play()
+        public MusicEvent PlayAll()
         {
             this.Storyboard.AddAction(() =>
             {
@@ -267,7 +267,7 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Stop()
+        public MusicEvent StopAll()
         {
             this.Storyboard.AddAction(() =>
             {
