@@ -74,7 +74,8 @@ namespace Sample
 
             Music.Push(handle["message_init"])
                  .LoadPreset("resource/ux_preset.xml")
-                 .AddLayer("music", Enumerable.Range(1, 23).Except(new[] { 16 }));
+                 .Key("music")
+                 .AddLayer(Enumerable.Range(1, 23).Except(new[] { 16 }));
 
             Screen.FadeIn(5.0, EasingFunctions.QuadEaseOut);
             Process.Wait(1.0);

@@ -36,6 +36,10 @@ namespace Sitrine.Event
     /// </summary>
     public class MusicEvent : StoryEvent
     {
+        #region -- Private Fields --
+        string key = null;
+        #endregion
+
         #region -- Constructors --
         internal MusicEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
@@ -44,16 +48,35 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
+        /// <summary>
+        /// 操作対象のレイヤーをキーを用いて指定します。
+        /// </summary>
+        /// <param name="layerKey">レーヤーを指し示すキー。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MusicEvent Key(string layerKey)
+        {
+            if (layerKey == null)
+                throw new ArgumentNullException("layerKey");
+
+            this.key = layerKey;
+
+            return this;
+        }
+
         #region Layer
         /// <summary>
         /// シーケンスレイヤを追加します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">追加されるレイヤのキーとなるレイヤ名。</param>
         /// <param name="targetParts">通過させるパート。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent AddLayer(string key, IEnumerable<int> targetParts = null)
+        public MusicEvent AddLayer(IEnumerable<int> targetParts = null)
         {
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
+
             this.Storyboard.AddAction(() =>
             {
                 if (this.Window.Music.Layer.ContainsKey(key))
@@ -69,10 +92,14 @@ namespace Sitrine.Event
         /// シーケンスレイヤを削除します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">レイヤのキー。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent RemoveLayer(string key)
+        public MusicEvent RemoveLayer()
         {
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
@@ -90,15 +117,14 @@ namespace Sitrine.Event
         /// レイヤに指定された SMF ファイルをロードし、再生します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">レイヤのキー。</param>
         /// <param name="file">読み込まれる SMF ファイルのパス。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Load(string key, string file)
+        public MusicEvent Load(string file)
         {
             if (String.IsNullOrWhiteSpace(file))
                 throw new ArgumentNullException("file");
 
-            this.Load(key, file, false);
+            this.Load(file, false);
 
             return this;
         }
@@ -107,14 +133,18 @@ namespace Sitrine.Event
         /// レイヤに指定された SMF ファイルをロードし、再生します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">レイヤのキー。</param>
         /// <param name="file">読み込まれる SMF ファイルのパス。</param>
         /// <param name="looping">ループ再生する場合は true、しない場合は false。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Load(string key, string file, bool looping)
+        public MusicEvent Load(string file, bool looping)
         {
             if (String.IsNullOrWhiteSpace(file))
                 throw new ArgumentNullException("file");
+
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
 
             this.Storyboard.AddAction(() =>
             {
@@ -132,10 +162,9 @@ namespace Sitrine.Event
         /// レイヤに指定されたストリームからロードし、再生します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">レイヤのキー。</param>
         /// <param name="stream">読み込まれるストリーム。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Load(string key, Stream stream)
+        public MusicEvent Load(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -143,7 +172,7 @@ namespace Sitrine.Event
             if (!stream.CanRead)
                 throw new NotSupportedException();
 
-            this.Load(key, stream, false);
+            this.Load(stream, false);
 
             return this;
         }
@@ -152,17 +181,21 @@ namespace Sitrine.Event
         /// レイヤに指定されたストリームからロードし、再生します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">レイヤのキー。</param>
         /// <param name="stream">読み込まれるストリーム。</param>
         /// <param name="looping">ループ再生する場合は true、しない場合は false。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Load(string key, Stream stream, bool looping)
+        public MusicEvent Load(Stream stream, bool looping)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
             if (!stream.CanRead)
                 throw new NotSupportedException();
+
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
 
             this.Storyboard.AddAction(() =>
             {
@@ -247,10 +280,14 @@ namespace Sitrine.Event
         /// 指定されたレイヤについて再生を開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">再生を開始するレイヤ。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Play(string key)
+        public MusicEvent Play()
         {
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
@@ -281,10 +318,14 @@ namespace Sitrine.Event
         /// <summary>
         /// 指定されたレイヤについて再生を停止します。
         /// </summary>
-        /// <param name="key">再生を停止するレイヤ。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Stop(string key)
+        public MusicEvent Stop()
         {
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
@@ -370,11 +411,15 @@ namespace Sitrine.Event
         /// ループの可否を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="key">設定先のレイヤのキー。</param>
         /// <param name="looping">ループする場合は true、しない場合は false。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent SetLoop(string key, bool looping)
+        public MusicEvent SetLoop(bool looping)
         {
+            if (this.key == null)
+                throw new KeyNotSpecifiedException();
+
+            string key = this.key;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(key))
