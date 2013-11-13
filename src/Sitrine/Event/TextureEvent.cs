@@ -42,6 +42,7 @@ namespace Sitrine.Event
     {
         #region -- Private Fields --
         private readonly Dictionary<int, int> asignment;
+        private int? id = null;
         #endregion
 
         #region -- Constructors --
@@ -53,6 +54,18 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
+        /// <summary>
+        /// 操作対象のテクスチャ ID を指定します。
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public TextureEvent ID(int id)
+        {
+            this.id = id;
+
+            return this;
+        }
+
         /// <summary>
         /// 指定された ID とビットマップから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
@@ -66,6 +79,7 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("bitmap");
 
             BitmapLoader loader = new BitmapLoader(bitmap);
+            this.id = id;
             
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
@@ -86,6 +100,7 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("stream");
 
             BitmapLoader loader = new BitmapLoader(stream);
+            this.id = id;
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
@@ -106,6 +121,7 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("filename");
 
             BitmapLoader loader = new BitmapLoader(filename);
+            this.id = id;
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
@@ -419,6 +435,7 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("bitmap");
 
             BitmapLoader loader = new BitmapLoader(bitmap);
+            this.id = id;
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
             this.Storyboard.AddResource(loader);
@@ -441,6 +458,7 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("stream");
 
             BitmapLoader loader = new BitmapLoader(stream);
+            this.id = id;
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
             this.Storyboard.AddResource(loader);
@@ -463,6 +481,7 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("filename");
 
             BitmapLoader loader = new BitmapLoader(filename);
+            this.id = id;
 
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
             this.Storyboard.AddResource(loader);
