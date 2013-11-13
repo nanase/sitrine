@@ -130,13 +130,17 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 指定された ID のテクスチャを不透明にし、画面上に表示されるようにします。
+        /// テクスチャを不透明にし、画面上に表示されるようにします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Show(int id)
+        public TextureEvent Show()
         {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -155,13 +159,17 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 指定された ID のテクスチャを完全不透明にし、画面上から隠します。
+        /// テクスチャを完全不透明にし、画面上から隠します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Hide(int id)
+        public TextureEvent Hide()
         {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -180,13 +188,17 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 指定された ID のテクスチャのリソースを解放し画面上から消去します。
+        /// テクスチャのリソースを解放し画面上から消去します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Clear(int id)
+        public TextureEvent Clear()
         {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -223,11 +235,15 @@ namespace Sitrine.Event
         /// テクスチャの反射光の色を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="color">反射光の色。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent SetColor(int id, Color4 color)
+        public TextureEvent Color(Color4 color)
         {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -246,11 +262,15 @@ namespace Sitrine.Event
         /// テクスチャの表示位置を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="position">表示位置。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent SetPosition(int id, PointF position)
+        public TextureEvent Position(PointF position)
         {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -269,11 +289,15 @@ namespace Sitrine.Event
         /// テクスチャの描画処理をコンパイルしないかどうかの真偽値を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="noCompile">コンパイルしないとき true、コンパイルするとき false。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent SetNoCompile(int id, bool noCompile)
+        public TextureEvent NoCompile(bool noCompile)
         {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -292,18 +316,22 @@ namespace Sitrine.Event
         /// 指定された位置へ移動するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
         /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(int id, PointF to, int frame, Func<double, double> easing = null)
+        public TextureEvent AnimatePosition(PointF to, int frame, Func<double, double> easing = null)
         {
             if (frame == 0)
                 return this;
 
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
+
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
 
             this.Storyboard.AddAction(() =>
             {
@@ -325,18 +353,22 @@ namespace Sitrine.Event
         /// 指定された位置へ移動するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">移動先の位置座標。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(int id, PointF to, double seconds, Func<double, double> easing = null)
+        public TextureEvent AnimatePosition(PointF to, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
+
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
 
             this.Storyboard.AddAction(() =>
             {
@@ -358,18 +390,22 @@ namespace Sitrine.Event
         /// 指定された色へ変化するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
         /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(int id, Color4 to, int frame, Func<double, double> easing = null)
+        public TextureEvent AnimateColor(Color4 to, int frame, Func<double, double> easing = null)
         {
             if (frame == 0)
                 return this;
 
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
+
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
 
             this.Storyboard.AddAction(() =>
             {
@@ -391,18 +427,22 @@ namespace Sitrine.Event
         /// 指定された色へ変化するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="id">関連付けられた ID。</param>
         /// <param name="to">変化後の色。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(int id, Color4 to, double seconds, Func<double, double> easing = null)
+        public TextureEvent AnimateColor(Color4 to, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
+
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
 
             this.Storyboard.AddAction(() =>
             {
