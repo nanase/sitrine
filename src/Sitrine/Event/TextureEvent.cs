@@ -38,7 +38,7 @@ namespace Sitrine.Event
     /// <summary>
     /// テクスチャの管理に関わるイベントをスケジューリングします。
     /// </summary>
-    public class TextureEvent : StoryEvent
+    public class TextureEvent : AnimateEvent<TextureEvent>
     {
         #region -- Private Fields --
         private readonly Dictionary<int, int> asignment;
@@ -50,6 +50,7 @@ namespace Sitrine.Event
             : base(storyboard, window)
         {
             this.asignment = new Dictionary<int, int>();
+            this.subclass = this;
         }
         #endregion
 
@@ -57,8 +58,8 @@ namespace Sitrine.Event
         /// <summary>
         /// 操作対象のテクスチャ ID を指定します。
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">操作対象のテクスチャ ID。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent ID(int id)
         {
             this.id = id;
@@ -80,7 +81,7 @@ namespace Sitrine.Event
 
             BitmapLoader loader = new BitmapLoader(bitmap);
             this.id = id;
-            
+
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
 
@@ -333,6 +334,10 @@ namespace Sitrine.Event
 
             int id = this.id.Value;
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -342,6 +347,9 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -370,6 +378,10 @@ namespace Sitrine.Event
 
             int id = this.id.Value;
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -379,6 +391,9 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
@@ -407,6 +422,10 @@ namespace Sitrine.Event
 
             int id = this.id.Value;
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -416,6 +435,9 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -444,6 +466,10 @@ namespace Sitrine.Event
 
             int id = this.id.Value;
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -453,6 +479,9 @@ namespace Sitrine.Event
                 }
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
