@@ -34,12 +34,13 @@ namespace Sitrine.Event
     /// <summary>
     /// スクリーンの背景色および前景色に関わるイベントをスケジューリングします。
     /// </summary>
-    public class ScreenEvent : StoryEvent
+    public class ScreenEvent : AnimateEvent<ScreenEvent>
     {
         #region -- Constructors --
         internal ScreenEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
+            this.subclass = this;
         }
         #endregion
 
@@ -89,9 +90,16 @@ namespace Sitrine.Event
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("frames");
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimateForeground(color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -115,9 +123,16 @@ namespace Sitrine.Event
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimateForeground(color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
@@ -141,9 +156,16 @@ namespace Sitrine.Event
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("frames");
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimateBackground(color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -167,9 +189,16 @@ namespace Sitrine.Event
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
 
+            int delayFrames = this.DelayFrames;
+            double delaySeconds = this.DelaySeconds;
+            this.ResetDelay();
+
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
+
                 story.AnimateBackground(color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
