@@ -71,6 +71,7 @@
     <Compile Include="Audio\Sequencer.cs" />
     <Compile Include="Audio\Converter\Event\SystemExclusiveEvent.cs" />
     <Compile Include="Audio\Converter\Track.cs" />
+    <Compile Include="Event\AnimateEvent.cs" />
     <Compile Include="Texture\BitmapTexture.cs" />
     <Compile Include="Texture\SolidTexture.cs" />
     <Compile Include="Texture\TextTextureBase.cs" />
