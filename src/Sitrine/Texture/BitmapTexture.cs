@@ -168,7 +168,7 @@ namespace Sitrine.Texture
         }
         #endregion
 
-         #region -- Destructors --
+        #region -- Destructors --
         ~BitmapTexture()
         {
             this.Dispose(false);
