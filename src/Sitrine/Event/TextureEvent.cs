@@ -557,6 +557,45 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// スプライトアニメーションのフレーム更新間隔を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="interval">更新フレーム間隔。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Interval(int interval)
+        {
+            if (interval <= 0)
+                throw new ArgumentOutOfRangeException("interval");
+
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                Texture.Texture texture = this.Window.Textures[this.asignment[id]];
+
+                if (texture is SpriteAnimation)
+                {
+                    ((SpriteAnimation)texture).Interval = interval;
+                }
+                else
+                {
+                    Trace.TraceWarning("Texture[" + id + "] is not SpriteAnimation");
+                }
+            });
+
+            return this;
+        }
         #endregion
 
         #region -- Private Methods --
