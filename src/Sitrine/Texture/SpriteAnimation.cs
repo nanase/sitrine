@@ -198,6 +198,9 @@ namespace Sitrine.Texture
             this.x = countX;
             this.y = countY;
 
+            this.Width = this.FrameWidth;
+            this.Height = this.FrameHeight;
+
             this.s_width = 1.0f / (float)countX;
             this.s_height = 1.0f / (float)countY;
 
