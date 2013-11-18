@@ -41,7 +41,7 @@ namespace Sitrine.Texture
             {
                 GL.Disable(EnableCap.Texture2D);
                 GL.Translate(this.Position.X, this.Position.Y, 0.0f);
-                GL.Scale(this.Width, this.Height, 1.0f);
+                GL.Scale(this.Width * this.ScaleX, this.Height * this.ScaleY, 1.0f);
                 GL.Color4(this.Color);
                 GL.Rect(0f, 0f, 1f, 1f);
                 GL.Enable(EnableCap.Texture2D);

@@ -39,6 +39,7 @@ namespace Sitrine.Texture
         private Color4 color = Color4.White;
         private PointF position = new PointF();
         private float width, height;
+        private float scaleX = 1.0f, scaleY = 1.0f;
         private bool disposed = false;
         #endregion
 
@@ -97,6 +98,50 @@ namespace Sitrine.Texture
 
                 this.RequestRecompile();
             }
+        }
+
+        /// <summary>
+        /// テクスチャの X 軸方向の拡大率を取得または設定します。
+        /// </summary>
+        public float ScaleX
+        {
+            get { return this.scaleX; }
+            set
+            {
+                this.scaleX = value;
+
+                this.RequestRecompile();
+            }
+        }
+
+        /// <summary>
+        /// テクスチャの Y 軸方向の拡大率を取得または設定します。
+        /// </summary>
+        public float ScaleY
+        {
+            get { return this.scaleY; }
+            set
+            {
+                this.scaleY = value;
+
+                this.RequestRecompile();
+            }
+        }
+
+        /// <summary>
+        /// 実際に表示されるテクスチャの幅を取得します。
+        /// </summary>
+        public float AcctualWidth
+        {
+            get { return this.width * this.scaleX; }
+        }
+
+        /// <summary>
+        /// 実際に表示されるテクスチャの高さを取得します。
+        /// </summary>
+        public float AcctualHeight
+        {
+            get { return this.height * this.scaleY; }
         }
 
         /// <summary>
