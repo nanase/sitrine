@@ -596,6 +596,97 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// テクスチャの縦横の拡大率を指定します。
+        /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(float scale)
+        {
+            return this.Scale(scale, scale);
+        }
+
+        /// <summary>
+        /// テクスチャの縦横の拡大率を指定します。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(float scaleX, float scaleY)
+        {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                var texture = this.Window.Textures[this.asignment[id]];
+                texture.ScaleX = scaleX;
+                texture.ScaleY = scaleY;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// テクスチャの X 軸方向の拡大率を指定します。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleX(float scaleX)
+        {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].ScaleX = scaleX;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// テクスチャの Y 軸方向の拡大率を指定します。
+        /// </summary>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleY(float scaleY)
+        {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].ScaleY = scaleY;
+            });
+
+            return this;
+        }
         #endregion
 
         #region -- Private Methods --
