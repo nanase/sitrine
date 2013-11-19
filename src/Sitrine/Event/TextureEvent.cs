@@ -599,6 +599,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// テクスチャの縦横の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scale">拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
@@ -609,6 +610,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// テクスチャの縦横の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scaleX">X 軸方向の拡大率。</param>
         /// <param name="scaleY">Y 軸方向の拡大率。</param>
@@ -638,6 +640,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// テクスチャの X 軸方向の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scaleX">X 軸方向の拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
@@ -664,6 +667,7 @@ namespace Sitrine.Event
 
         /// <summary>
         /// テクスチャの Y 軸方向の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scaleY">Y 軸方向の拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
