@@ -691,6 +691,33 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// テクスチャの回転角を度 (degree) で指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Rotate(float angle)
+        {
+            if (!this.id.HasValue)
+                throw new KeyNotSpecifiedException();
+
+            int id = this.id.Value;
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].RotateZ = angle;
+            });
+
+            return this;
+        }
         #endregion
 
         #region -- Private Methods --
