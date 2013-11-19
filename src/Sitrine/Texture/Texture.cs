@@ -40,6 +40,7 @@ namespace Sitrine.Texture
         private PointF position = new PointF();
         private float width, height;
         private float scaleX = 1.0f, scaleY = 1.0f;
+        private PointF basePoint = new PointF();
         private bool disposed = false;
         #endregion
 
@@ -123,6 +124,21 @@ namespace Sitrine.Texture
             set
             {
                 this.scaleY = value;
+
+                this.RequestRecompile();
+            }
+        }
+
+        /// <summary>
+        /// 拡大や回転の基点となるテクスチャ上の座標を取得または設定します。
+        /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
+        /// </summary>
+        public PointF BasePoint
+        {
+            get { return this.basePoint; }
+            set
+            {
+                this.basePoint = value;
 
                 this.RequestRecompile();
             }
