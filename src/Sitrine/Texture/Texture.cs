@@ -40,6 +40,7 @@ namespace Sitrine.Texture
         private PointF position = new PointF();
         private float width, height;
         private float scaleX = 1.0f, scaleY = 1.0f;
+        private float rotateZ = 0.0f;
         private PointF basePoint = new PointF();
         private bool disposed = false;
         #endregion
@@ -124,6 +125,20 @@ namespace Sitrine.Texture
             set
             {
                 this.scaleY = value;
+
+                this.RequestRecompile();
+            }
+        }
+
+        /// <summary>
+        /// テクスチャの回転角を取得または設定します。単位は 度 (degree) です。
+        /// </summary>
+        public float RotateZ
+        {
+            get { return this.rotateZ; }
+            set
+            {
+                this.rotateZ = value;
 
                 this.RequestRecompile();
             }
