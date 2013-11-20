@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animate\DelaySpan.cs" />
     <Compile Include="Animate\EasingFunctions.cs" />
     <Compile Include="Audio\Converter\HandleConverter.cs" />
     <Compile Include="Audio\Converter\HandleItem.cs" />
