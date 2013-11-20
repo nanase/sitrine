@@ -30,7 +30,7 @@ namespace Sitrine.Event
     /// <summary>
     /// キーボードに関連するイベントをスケジューリングします。
     /// </summary>
-    public class KeyboardEvent : StoryEvent
+    public class KeyboardEvent : StoryEvent<KeyboardEvent>
     {
         #region -- Private Fields --
         private bool keyUpFlag;
@@ -43,6 +43,7 @@ namespace Sitrine.Event
         internal KeyboardEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
+            this.Subclass = this;
         }
         #endregion
 
@@ -99,7 +100,10 @@ namespace Sitrine.Event
             if (this.Storyboard.State != StoryboardState.Started)
                 this.Listen(callback, this.okKeys);
             else
+            {
+                this.PopDelaySpan().SetDelayAction(this.Storyboard);
                 this.Storyboard.AddAction(() => this.Listen(callback, this.okKeys));
+            }
 
             return this;
         }
@@ -115,7 +119,10 @@ namespace Sitrine.Event
             if (this.Storyboard.State != StoryboardState.Started)
                 this.Listen(callback, this.cancelKeys);
             else
+            {
+                this.PopDelaySpan().SetDelayAction(this.Storyboard);
                 this.Storyboard.AddAction(() => this.Listen(callback, this.cancelKeys));
+            }
 
             return this;
         }
@@ -138,7 +145,10 @@ namespace Sitrine.Event
             if (this.Storyboard.State != StoryboardState.Started)
                 this.Listen(callback, keys);
             else
+            {
+                this.PopDelaySpan().SetDelayAction(this.Storyboard);
                 this.Storyboard.AddAction(() => this.Listen(callback, keys));
+            }
 
             return this;
         }
