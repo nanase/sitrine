@@ -29,8 +29,12 @@ namespace Sitrine.Event
     /// <summary>
     /// ストーリーボードに追加されるイベントの抽象クラスです。
     /// </summary>
-    public abstract class StoryEvent
+    public abstract class StoryEvent<T>
     {
+        #region -- Private Fields --
+        private int? id = null;
+        #endregion
+
         #region -- Protected Fields --
         /// <summary>
         /// イベントが実行されるウィンドウ。この変数は読み取り専用です。
@@ -41,6 +45,25 @@ namespace Sitrine.Event
         /// イベントが属するストーリーボード。この変数は読み取り専用です。
         /// </summary>
         protected readonly Storyboard Storyboard;
+        #endregion
+
+        #region -- Protected Properties --
+        protected int ID
+        {
+            get
+            {
+                if (!this.id.HasValue)
+                    throw new KeyNotSpecifiedException();
+
+                return this.id.Value;
+            }
+            set
+            {
+                this.id = value;
+            }
+        }
+
+        protected T Subclass { private get; set; }
         #endregion
 
         #region -- Constructors --
@@ -59,6 +82,20 @@ namespace Sitrine.Event
 
             this.Storyboard = storyboard;
             this.Window = window;
+        }
+        #endregion
+
+        #region -- Public Methods --
+        /// <summary>
+        /// 操作対象のテクスチャ ID を指定します。
+        /// </summary>
+        /// <param name="id">操作対象のテクスチャ ID。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public T ID(int id)
+        {
+            this.id = id;
+
+            return this.Subclass;
         }
         #endregion
     }
