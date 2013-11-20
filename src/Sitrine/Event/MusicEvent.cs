@@ -413,7 +413,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="looping">ループする場合は true、しない場合は false。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent SetLoop(bool looping)
+        public MusicEvent Loop(bool looping)
         {
             if (this.key == null)
                 throw new KeyNotSpecifiedException();
