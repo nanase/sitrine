@@ -34,13 +34,13 @@ namespace Sitrine.Event
     /// <summary>
     /// スクリーンの背景色および前景色に関わるイベントをスケジューリングします。
     /// </summary>
-    public class ScreenEvent : AnimateEvent<ScreenEvent>
+    public class ScreenEvent : StoryEvent<ScreenEvent>
     {
         #region -- Constructors --
         internal ScreenEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
-            this.subclass = this;
+            this.Subclass = this;
         }
         #endregion
 
@@ -54,6 +54,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent ForegroundColor(Color value)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.ForegroundColor = value);
 
             return this;
@@ -67,6 +68,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent BackgroundColor(Color value)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
 
             return this;
@@ -90,16 +92,13 @@ namespace Sitrine.Event
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("frames");
 
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimateForeground(color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -123,16 +122,13 @@ namespace Sitrine.Event
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimateForeground(color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
@@ -156,16 +152,13 @@ namespace Sitrine.Event
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("frames");
 
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimateBackground(color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -189,16 +182,13 @@ namespace Sitrine.Event
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimateBackground(color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
