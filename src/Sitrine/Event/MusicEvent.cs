@@ -34,35 +34,17 @@ namespace Sitrine.Event
     /// <summary>
     /// 音楽や効果音の再生に関連するイベントをスケジューリングします。
     /// </summary>
-    public class MusicEvent : StoryEvent
+    public class MusicEvent : StoryEvent<MusicEvent>
     {
-        #region -- Private Fields --
-        string key = null;
-        #endregion
-
         #region -- Constructors --
         internal MusicEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
+            this.Subclass = this;
         }
         #endregion
 
         #region -- Public Methods --
-        /// <summary>
-        /// 操作対象のレイヤーをキーを用いて指定します。
-        /// </summary>
-        /// <param name="layerKey">レーヤーを指し示すキー。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent Key(string layerKey)
-        {
-            if (layerKey == null)
-                throw new ArgumentNullException("layerKey");
-
-            this.key = layerKey;
-
-            return this;
-        }
-
         #region Layer
         /// <summary>
         /// シーケンスレイヤを追加します。
@@ -72,17 +54,15 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent AddLayer(IEnumerable<int> targetParts = null)
         {
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceWarning("Add layer '{0}', but it already exists.", key);
+                if (this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceWarning("Add layer '{0}', but it already exists.", id);
 
-                this.Window.Music.AddLayer(key, targetParts);
+                this.Window.Music.AddLayer(id, targetParts);
             });
 
             return this;
@@ -95,17 +75,15 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent RemoveLayer()
         {
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (!this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceWarning("Layer '{0}' does not exist.", key);
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceWarning("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer.Remove(key);
+                this.Window.Music.Layer.Remove(id);
             });
 
             return this;
@@ -141,18 +119,16 @@ namespace Sitrine.Event
             if (String.IsNullOrWhiteSpace(file))
                 throw new ArgumentNullException("file");
 
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (!this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceError("Layer '{0}' does not exist.", key);
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[key].Load(file);
-                this.Window.Music.Layer[key].Looping = looping;
+                this.Window.Music.Layer[id].Load(file);
+                this.Window.Music.Layer[id].Looping = looping;
             });
 
             return this;
@@ -192,18 +168,16 @@ namespace Sitrine.Event
             if (!stream.CanRead)
                 throw new NotSupportedException();
 
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (!this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceError("Layer '{0}' does not exist.", key);
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[key].Load(stream);
-                this.Window.Music.Layer[key].Looping = looping;
+                this.Window.Music.Layer[id].Load(stream);
+                this.Window.Music.Layer[id].Looping = looping;
             });
 
             return this;
@@ -222,6 +196,7 @@ namespace Sitrine.Event
             if (String.IsNullOrWhiteSpace(file))
                 throw new ArgumentNullException("file");
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(file));
 
             return this;
@@ -241,6 +216,7 @@ namespace Sitrine.Event
             if (!stream.CanRead)
                 throw new NotSupportedException();
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(stream));
 
             return this;
@@ -253,6 +229,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent ClearPreset()
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(this.Window.Music.Preset.Clear);
 
             return this;
@@ -267,6 +244,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent PlayAll()
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 foreach (var item in this.Window.Music.Layer.Values)
@@ -283,17 +261,15 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent Play()
         {
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (!this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceError("Layer '{0}' does not exist.", key);
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[key].Play();
+                this.Window.Music.Layer[id].Play();
             });
 
             return this;
@@ -306,6 +282,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent StopAll()
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 foreach (var item in this.Window.Music.Layer.Values)
@@ -321,17 +298,15 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent Stop()
         {
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (!this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceError("Layer '{0}' does not exist.", key);
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[key].Stop();
+                this.Window.Music.Layer[id].Stop();
             });
 
             return this;
@@ -350,6 +325,7 @@ namespace Sitrine.Event
             if (handles == null)
                 throw new ArgumentNullException("handles");
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
 
             return this;
@@ -368,6 +344,7 @@ namespace Sitrine.Event
             if (!HandleParser.TryParse(code, out handles))
                 throw new UnableToParseHandleException();
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
 
             return this;
@@ -383,6 +360,7 @@ namespace Sitrine.Event
             if (handles == null)
                 throw new ArgumentNullException("handles");
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Window.Music.Master.PushHandle(handles);
 
             return this;
@@ -400,6 +378,7 @@ namespace Sitrine.Event
             if (!HandleParser.TryParse(code, out handles))
                 throw new UnableToParseHandleException();
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Window.Music.Master.PushHandle(handles);
 
             return this;
@@ -415,17 +394,15 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent Loop(bool looping)
         {
-            if (this.key == null)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            string key = this.key;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
-                if (!this.Window.Music.Layer.ContainsKey(key))
-                    Trace.TraceError("Layer '{0}' does not exist.", key);
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[key].Looping = looping;
+                this.Window.Music.Layer[id].Looping = looping;
             });
 
             return this;
