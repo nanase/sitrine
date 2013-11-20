@@ -49,7 +49,7 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Protected Properties --
-        protected int ID
+        protected int AssignID
         {
             get
             {
