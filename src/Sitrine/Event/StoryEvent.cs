@@ -32,6 +32,7 @@ namespace Sitrine.Event
     public abstract class StoryEvent<T>
     {
         #region -- Private Fields --
+        private DelaySpan delayspan;
         private int? id = null;
         #endregion
 
@@ -96,6 +97,45 @@ namespace Sitrine.Event
             this.id = id;
 
             return this.Subclass;
+        }
+
+        /// <summary>
+        /// 指定されたフレーム数だけ動作を遅延させます。
+        /// </summary>
+        /// <param name="frames">遅延させるフレーム数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public T Delay(int frames)
+        {
+            if (frames < 0)
+                throw new ArgumentOutOfRangeException("frames");
+
+            this.delayspan.Add(frames);
+
+            return this.Subclass;
+        }
+
+        /// <summary>
+        /// 指定された秒数だけ動作を遅延させます。
+        /// </summary>
+        /// <param name="seconds">遅延させる秒数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public T Delay(double seconds)
+        {
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("seconds");
+
+            this.delayspan.Add(seconds);
+
+            return this.Subclass;
+        }
+        #endregion
+
+        #region -- Protected Methods --
+        protected DelaySpan PopDelaySpan()
+        {
+            DelaySpan ds = this.delayspan;
+            this.delayspan = new DelaySpan();
+            return ds;
         }
         #endregion
     }
