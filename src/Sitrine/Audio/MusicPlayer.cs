@@ -51,7 +51,7 @@ namespace Sitrine.Audio
         private Master master;
         private Preset preset;
 
-        private Dictionary<string, SequenceLayer> layer;
+        private Dictionary<int, SequenceLayer> layer;
 
         private volatile bool reqEnd;
         private Task updater;
@@ -70,7 +70,7 @@ namespace Sitrine.Audio
         /// </summary>
         public Preset Preset { get { return this.preset; } }
 
-        public IDictionary<string, SequenceLayer> Layer { get { return this.layer; } }
+        public IDictionary<int, SequenceLayer> Layer { get { return this.layer; } }
         #endregion
 
         #region -- Constructors --
@@ -90,7 +90,7 @@ namespace Sitrine.Audio
             this.context = new AudioContext();
             this.master = new Master(options.SamplingRate, 23);
             this.preset = new Preset();
-            this.layer = new Dictionary<string, SequenceLayer>();
+            this.layer = new Dictionary<int, SequenceLayer>();
 
             this.source = AL.GenSource();
             this.buffers = AL.GenBuffers(this.bufferCount);
@@ -136,11 +136,11 @@ namespace Sitrine.Audio
         /// <summary>
         /// レイヤを追加します。
         /// </summary>
-        /// <param name="key">キーとなるレイヤ名。</param>
+        /// <param name="id">キーとなる ID。</param>
         /// <param name="tagetParts">通過させるハンドルのパート。</param>
-        public void AddLayer(string key, IEnumerable<int> tagetParts = null)
+        public void AddLayer(int id, IEnumerable<int> tagetParts = null)
         {
-            this.layer[key] = new SequenceLayer(this.preset, this.master, tagetParts);
+            this.layer[id] = new SequenceLayer(this.preset, this.master, tagetParts);
         }
         #endregion
 
