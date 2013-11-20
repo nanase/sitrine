@@ -38,11 +38,10 @@ namespace Sitrine.Event
     /// <summary>
     /// テクスチャの管理に関わるイベントをスケジューリングします。
     /// </summary>
-    public class TextureEvent : AnimateEvent<TextureEvent>
+    public class TextureEvent : StoryEvent<TextureEvent>
     {
         #region -- Private Fields --
-        private readonly Dictionary<int, int> asignment;
-        private int? id = null;
+        private readonly Dictionary<int, int> asignment;        
         #endregion
 
         #region -- Constructors --
@@ -50,23 +49,11 @@ namespace Sitrine.Event
             : base(storyboard, window)
         {
             this.asignment = new Dictionary<int, int>();
-            this.subclass = this;
+            this.Subclass = this;
         }
         #endregion
 
         #region -- Public Methods --
-        /// <summary>
-        /// 操作対象のテクスチャ ID を指定します。
-        /// </summary>
-        /// <param name="id">操作対象のテクスチャ ID。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ID(int id)
-        {
-            this.id = id;
-
-            return this;
-        }
-
         /// <summary>
         /// 指定された ID とビットマップから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
@@ -80,8 +67,9 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("bitmap");
 
             BitmapLoader loader = new BitmapLoader(bitmap);
-            this.id = id;
-
+            this.AssignID = id;
+            
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
 
@@ -101,8 +89,9 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("stream");
 
             BitmapLoader loader = new BitmapLoader(stream);
-            this.id = id;
+            this.AssignID = id;
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
 
@@ -122,8 +111,9 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("filename");
 
             BitmapLoader loader = new BitmapLoader(filename);
-            this.id = id;
+            this.AssignID = id;
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
 
@@ -137,11 +127,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Show()
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -166,11 +154,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Hide()
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -195,11 +181,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Clear()
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -221,6 +205,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent ClearAll()
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 foreach (int key in this.asignment.Values)
@@ -240,11 +225,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Color(Color4 color)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -267,11 +250,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Position(PointF position)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -294,11 +275,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent NoCompile(bool noCompile)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -329,14 +308,8 @@ namespace Sitrine.Event
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
 
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
-
-            int id = this.id.Value;
-
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
@@ -348,8 +321,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -373,14 +345,8 @@ namespace Sitrine.Event
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
 
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
-
-            int id = this.id.Value;
-
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
@@ -390,10 +356,9 @@ namespace Sitrine.Event
                     return;
                 }
 
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                AnimateStoryboard story = new AnimateStoryboard(this.Window); 
+                
+                delay.SetDelayAction(story);
                 story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
@@ -417,14 +382,8 @@ namespace Sitrine.Event
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("duration");
 
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
-
-            int id = this.id.Value;
-
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
@@ -436,8 +395,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -461,14 +419,8 @@ namespace Sitrine.Event
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("seconds");
 
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
-
-            int id = this.id.Value;
-
-            int delayFrames = this.DelayFrames;
-            double delaySeconds = this.DelaySeconds;
-            this.ResetDelay();
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
             {
@@ -480,8 +432,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                story.Process.WaitFrame(delayFrames + story.GetFrameCount(delaySeconds));
-
+                delay.SetDelayAction(story);
                 story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
@@ -504,8 +455,9 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("bitmap");
 
             BitmapLoader loader = new BitmapLoader(bitmap);
-            this.id = id;
+            this.AssignID = id;
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
             this.Storyboard.AddResource(loader);
 
@@ -527,8 +479,9 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("stream");
 
             BitmapLoader loader = new BitmapLoader(stream);
-            this.id = id;
+            this.AssignID = id;
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
             this.Storyboard.AddResource(loader);
 
@@ -550,8 +503,9 @@ namespace Sitrine.Event
                 throw new ArgumentNullException("filename");
 
             BitmapLoader loader = new BitmapLoader(filename);
-            this.id = id;
+            this.AssignID = id;
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
             this.Storyboard.AddResource(loader);
 
@@ -569,11 +523,9 @@ namespace Sitrine.Event
             if (interval <= 0)
                 throw new ArgumentOutOfRangeException("interval");
 
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -617,11 +569,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Scale(float scaleX, float scaleY)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -646,11 +596,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent ScaleX(float scaleX)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -673,11 +621,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent ScaleY(float scaleY)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -700,11 +646,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Rotate(float angle)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -729,11 +673,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Base(float x, float y)
         {
-            if (!this.id.HasValue)
-                throw new KeyNotSpecifiedException();
+            int id = this.AssignID;
 
-            int id = this.id.Value;
-
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
