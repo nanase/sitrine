@@ -104,8 +104,13 @@ namespace Sitrine.Event
             if (story == null)
                 throw new ArgumentNullException("story");
 
-            story.Process.Wait(this.delaySeconds)
-                         .WaitFrame(this.delayFrames);
+            var process = story.Process;
+
+            if (this.delaySeconds != 0.0)
+                process.Wait(this.delaySeconds);
+
+            if (this.delayFrames != 0)
+                process.WaitFrame(this.delayFrames);
         }
         #endregion
     }
