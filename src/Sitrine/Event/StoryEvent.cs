@@ -69,7 +69,8 @@ namespace Sitrine.Event
 
         #region -- Constructors --
         /// <summary>
-        /// ストーリーボードオブジェクトとそれが実行されるウィンドウオブジェクトを指定して Storyboard クラスの新しいインスタンスを初期化します。
+        /// ストーリーボードオブジェクトとそれが実行されるウィンドウオブジェクトを指定して
+        /// 新しい Storyboard クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="Storyboard">対象となる Storyboard オブジェクト。</param>
         /// <param name="Window">ストーリーボードが実行される SitrineWindow オブジェクト。</param>
@@ -88,9 +89,9 @@ namespace Sitrine.Event
 
         #region -- Public Methods --
         /// <summary>
-        /// 操作対象のテクスチャ ID を指定します。
+        /// 操作対象の ID を指定します。
         /// </summary>
-        /// <param name="id">操作対象のテクスチャ ID。</param>
+        /// <param name="id">操作対象の ID。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public T ID(int id)
         {
