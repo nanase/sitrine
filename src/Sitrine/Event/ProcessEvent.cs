@@ -30,12 +30,13 @@ namespace Sitrine.Event
     /// <summary>
     /// ストーリーボードの進行に関わるイベントをスケジューリングします。
     /// </summary>
-    public class ProcessEvent : StoryEvent
+    public class ProcessEvent : StoryEvent<ProcessEvent>
     {
         #region -- Constructors --
         internal ProcessEvent(Storyboard storyboard, SitrineWindow window)
             : base(storyboard, window)
         {
+            this.Subclass = this;
         }
         #endregion
 
@@ -51,6 +52,7 @@ namespace Sitrine.Event
             if (seconds < 0)
                 throw new ArgumentOutOfRangeException("seconds");
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Storyboard.SetWait(this.Storyboard.GetFrameCount(seconds)));
 
             return this;
@@ -67,6 +69,7 @@ namespace Sitrine.Event
             if (frame < 0)
                 throw new ArgumentOutOfRangeException("frame");
 
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Storyboard.SetWait(frame));
 
             return this;
@@ -79,6 +82,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent Break()
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(this.Storyboard.Break);
 
             return this;
@@ -91,6 +95,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent Invoke(Action action)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(action);
 
             return this;
@@ -104,6 +109,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent Fork(Storyboard newStoryboard)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.AddStoryboard(newStoryboard));
 
             return this;
@@ -118,6 +124,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent ForkIf(Func<bool> condition, Storyboard newStoryboard)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (condition())
@@ -137,6 +144,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent ForkIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.AddStoryboard(condition() ? storyOnTrue : storyOnFalse));
 
             return this;
@@ -151,6 +159,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent ForkElseIf(Func<bool> condition, Storyboard newStoryboard)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!condition())
@@ -168,6 +177,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent Yield(Storyboard newStoryboard)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 this.Window.AddStoryboard(newStoryboard);
@@ -186,6 +196,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent YieldIf(Func<bool> condition, Storyboard newStoryboard)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (condition())
@@ -208,6 +219,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent YieldIf(Func<bool> condition, Storyboard storyOnTrue, Storyboard storyOnFalse)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 this.Window.AddStoryboard(condition() ? storyOnTrue : storyOnFalse);
@@ -226,6 +238,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent YieldElseIf(Func<bool> condition, Storyboard newStoryboard)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 if (!condition())
@@ -246,6 +259,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ProcessEvent Loop(Action<Storyboard> storyevents, int loopCount = -1)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.AddStoryboard(LoopStoryboard.Create(this.Window, storyevents, loopCount)));
 
             return this;
