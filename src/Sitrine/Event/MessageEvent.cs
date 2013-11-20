@@ -33,7 +33,7 @@ namespace Sitrine.Event
     /// <summary>
     /// メッセージ表示に関するイベントをスケジューリングします。
     /// </summary>
-    public class MessageEvent : StoryEvent
+    public class MessageEvent : StoryEvent<MessageEvent>
     {
         #region -- Private Fields --
         private readonly MessageTexture texture;
@@ -61,12 +61,14 @@ namespace Sitrine.Event
             : base(storyboard, window)
         {
             this.texture = new MessageTexture(renderer, size);
+            this.Subclass = this;
         }
 
         internal MessageEvent(Storyboard storyboard, SitrineWindow window, TextOptions options, Size size)
             : base(storyboard, window)
         {
             this.texture = new MessageTexture(options, size);
+            this.Subclass = this;
         }
         #endregion
 
@@ -80,6 +82,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Position(PointF value)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.texture.Position = value);
 
             return this;
@@ -93,6 +96,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Color(Color4 value)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.texture.Color = value);
 
             return this;
@@ -106,6 +110,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Interval(int value)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.texture.Interval = value);
 
             return this;
@@ -119,6 +124,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent ProgressCount(int value)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.texture.ProgressCount = value);
 
             return this;
@@ -134,6 +140,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Show(string text)
         {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
             {
                 this.texture.Draw(text);
