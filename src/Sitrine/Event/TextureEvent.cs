@@ -59,6 +59,27 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられる ID。</param>
+        /// <param name="loader">関連付けられる BitmapLoader オブジェクト。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Create(int id, BitmapLoader loader)
+        {
+            if (loader == null)
+                throw new ArgumentNullException("loader");
+
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
+            this.Storyboard.AddResource(loader);
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された ID とビットマップから新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Create(int id, Bitmap bitmap)
