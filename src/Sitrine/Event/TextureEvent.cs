@@ -54,6 +54,7 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
+        #region Create
         /// <summary>
         /// 指定された ID とビットマップから新しいテクスチャを作成します。
         /// このメソッドは遅延実行されます。
@@ -89,7 +90,7 @@ namespace Sitrine.Event
 
             BitmapLoader loader = new BitmapLoader(bitmap);
             this.AssignID = id;
-            
+
             this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
             this.Storyboard.AddResource(loader);
@@ -140,6 +141,449 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        #endregion
+
+        #region CreateSpriteAnimation
+        /// <summary>
+        /// 指定された ID とビットマップからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent CreateSpriteAnimation(int id, Bitmap bitmap, int countX, int countY)
+        {
+            if (bitmap == null)
+                throw new ArgumentNullException("bitmap");
+
+            BitmapLoader loader = new BitmapLoader(bitmap);
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された ID とビットマップデータを格納するストリームからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent CreateSpriteAnimation(int id, Stream stream, int countX, int countY)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
+            BitmapLoader loader = new BitmapLoader(stream);
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された ID とビットマップファイルからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="filename">ビットマップデータを格納したファイル名。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent CreateSpriteAnimation(int id, string filename, int countX, int countY)
+        {
+            if (string.IsNullOrWhiteSpace(filename))
+                throw new ArgumentNullException("filename");
+
+            BitmapLoader loader = new BitmapLoader(filename);
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
+
+            return this;
+        }
+
+        #endregion
+
+        #region Bind
+
+        #endregion
+
+        #region BindSpriteAnimation
+
+        #endregion
+
+        #region FadeIn
+
+        #endregion
+
+        #region FadeOut
+
+        #endregion
+
+        #region Base
+        /// <summary>
+        /// 拡大や回転の基点となるテクスチャ上の座標を指定します。
+        /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">基点の X 座標値。</param>
+        /// <param name="y">基点の Y 座標値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Base(float x, float y)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].BasePoint = new PointF(x, y);
+            });
+
+            return this;
+        }
+        #endregion
+
+        #region Scale
+        /// <summary>
+        /// テクスチャの縦横の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(float scale)
+        {
+            return this.Scale(scale, scale);
+        }
+
+        /// <summary>
+        /// テクスチャの縦横の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(float scaleX, float scaleY)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                var texture = this.Window.Textures[this.asignment[id]];
+                texture.ScaleX = scaleX;
+                texture.ScaleY = scaleY;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// テクスチャの X 軸方向の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleX(float scaleX)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].ScaleX = scaleX;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// テクスチャの Y 軸方向の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleY(float scaleY)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].ScaleY = scaleY;
+            });
+
+            return this;
+        }
+
+        #endregion
+
+        #region Angle
+        /// <summary>
+        /// テクスチャの回転角を度 (degree) で指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Rotate(float angle)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].RotateZ = angle;
+            });
+
+            return this;
+        }
+        #endregion
+
+        #region Position
+        /// <summary>
+        /// テクスチャの表示位置を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="position">表示位置。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Position(PointF position)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].Position = position;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された位置へ移動するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="to">移動先の位置座標。</param>
+        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimatePosition(PointF to, int frame, Func<double, double> easing = null)
+        {
+            if (frame == 0)
+                return this;
+
+            if (frame < 0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame, easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された位置へ移動するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="to">移動先の位置座標。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimatePosition(PointF to, double seconds, Func<double, double> easing = null)
+        {
+            if (seconds == 0.0)
+                return this;
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+        #endregion
+
+        #region Color
+        /// <summary>
+        /// テクスチャの反射光の色を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="color">反射光の色。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Color(Color4 color)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].Color = color;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="to">変化後の色。</param>
+        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimateColor(Color4 to, int frame, Func<double, double> easing = null)
+        {
+            if (frame == 0)
+                return this;
+
+            if (frame < 0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame, easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="to">変化後の色。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent AnimateColor(Color4 to, double seconds, Func<double, double> easing = null)
+        {
+            if (seconds == 0.0)
+                return this;
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("seconds");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+        #endregion
 
         /// <summary>
         /// テクスチャを不透明にし、画面上に表示されるようにします。
@@ -239,56 +683,6 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// テクスチャの反射光の色を設定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="color">反射光の色。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Color(Color4 color)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                this.Window.Textures[this.asignment[id]].Color = color;
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// テクスチャの表示位置を設定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="position">表示位置。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(PointF position)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                this.Window.Textures[this.asignment[id]].Position = position;
-            });
-
-            return this;
-        }
-
-        /// <summary>
         /// テクスチャの描画処理をコンパイルしないかどうかの真偽値を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
@@ -309,226 +703,6 @@ namespace Sitrine.Event
 
                 this.Window.Textures[this.asignment[id]].NoCompile = noCompile;
             });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された位置へ移動するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="to">移動先の位置座標。</param>
-        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(PointF to, int frame, Func<double, double> easing = null)
-        {
-            if (frame == 0)
-                return this;
-
-            if (frame < 0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame, easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された位置へ移動するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="to">移動先の位置座標。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(PointF to, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window); 
-                
-                delay.SetDelayAction(story);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された色へ変化するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="to">変化後の色。</param>
-        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(Color4 to, int frame, Func<double, double> easing = null)
-        {
-            if (frame == 0)
-                return this;
-
-            if (frame < 0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame, easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された色へ変化するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="to">変化後の色。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(Color4 to, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("seconds");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された ID とビットマップからスプライトアニメーションとして新しいテクスチャを作成します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="id">関連付けられる ID。</param>
-        /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
-        /// <param name="countX">横方向への分割数。</param>
-        /// <param name="countY">縦方向への分割数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent CreateSpriteAnimation(int id, Bitmap bitmap, int countX, int countY)
-        {
-            if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
-
-            BitmapLoader loader = new BitmapLoader(bitmap);
-            this.AssignID = id;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
-            this.Storyboard.AddResource(loader);
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された ID とビットマップデータを格納するストリームからスプライトアニメーションとして新しいテクスチャを作成します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="id">関連付けられる ID。</param>
-        /// <param name="stream">ビットマップデータを格納する読み取り可能な Stream オブジェクト。</param>
-        /// <param name="countX">横方向への分割数。</param>
-        /// <param name="countY">縦方向への分割数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent CreateSpriteAnimation(int id, Stream stream, int countX, int countY)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            BitmapLoader loader = new BitmapLoader(stream);
-            this.AssignID = id;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
-            this.Storyboard.AddResource(loader);
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された ID とビットマップファイルからスプライトアニメーションとして新しいテクスチャを作成します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="id">関連付けられる ID。</param>
-        /// <param name="filename">ビットマップデータを格納したファイル名。</param>
-        /// <param name="countX">横方向への分割数。</param>
-        /// <param name="countY">縦方向への分割数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent CreateSpriteAnimation(int id, string filename, int countX, int countY)
-        {
-            if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException("filename");
-
-            BitmapLoader loader = new BitmapLoader(filename);
-            this.AssignID = id;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
-            this.Storyboard.AddResource(loader);
 
             return this;
         }
@@ -565,147 +739,6 @@ namespace Sitrine.Event
                 {
                     Trace.TraceWarning("Texture[" + id + "] is not SpriteAnimation");
                 }
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// テクスチャの縦横の拡大率を指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scale">拡大率。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scale)
-        {
-            return this.Scale(scale, scale);
-        }
-
-        /// <summary>
-        /// テクスチャの縦横の拡大率を指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scaleX, float scaleY)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                var texture = this.Window.Textures[this.asignment[id]];
-                texture.ScaleX = scaleX;
-                texture.ScaleY = scaleY;
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// テクスチャの X 軸方向の拡大率を指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleX(float scaleX)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                this.Window.Textures[this.asignment[id]].ScaleX = scaleX;
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// テクスチャの Y 軸方向の拡大率を指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleY(float scaleY)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                this.Window.Textures[this.asignment[id]].ScaleY = scaleY;
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// テクスチャの回転角を度 (degree) で指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Rotate(float angle)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                this.Window.Textures[this.asignment[id]].RotateZ = angle;
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 拡大や回転の基点となるテクスチャ上の座標を指定します。
-        /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="x">基点の X 座標値。</param>
-        /// <param name="y">基点の Y 座標値。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Base(float x, float y)
-        {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                this.Window.Textures[this.asignment[id]].BasePoint = new PointF(x, y);
             });
 
             return this;
