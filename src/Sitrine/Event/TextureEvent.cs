@@ -383,6 +383,17 @@ namespace Sitrine.Event
         /// テクスチャの縦横の拡大率を指定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(double scale)
+        {
+            return this.Scale((float)scale, (float)scale);
+        }
+
+        /// <summary>
+        /// テクスチャの縦横の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
         /// <param name="scaleX">X 軸方向の拡大率。</param>
         /// <param name="scaleY">Y 軸方向の拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
@@ -405,6 +416,18 @@ namespace Sitrine.Event
             });
 
             return this;
+        }
+
+        /// <summary>
+        /// テクスチャの縦横の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(double scaleX, double scaleY)
+        {
+            return this.Scale((float)scaleX, (float)scaleY);
         }
 
         /// <summary>
@@ -433,6 +456,17 @@ namespace Sitrine.Event
         }
 
         /// <summary>
+        /// テクスチャの X 軸方向の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleX(double scaleX)
+        {
+            return this.ScaleX((float)scaleX);
+        }
+
+        /// <summary>
         /// テクスチャの Y 軸方向の拡大率を指定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
@@ -457,6 +491,16 @@ namespace Sitrine.Event
             return this;
         }
 
+        /// <summary>
+        /// テクスチャの Y 軸方向の拡大率を指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleY(double scaleY)
+        {
+            return this.ScaleY((float)scaleY);
+        }
         #endregion
 
         #region Angle
