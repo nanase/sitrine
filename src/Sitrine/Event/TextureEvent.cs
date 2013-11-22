@@ -150,6 +150,10 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられる ID。</param>
+        /// <param name="loader">関連付けられる BitmapLoader オブジェクト。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent CreateSpriteAnimation(int id, BitmapLoader loader, int countX, int countY)
         {
             if (loader == null)
@@ -163,6 +167,12 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// 指定された ID とビットマップからスプライトアニメーションとして新しいテクスチャを作成します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         /// <param name="countX">横方向への分割数。</param>
         /// <param name="countY">縦方向への分割数。</param>
@@ -232,6 +242,13 @@ namespace Sitrine.Event
         #endregion
 
         #region Bind
+        /// <summary>
+        /// 指定された ID とビットマップを新しいテクスチャにバインドします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="loader">関連付けられる BitmapLoader オブジェクト。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Bind(int id, BitmapLoader loader)
         {
             if (loader == null)
@@ -247,6 +264,15 @@ namespace Sitrine.Event
         #endregion
 
         #region BindSpriteAnimation
+        /// <summary>
+        /// 指定された ID とビットマップをスプライトアニメーションとして新しいテクスチャにバインドします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="id">関連付けられる ID。</param>
+        /// <param name="loader">関連付けられる BitmapLoader オブジェクト。</param>
+        /// <param name="countX">横方向への分割数。</param>
+        /// <param name="countY">縦方向への分割数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent BindSpriteAnimation(int id, BitmapLoader loader, int countX, int countY)
         {
             if (loader == null)
