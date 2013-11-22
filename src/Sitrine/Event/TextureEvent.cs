@@ -216,11 +216,21 @@ namespace Sitrine.Event
 
             return this;
         }
-
         #endregion
 
         #region Bind
+        public TextureEvent Bind(int id, BitmapLoader loader)
+        {
+            if (loader == null)
+                throw new ArgumentNullException("loader");
 
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new BitmapTexture(loader)));
+
+            return this;
+        }
         #endregion
 
         #region BindSpriteAnimation
