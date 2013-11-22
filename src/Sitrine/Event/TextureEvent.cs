@@ -288,7 +288,29 @@ namespace Sitrine.Event
         #endregion
 
         #region FadeOut
+        /// <summary>
+        /// テクスチャを指定されたフレーム時間でフェードアウトします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent FadeOut(int frames, Func<double, double> easing = null)
+        {
+            return this.Color(new Color4(0, 0, 0, 0), frames, easing);
+        }
 
+        /// <summary>
+        /// テクスチャを指定された秒数でフェードアウトします。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent FadeOut(double seconds, Func<double, double> easing = null)
+        {
+            return this.Color(new Color4(0, 0, 0, 0), seconds, easing);
+        }
         #endregion
 
         #region Base
