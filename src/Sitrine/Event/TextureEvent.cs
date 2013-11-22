@@ -898,6 +898,7 @@ namespace Sitrine.Event
         }
         #endregion
 
+        #region Show
         /// <summary>
         /// テクスチャを不透明にし、画面上に表示されるようにします。
         /// このメソッドは遅延実行されます。
@@ -905,25 +906,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Show()
         {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                var tex = this.Window.Textures[this.asignment[id]];
-                var color = tex.Color;
-                color.A = 1f;
-                tex.Color = color;
-            });
-
-            return this;
+            return this.Alpha(1.0f);
         }
+        #endregion
 
         /// <summary>
         /// テクスチャを完全不透明にし、画面上から隠します。
