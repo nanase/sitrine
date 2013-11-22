@@ -597,16 +597,16 @@ namespace Sitrine.Event
         /// 指定された位置へ移動するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="to">移動先の位置座標。</param>
-        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="position">移動先の位置座標。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(PointF to, int frame, Func<double, double> easing = null)
+        public TextureEvent Position(PointF position, int frames, Func<double, double> easing = null)
         {
-            if (frame == 0)
+            if (frames == 0)
                 return this;
 
-            if (frame < 0)
+            if (frames < 0)
                 throw new ArgumentOutOfRangeException("duration");
 
             int id = this.AssignID;
@@ -623,7 +623,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, frame, easing);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], position, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -634,11 +634,11 @@ namespace Sitrine.Event
         /// 指定された位置へ移動するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="to">移動先の位置座標。</param>
+        /// <param name="position">移動先の位置座標。</param>
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimatePosition(PointF to, double seconds, Func<double, double> easing = null)
+        public TextureEvent Position(PointF position, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -660,7 +660,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
+                story.AnimatePosition(this.Window.Textures[this.asignment[id]], position, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -699,15 +699,15 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="to">変化後の色。</param>
-        /// <param name="frame">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(Color4 to, int frame, Func<double, double> easing = null)
+        public TextureEvent Color(Color4 color, int frames, Func<double, double> easing = null)
         {
-            if (frame == 0)
+            if (frames == 0)
                 return this;
 
-            if (frame < 0)
+            if (frames < 0)
                 throw new ArgumentOutOfRangeException("duration");
 
             int id = this.AssignID;
@@ -724,7 +724,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, frame, easing);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -739,7 +739,7 @@ namespace Sitrine.Event
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent AnimateColor(Color4 to, double seconds, Func<double, double> easing = null)
+        public TextureEvent Color(Color4 color, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -761,7 +761,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], to, story.GetFrameCount(seconds), easing);
+                story.AnimateColor(this.Window.Textures[this.asignment[id]], color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
