@@ -692,6 +692,58 @@ namespace Sitrine.Event
         }
         #endregion
 
+        #region Alpha
+        /// <summary>
+        /// テクスチャの透明度を変更します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="alpha">変更後の透明度。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Alpha(float alpha)
+        {
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                var tex = this.Window.Textures[this.asignment[id]];
+                var color = tex.Color;
+                color.A = alpha;
+                tex.Color = color;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// テクスチャの透明度を変更します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="alpha">変更後の透明度。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Alpha(double alpha)
+        {
+            return this.Alpha((float)alpha);
+        }
+
+        /// <summary>
+        /// テクスチャの透明度を変更します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="alpha">変更後の透明度。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Alpha(byte alpha)
+        {
+            return this.Alpha(alpha / 255.0f);
+        }
+        #endregion
+
         #region Color
         /// <summary>
         /// テクスチャの反射光の色を設定します。
