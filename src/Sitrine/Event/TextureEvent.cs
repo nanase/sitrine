@@ -456,6 +456,64 @@ namespace Sitrine.Event
             return this.Scale((float)scaleX, (float)scaleY);
         }
 
+        public TextureEvent Scale(float scaleX, float scaleY, int frames, Func<double, double> easing = null)
+        {
+            if (frames == 0)
+                return this;
+
+            if (frames < 0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                story.AnimateScale(this.Window.Textures[this.asignment[id]], scaleX, scaleY, frames, easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+
+        public TextureEvent Scale(float scaleX, float scaleY, double seconds, Func<double, double> easing = null)
+        {
+            if (seconds == 0.0)
+                return this;
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                story.AnimateScale(this.Window.Textures[this.asignment[id]], scaleX, scaleY, story.GetFrameCount(seconds), easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+
         /// <summary>
         /// テクスチャの X 軸方向の拡大率を指定します。
         /// このメソッドは遅延実行されます。
@@ -1119,23 +1177,23 @@ namespace Sitrine.Event
 
                 this.BuildAnimation(frame, easing,
                     () =>
-                {
-                    texture.NoCompile = true;
-                    from = texture.Position;
-                    noCompile = texture.NoCompile;
+                    {
+                        texture.NoCompile = true;
+                        from = texture.Position;
+                        noCompile = texture.NoCompile;
 
-                    dx = (to.X - from.X);
-                    dy = (to.Y - from.Y);
+                        dx = (to.X - from.X);
+                        dy = (to.Y - from.Y);
                     },
                     f =>
                     {
                         texture.Position = new PointF(from.X + dx * f, from.Y + dy * f);
                     },
                     () =>
-                {
-                    if (!noCompile)
-                        texture.NoCompile = false;
-                });
+                    {
+                        if (!noCompile)
+                            texture.NoCompile = false;
+                    });
             }
 
             public void AnimateColor(Texture.Texture texture, Color4 to, int frame, Func<double, double> easing = null)
@@ -1150,15 +1208,15 @@ namespace Sitrine.Event
 
                 this.BuildAnimation(frame, easing,
                     () =>
-                {
-                    texture.NoCompile = true;
-                    from = texture.Color;
-                    noCompile = texture.NoCompile;
+                    {
+                        texture.NoCompile = true;
+                        from = texture.Color;
+                        noCompile = texture.NoCompile;
 
-                    dr = (to.R - from.R);
-                    dg = (to.G - from.G);
-                    db = (to.B - from.B);
-                    da = (to.A - from.A);
+                        dr = (to.R - from.R);
+                        dg = (to.G - from.G);
+                        db = (to.B - from.B);
+                        da = (to.A - from.A);
                     },
                     f =>
                     {
@@ -1172,7 +1230,7 @@ namespace Sitrine.Event
                         if (!noCompile)
                             texture.NoCompile = false;
                     });
-                }
+            }
             #endregion
 
             #region -- Private Methods --
@@ -1189,12 +1247,12 @@ namespace Sitrine.Event
                 for (int i = 0, j = 1; i < frame; i++)
                 {
                     Process.WaitFrame(1);
-                Process.Invoke(() =>
-                {
+                    Process.Invoke(() =>
+                    {
                         float f = (float)easing(j++ / (double)frame);
                         iterator(f);
-                });
-            }
+                    });
+                }
 
                 Process.Invoke(finalizer);
             }
