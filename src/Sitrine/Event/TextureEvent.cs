@@ -319,10 +319,9 @@ namespace Sitrine.Event
         /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="x">基点の X 座標値。</param>
-        /// <param name="y">基点の Y 座標値。</param>
+        /// <param name="position">基点の座標値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Base(float x, float y)
+        public TextureEvent Base(PointF position)
         {
             int id = this.AssignID;
 
@@ -335,10 +334,36 @@ namespace Sitrine.Event
                     return;
                 }
 
-                this.Window.Textures[this.asignment[id]].BasePoint = new PointF(x, y);
+                this.Window.Textures[this.asignment[id]].BasePoint = position;
             });
 
             return this;
+        }
+
+        /// <summary>
+        /// 拡大や回転の基点となるテクスチャ上の座標を指定します。
+        /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">基点の X 座標値。</param>
+        /// <param name="Y">基点の Y 座標値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Base(double x, double y)
+        {
+            return this.Base(new PointF((float)x, (float)y));
+        }
+
+        /// <summary>
+        /// 拡大や回転の基点となるテクスチャ上の座標を指定します。
+        /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">基点の X 座標値。</param>
+        /// <param name="Y">基点の Y 座標値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Base(float x, float y)
+        {
+            return this.Base(new PointF(x, y));
         }
         #endregion
 
