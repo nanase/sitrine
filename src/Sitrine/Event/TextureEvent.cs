@@ -528,6 +528,17 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// テクスチャの回転角を度 (degree) で指定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Angle(double angle)
+        {
+            return this.Angle((float)angle);
+        }
         #endregion
 
         #region Position
