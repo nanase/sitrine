@@ -1074,14 +1074,41 @@ namespace Sitrine.Event
             #endregion
 
             #region -- Public Methods --
+            public void AnimateScale(Texture.Texture texture, float scaleX, float scaleY, int frame, Func<double, double> easing = null)
+            {
+                this.targetObject = texture;
+                this.targetPropery = "scale";
+
+                float fromX = 0f, fromY = 0f;
+                bool noCompile = false;
+
+                float dx = 0f, dy = 0f;
+
+                this.BuildAnimation(frame, easing,
+                    () =>
+                    {
+                        texture.NoCompile = true;
+                        fromX = texture.ScaleX;
+                        fromY = texture.ScaleY;
+                        noCompile = texture.NoCompile;
+
+                        dx = (scaleX - fromX);
+                        dy = (scaleY - fromY);
+                    },
+                    f =>
+                    {
+                        texture.ScaleX = fromX + dx * f;
+                        texture.ScaleY = fromY + dy * f;
+                    },
+                    () =>
+                    {
+                        if (!noCompile)
+                            texture.NoCompile = false;
+                    });
+            }
+
             public void AnimatePosition(Texture.Texture texture, PointF to, int frame, Func<double, double> easing = null)
             {
-                if (frame == 0)
-                    return;
-
-                frame /= 2;
-                easing = easing ?? EasingFunctions.Linear;
-
                 this.targetObject = texture;
                 this.targetPropery = "position";
 
@@ -1090,7 +1117,8 @@ namespace Sitrine.Event
 
                 float dx = 0f, dy = 0f;
 
-                Process.Invoke(() =>
+                this.BuildAnimation(frame, easing,
+                    () =>
                 {
                     texture.NoCompile = true;
                     from = texture.Position;
@@ -1098,19 +1126,12 @@ namespace Sitrine.Event
 
                     dx = (to.X - from.X);
                     dy = (to.Y - from.Y);
-                });
-
-                for (int i = 0, j = 1; i < frame; i++)
-                {
-                    Process.WaitFrame(1);
-                    Process.Invoke(() =>
+                    },
+                    f =>
                     {
-                        float f = (float)easing(j++ / (double)frame);
                         texture.Position = new PointF(from.X + dx * f, from.Y + dy * f);
-                    });
-                }
-
-                Process.Invoke(() =>
+                    },
+                    () =>
                 {
                     if (!noCompile)
                         texture.NoCompile = false;
@@ -1119,12 +1140,6 @@ namespace Sitrine.Event
 
             public void AnimateColor(Texture.Texture texture, Color4 to, int frame, Func<double, double> easing = null)
             {
-                if (frame == 0)
-                    return;
-
-                frame /= 2;
-                easing = easing ?? EasingFunctions.Linear;
-
                 this.targetObject = texture;
                 this.targetPropery = "color";
 
@@ -1133,7 +1148,8 @@ namespace Sitrine.Event
 
                 float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-                Process.Invoke(() =>
+                this.BuildAnimation(frame, easing,
+                    () =>
                 {
                     texture.NoCompile = true;
                     from = texture.Color;
@@ -1143,26 +1159,44 @@ namespace Sitrine.Event
                     dg = (to.G - from.G);
                     db = (to.B - from.B);
                     da = (to.A - from.A);
-                });
-
-                for (int i = 0, j = 1; i < frame; i++)
-                {
-                    Process.WaitFrame(1);
-                    Process.Invoke(() =>
+                    },
+                    f =>
                     {
-                        float f = (float)easing(j++ / (double)frame);
                         texture.Color = new Color4((from.R + dr * f).Clamp(1f, 0f),
                                                    (from.G + dg * f).Clamp(1f, 0f),
                                                    (from.B + db * f).Clamp(1f, 0f),
                                                    (from.A + da * f).Clamp(1f, 0f));
+                    },
+                    () =>
+                    {
+                        if (!noCompile)
+                            texture.NoCompile = false;
                     });
                 }
+            #endregion
 
+            #region -- Private Methods --
+            private void BuildAnimation(int frame, Func<double, double> easing, Action initalizer, Action<float> iterator, Action finalizer)
+            {
+                if (frame == 0)
+                    return;
+
+                frame /= 2;
+                easing = easing ?? EasingFunctions.Linear;
+
+                Process.Invoke(initalizer);
+
+                for (int i = 0, j = 1; i < frame; i++)
+                {
+                    Process.WaitFrame(1);
                 Process.Invoke(() =>
                 {
-                    if (!noCompile)
-                        texture.NoCompile = false;
+                        float f = (float)easing(j++ / (double)frame);
+                        iterator(f);
                 });
+            }
+
+                Process.Invoke(finalizer);
             }
             #endregion
         }
