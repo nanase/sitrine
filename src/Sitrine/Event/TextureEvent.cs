@@ -594,6 +594,30 @@ namespace Sitrine.Event
         }
 
         /// <summary>
+        /// テクスチャの表示位置を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">表示位置の X 座標値。</param>
+        /// <param name="y">表示位置の Y 座標値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Position(float x, float y)
+        {
+            return this.Position(new PointF(x, y));
+        }
+
+        /// <summary>
+        /// テクスチャの表示位置を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">表示位置の X 座標値。</param>
+        /// <param name="y">表示位置の Y 座標値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Position(double x, double y)
+        {
+            return this.Position(new PointF((float)x, (float)y));
+        }
+
+        /// <summary>
         /// 指定された位置へ移動するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
