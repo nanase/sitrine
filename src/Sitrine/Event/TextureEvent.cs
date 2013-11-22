@@ -150,6 +150,19 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">関連付けられる ID。</param>
+        public TextureEvent CreateSpriteAnimation(int id, BitmapLoader loader, int countX, int countY)
+        {
+            if (loader == null)
+                throw new ArgumentNullException("loader");
+
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+            this.Storyboard.AddResource(loader);
+
+            return this;
+        }
         /// <param name="bitmap">関連付けられる Bitmap オブジェクト。</param>
         /// <param name="countX">横方向への分割数。</param>
         /// <param name="countY">縦方向への分割数。</param>
