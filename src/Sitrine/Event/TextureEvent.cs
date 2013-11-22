@@ -41,7 +41,7 @@ namespace Sitrine.Event
     public class TextureEvent : StoryEvent<TextureEvent>
     {
         #region -- Private Fields --
-        private readonly Dictionary<int, int> asignment;        
+        private readonly Dictionary<int, int> asignment;
         #endregion
 
         #region -- Constructors --
@@ -910,6 +910,7 @@ namespace Sitrine.Event
         }
         #endregion
 
+        #region Hide
         /// <summary>
         /// テクスチャを完全不透明にし、画面上から隠します。
         /// このメソッドは遅延実行されます。
@@ -917,25 +918,9 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Hide()
         {
-            int id = this.AssignID;
-
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                var tex = this.Window.Textures[this.asignment[id]];
-                var color = tex.Color;
-                color.A = 0f;
-                tex.Color = color;
-            });
-
-            return this;
+            return this.Alpha(0.0f);
         }
+        #endregion
 
         /// <summary>
         /// テクスチャのリソースを解放し画面上から消去します。
