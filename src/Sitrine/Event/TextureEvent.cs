@@ -234,7 +234,18 @@ namespace Sitrine.Event
         #endregion
 
         #region BindSpriteAnimation
+        public TextureEvent BindSpriteAnimation(int id, BitmapLoader loader, int countX, int countY)
+        {
+            if (loader == null)
+                throw new ArgumentNullException("loader");
 
+            this.AssignID = id;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.AsignmentTexture(id, new SpriteAnimation(loader, countX, countY)));
+
+            return this;
+        }
         #endregion
 
         #region FadeIn
