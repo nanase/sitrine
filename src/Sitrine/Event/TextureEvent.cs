@@ -1117,10 +1117,10 @@ namespace Sitrine.Event
             story.BuildAnimation(frame, easing,
                 () =>
                 {
+                    noCompile = texture.NoCompile;
                     texture.NoCompile = true;
                     fromX = texture.ScaleX;
                     fromY = texture.ScaleY;
-                    noCompile = texture.NoCompile;
 
                     dx = (scaleX - fromX);
                     dy = (scaleY - fromY);
@@ -1150,9 +1150,9 @@ namespace Sitrine.Event
             story.BuildAnimation(frame, easing,
                 () =>
                 {
+                    noCompile = texture.NoCompile;
                     texture.NoCompile = true;
                     from = texture.Position;
-                    noCompile = texture.NoCompile;
 
                     dx = (to.X - from.X);
                     dy = (to.Y - from.Y);
@@ -1181,9 +1181,9 @@ namespace Sitrine.Event
             story.BuildAnimation(frame, easing,
                 () =>
                 {
-                    texture.NoCompile = true;
-                    from = texture.Color;
                     noCompile = texture.NoCompile;
+                    texture.NoCompile = true;
+                    from = texture.Color;                    
 
                     dr = (to.R - from.R);
                     dg = (to.G - from.G);
