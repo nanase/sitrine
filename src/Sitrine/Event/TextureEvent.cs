@@ -478,7 +478,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateScale(this.Window.Textures[this.asignment[id]], scaleX, scaleY, frames, easing);
+                this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -507,7 +507,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateScale(this.Window.Textures[this.asignment[id]], scaleX, scaleY, story.GetFrameCount(seconds), easing);
+                this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -705,7 +705,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], position, frames, easing);
+                this.AnimatePosition(story, this.Window.Textures[this.asignment[id]], position, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -742,7 +742,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimatePosition(this.Window.Textures[this.asignment[id]], position, story.GetFrameCount(seconds), easing);
+                this.AnimatePosition(story, this.Window.Textures[this.asignment[id]], position, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -911,7 +911,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], color, frames, easing);
+                this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -948,7 +948,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateColor(this.Window.Textures[this.asignment[id]], color, story.GetFrameCount(seconds), easing);
+                this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -1103,160 +1103,106 @@ namespace Sitrine.Event
                 this.asignment.Add(id, key);
             }
         }
-        #endregion
 
-        class AnimateStoryboard : RenderStoryboard, IExclusiveStory
+        private void AnimateScale(AnimateStoryboard story, Texture.Texture texture, float scaleX, float scaleY, int frame, Func<double, double> easing = null)
         {
-            #region -- Private Fields --
-            private object targetObject;
-            private string targetPropery;
-            #endregion
+            story.TargetObject = texture;
+            story.TargetProperty = "scale";
 
-            #region -- Public Properties --
-            public object TargetObject
-            {
-                get { return this.targetObject; }
-            }
+            float fromX = 0f, fromY = 0f;
+            bool noCompile = false;
 
-            public string TargetProperty
-            {
-                get { return this.targetPropery; }
-            }
-            #endregion
+            float dx = 0f, dy = 0f;
 
-            #region -- Constructors --
-            public AnimateStoryboard(SitrineWindow window)
-                : base(window)
-            {
-            }
-            #endregion
-
-            #region -- Public Methods --
-            public void AnimateScale(Texture.Texture texture, float scaleX, float scaleY, int frame, Func<double, double> easing = null)
-            {
-                this.targetObject = texture;
-                this.targetPropery = "scale";
-
-                float fromX = 0f, fromY = 0f;
-                bool noCompile = false;
-
-                float dx = 0f, dy = 0f;
-
-                this.BuildAnimation(frame, easing,
-                    () =>
-                    {
-                        texture.NoCompile = true;
-                        fromX = texture.ScaleX;
-                        fromY = texture.ScaleY;
-                        noCompile = texture.NoCompile;
-
-                        dx = (scaleX - fromX);
-                        dy = (scaleY - fromY);
-                    },
-                    f =>
-                    {
-                        texture.ScaleX = fromX + dx * f;
-                        texture.ScaleY = fromY + dy * f;
-                    },
-                    () =>
-                    {
-                        if (!noCompile)
-                            texture.NoCompile = false;
-                    });
-            }
-
-            public void AnimatePosition(Texture.Texture texture, PointF to, int frame, Func<double, double> easing = null)
-            {
-                this.targetObject = texture;
-                this.targetPropery = "position";
-
-                PointF from = new PointF();
-                bool noCompile = false;
-
-                float dx = 0f, dy = 0f;
-
-                this.BuildAnimation(frame, easing,
-                    () =>
-                    {
-                        texture.NoCompile = true;
-                        from = texture.Position;
-                        noCompile = texture.NoCompile;
-
-                        dx = (to.X - from.X);
-                        dy = (to.Y - from.Y);
-                    },
-                    f =>
-                    {
-                        texture.Position = new PointF(from.X + dx * f, from.Y + dy * f);
-                    },
-                    () =>
-                    {
-                        if (!noCompile)
-                            texture.NoCompile = false;
-                    });
-            }
-
-            public void AnimateColor(Texture.Texture texture, Color4 to, int frame, Func<double, double> easing = null)
-            {
-                this.targetObject = texture;
-                this.targetPropery = "color";
-
-                Color4 from = new Color4();
-                bool noCompile = false;
-
-                float dr = 0f, dg = 0f, db = 0f, da = 0f;
-
-                this.BuildAnimation(frame, easing,
-                    () =>
-                    {
-                        texture.NoCompile = true;
-                        from = texture.Color;
-                        noCompile = texture.NoCompile;
-
-                        dr = (to.R - from.R);
-                        dg = (to.G - from.G);
-                        db = (to.B - from.B);
-                        da = (to.A - from.A);
-                    },
-                    f =>
-                    {
-                        texture.Color = new Color4((from.R + dr * f).Clamp(1f, 0f),
-                                                   (from.G + dg * f).Clamp(1f, 0f),
-                                                   (from.B + db * f).Clamp(1f, 0f),
-                                                   (from.A + da * f).Clamp(1f, 0f));
-                    },
-                    () =>
-                    {
-                        if (!noCompile)
-                            texture.NoCompile = false;
-                    });
-            }
-            #endregion
-
-            #region -- Private Methods --
-            private void BuildAnimation(int frame, Func<double, double> easing, Action initalizer, Action<float> iterator, Action finalizer)
-            {
-                if (frame == 0)
-                    return;
-
-                frame /= 2;
-                easing = easing ?? EasingFunctions.Linear;
-
-                Process.Invoke(initalizer);
-
-                for (int i = 0, j = 1; i < frame; i++)
+            story.BuildAnimation(frame, easing,
+                () =>
                 {
-                    Process.WaitFrame(1);
-                    Process.Invoke(() =>
-                    {
-                        float f = (float)easing(j++ / (double)frame);
-                        iterator(f);
-                    });
-                }
+                    texture.NoCompile = true;
+                    fromX = texture.ScaleX;
+                    fromY = texture.ScaleY;
+                    noCompile = texture.NoCompile;
 
-                Process.Invoke(finalizer);
-            }
-            #endregion
+                    dx = (scaleX - fromX);
+                    dy = (scaleY - fromY);
+                },
+                f =>
+                {
+                    texture.ScaleX = fromX + dx * f;
+                    texture.ScaleY = fromY + dy * f;
+                },
+                () =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
         }
+
+        private void AnimatePosition(AnimateStoryboard story, Texture.Texture texture, PointF to, int frame, Func<double, double> easing = null)
+        {
+            story.TargetObject = texture;
+            story.TargetProperty = "position";
+
+            PointF from = new PointF();
+            bool noCompile = false;
+
+            float dx = 0f, dy = 0f;
+
+            story.BuildAnimation(frame, easing,
+                () =>
+                {
+                    texture.NoCompile = true;
+                    from = texture.Position;
+                    noCompile = texture.NoCompile;
+
+                    dx = (to.X - from.X);
+                    dy = (to.Y - from.Y);
+                },
+                f =>
+                {
+                    texture.Position = new PointF(from.X + dx * f, from.Y + dy * f);
+                },
+                () =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
+        }
+
+        private void AnimateColor(AnimateStoryboard story, Texture.Texture texture, Color4 to, int frame, Func<double, double> easing = null)
+        {
+            story.TargetObject = texture;
+            story.TargetProperty = "color";
+
+            Color4 from = new Color4();
+            bool noCompile = false;
+
+            float dr = 0f, dg = 0f, db = 0f, da = 0f;
+
+            story.BuildAnimation(frame, easing,
+                () =>
+                {
+                    texture.NoCompile = true;
+                    from = texture.Color;
+                    noCompile = texture.NoCompile;
+
+                    dr = (to.R - from.R);
+                    dg = (to.G - from.G);
+                    db = (to.B - from.B);
+                    da = (to.A - from.A);
+                },
+                f =>
+                {
+                    texture.Color = new Color4((from.R + dr * f).Clamp(1f, 0f),
+                                               (from.G + dg * f).Clamp(1f, 0f),
+                                               (from.B + db * f).Clamp(1f, 0f),
+                                               (from.A + da * f).Clamp(1f, 0f));
+                },
+                () =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
+        }
+        #endregion
     }
 }
