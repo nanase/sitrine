@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Drawing;
+using OpenTK;
 using OpenTK.Graphics;
 using Sitrine.Texture;
 using Sitrine.Utils;
@@ -80,12 +81,24 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MessageEvent Position(PointF value)
+        public MessageEvent Position(Vector2d value)
         {
             this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.texture.Position = value);
 
             return this;
+        }
+
+        /// <summary>
+        /// 画面左上を原点にしたメッセージの座標を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">X 軸方向の座標。</param>
+        /// <param name="y">Y 軸方向の座標。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MessageEvent Position(double x, double y)
+        {
+            return this.Position(new Vector2d(x,y));
         }
 
         /// <summary>
