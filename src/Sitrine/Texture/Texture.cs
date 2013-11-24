@@ -23,7 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.Drawing;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Sitrine.Utils;
@@ -37,11 +37,11 @@ namespace Sitrine.Texture
     {
         #region -- Private Fields --
         private Color4 color = Color4.White;
-        private PointF position = new PointF();
-        private float width, height;
-        private float scaleX = 1.0f, scaleY = 1.0f;
-        private float rotateZ = 0.0f;
-        private PointF basePoint = new PointF();
+        private Vector2d position = new Vector2d();
+        private double width, height;
+        private double scaleX = 1.0, scaleY = 1.0;
+        private double rotateZ = 0.0f;
+        private Vector2d basePoint = new Vector2d();
         private bool disposed = false;
         #endregion
 
@@ -49,7 +49,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの表示上の基準となる幅を取得します。
         /// </summary>
-        public float Width
+        public double Width
         {
             get { return this.width; }
             set
@@ -63,7 +63,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの表示上の基準となる高さを取得します。
         /// </summary>
-        public float Height
+        public double Height
         {
             get { return this.height; }
             set
@@ -77,7 +77,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// ビットマップの画面上の位置を取得または設定します。
         /// </summary>
-        public PointF Position
+        public Vector2d Position
         {
             get { return this.position; }
             set
@@ -105,7 +105,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// テクスチャの X 軸方向の拡大率を取得または設定します。
         /// </summary>
-        public float ScaleX
+        public double ScaleX
         {
             get { return this.scaleX; }
             set
@@ -119,7 +119,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// テクスチャの Y 軸方向の拡大率を取得または設定します。
         /// </summary>
-        public float ScaleY
+        public double ScaleY
         {
             get { return this.scaleY; }
             set
@@ -133,7 +133,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// テクスチャの回転角を取得または設定します。単位は 度 (degree) です。
         /// </summary>
-        public float RotateZ
+        public double RotateZ
         {
             get { return this.rotateZ; }
             set
@@ -148,7 +148,7 @@ namespace Sitrine.Texture
         /// 拡大や回転の基点となるテクスチャ上の座標を取得または設定します。
         /// この座標はピクセル値ではなく、テクスチャの各辺の長さを 1.0 としたときの 0.0 から 1.0 の割合で表現します。
         /// </summary>
-        public PointF BasePoint
+        public Vector2d BasePoint
         {
             get { return this.basePoint; }
             set
@@ -162,7 +162,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// 実際に表示されるテクスチャの幅を取得します。
         /// </summary>
-        public float AcctualWidth
+        public double AcctualWidth
         {
             get { return this.width * this.scaleX; }
         }
@@ -170,7 +170,7 @@ namespace Sitrine.Texture
         /// <summary>
         /// 実際に表示されるテクスチャの高さを取得します。
         /// </summary>
-        public float AcctualHeight
+        public double AcctualHeight
         {
             get { return this.height * this.scaleY; }
         }
