@@ -151,18 +151,18 @@ namespace Sitrine.Texture
             GL.PushMatrix();
             {
                 GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
-                GL.Translate(this.Position.X + this.BasePoint.X, this.Position.Y + this.BasePoint.Y, 0.0f);
-                GL.Rotate(this.RotateZ, 0f, 0f, 1.0f);
-                GL.Scale(this.Width * this.ScaleX, this.Height * this.ScaleY, 1.0f);
-                GL.Translate(-this.BasePoint.X, -this.BasePoint.Y, 0.0f);
+                GL.Translate(this.Position.X + this.BasePoint.X, this.Position.Y + this.BasePoint.Y, 0.0);
+                GL.Rotate(this.RotateZ, 0.0, 0.0, 1.0);
+                GL.Scale(this.Width * this.ScaleX, this.Height * this.ScaleY, 1.0);
+                GL.Translate(-this.BasePoint.X, -this.BasePoint.Y, 0.0);
                 GL.Color4(this.Color);
 
                 GL.Begin(BeginMode.Quads);
                 {
-                    GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 0.0f);
-                    GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, 1.0f);
-                    GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, 1.0f);
-                    GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 0.0f);
+                    GL.TexCoord2(0.0, 0.0); GL.Vertex2(0.0, 0.0);
+                    GL.TexCoord2(0.0, 1.0); GL.Vertex2(0.0, 1.0);
+                    GL.TexCoord2(1.0, 1.0); GL.Vertex2(1.0, 1.0);
+                    GL.TexCoord2(1.0, 0.0); GL.Vertex2(1.0, 0.0);
                 }
                 GL.End();
             }
