@@ -37,7 +37,7 @@ namespace Sitrine.Texture
     {
         #region -- Private Fields --
         private int x, y;
-        private float s_width, s_height;
+        private double s_width, s_height;
         private int interval, counter;
         private int[] lists;
 
@@ -172,18 +172,18 @@ namespace Sitrine.Texture
             GL.PushMatrix();
 
             GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
-            GL.Translate(this.Position.X + this.BasePoint.X, this.Position.Y + this.BasePoint.Y, 0.0f);
-            GL.Rotate(this.RotateZ, 0f, 0f, 1.0f);
-            GL.Scale(this.Width * this.ScaleX, this.Height * this.ScaleY, 1.0f);
-            GL.Translate(-this.BasePoint.X, -this.BasePoint.Y, 0.0f);
+            GL.Translate(this.Position.X + this.BasePoint.X, this.Position.Y + this.BasePoint.Y, 0.0);
+            GL.Rotate(this.RotateZ, 0.0, 0.0, 1.0);
+            GL.Scale(this.Width * this.ScaleX, this.Height * this.ScaleY, 1.0);
+            GL.Translate(-this.BasePoint.X, -this.BasePoint.Y, 0.0);
             GL.Color4(this.Color);
 
             GL.Begin(BeginMode.Quads);
             {
-                GL.TexCoord2(x * this.s_width, y * this.s_height); GL.Vertex2(0.0f, 0.0f);
-                GL.TexCoord2(x * this.s_width, (y + 1) * this.s_height); GL.Vertex2(0.0f, 1.0f);
-                GL.TexCoord2((x + 1) * this.s_width, (y + 1) * this.s_height); GL.Vertex2(1.0f, 1.0f);
-                GL.TexCoord2((x + 1) * this.s_width, y * this.s_height); GL.Vertex2(1.0f, 0.0f);
+                GL.TexCoord2(x * this.s_width, y * this.s_height); GL.Vertex2(0.0, 0.0);
+                GL.TexCoord2(x * this.s_width, (y + 1) * this.s_height); GL.Vertex2(0.0, 1.0);
+                GL.TexCoord2((x + 1) * this.s_width, (y + 1) * this.s_height); GL.Vertex2(1.0, 1.0);
+                GL.TexCoord2((x + 1) * this.s_width, y * this.s_height); GL.Vertex2(1.0, 0.0);
             }
             GL.End();
             GL.PopMatrix();
@@ -203,8 +203,8 @@ namespace Sitrine.Texture
             this.Width = this.FrameWidth;
             this.Height = this.FrameHeight;
 
-            this.s_width = 1.0f / (float)countX;
-            this.s_height = 1.0f / (float)countY;
+            this.s_width = 1.0 / (float)countX;
+            this.s_height = 1.0 / (float)countY;
 
             this.lists = new int[this.FrameCount];
 
