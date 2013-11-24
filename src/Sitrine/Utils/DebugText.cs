@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using OpenTK;
 using Sitrine.Texture;
 
 namespace Sitrine.Utils
@@ -108,7 +109,7 @@ namespace Sitrine.Utils
 
             this.debugTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)options.LineHeight + 1));
             this.debugTextTexture = new TextTexture(this.textOptions, new Size(window.TargetSize.Width, (int)(options.LineHeight + 1) * 4 + 1));
-            this.debugTextTexture.Position = new PointF(0f, options.LineHeight + 1);
+            this.debugTextTexture.Position = new Vector2d(0.0, options.LineHeight + 1.0);
 
             this.window = window;
             this.textures = window.Textures;
