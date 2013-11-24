@@ -417,6 +417,58 @@ namespace Sitrine.Event
         }
 
         /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(float scale, int frames, Func<double, double> easing = null)
+        {
+            return this.Scale(scale, scale, frames, easing);
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(float scale, double seconds, Func<double, double> easing = null)
+        {
+            return this.Scale(scale, scale, seconds, easing);
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(double scale, int frames, Func<double, double> easing = null)
+        {
+            return this.Scale((float)scale, (float)scale, frames, easing);
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scale">拡大率。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(double scale, double seconds, Func<double, double> easing = null)
+        {
+            return this.Scale((float)scale, (float)scale, seconds, easing);
+        }
+
+        /// <summary>
         /// テクスチャの縦横の拡大率を指定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
@@ -530,6 +582,34 @@ namespace Sitrine.Event
             });
 
             return this;
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(double scaleX, double scaleY, int frames, Func<double, double> easing = null)
+        {
+            return this.Scale((float)scaleX, (float)scaleY, frames, easing);
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="scaleY">Y 軸方向の拡大率。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Scale(double scaleX, double scaleY, double seconds, Func<double, double> easing = null)
+        {
+            return this.Scale((float)scaleX, (float)scaleY, seconds, easing);
         }
 
         /// <summary>
@@ -1201,7 +1281,7 @@ namespace Sitrine.Event
                 {
                     noCompile = texture.NoCompile;
                     texture.NoCompile = true;
-                    from = texture.Color;                    
+                    from = texture.Color;
 
                     dr = (to.R - from.R);
                     dg = (to.G - from.G);
