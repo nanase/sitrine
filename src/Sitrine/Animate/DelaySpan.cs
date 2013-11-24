@@ -122,6 +122,17 @@ namespace Sitrine.Event
             return this.delayFrames == 0 && this.delaySeconds == 0.0;
         }
         #endregion
+
+        #region -- Public Static Methods --
+        public static implicit operator DelaySpan(int frames)
+        {
+            return new DelaySpan(frames);
+        }
+
+        public static implicit operator DelaySpan(double seconds)
+        {
+            return new DelaySpan(seconds);
+        }
         #endregion
     }
 }
