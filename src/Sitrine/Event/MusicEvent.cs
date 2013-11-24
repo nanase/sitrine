@@ -50,11 +50,12 @@ namespace Sitrine.Event
         /// シーケンスレイヤを追加します。
         /// このメソッドは遅延実行されます。
         /// </summary>
+        /// <param name="id">割り当てるレイヤーID。</param>
         /// <param name="targetParts">通過させるパート。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent AddLayer(IEnumerable<int> targetParts = null)
+        public MusicEvent AddLayer(int id, IEnumerable<int> targetParts = null)
         {
-            int id = this.AssignID;
+            this.AssignID = id;
 
             this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
