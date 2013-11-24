@@ -112,6 +112,16 @@ namespace Sitrine.Event
             if (this.delayFrames != 0)
                 process.WaitFrame(this.delayFrames);
         }
+
+        /// <summary>
+        /// このインスタンスの値がゼロに等しいかの真偽値を返します。
+        /// </summary>
+        /// <returns>ゼロの場合は true、それ以外の場合は false。</returns>
+        public bool IsZero()
+        {
+            return this.delayFrames == 0 && this.delaySeconds == 0.0;
+        }
+        #endregion
         #endregion
     }
 }
