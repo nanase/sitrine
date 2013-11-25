@@ -524,40 +524,12 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(double scaleX, double scaleY, int frames, Func<double, double> easing = null)
-        {
-            return this.Scale((float)scaleX, (float)scaleY, frames, easing);
-        }
-
-        /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(double scaleX, double scaleY, double seconds, Func<double, double> easing = null)
-        {
-            return this.Scale((float)scaleX, (float)scaleY, seconds, easing);
-        }
-
-        /// <summary>
         /// テクスチャの X 軸方向の拡大率を指定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scaleX">X 軸方向の拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleX(float scaleX)
+        public TextureEvent ScaleX(double scaleX)
         {
             int id = this.AssignID;
 
@@ -571,6 +543,80 @@ namespace Sitrine.Event
                 }
 
                 this.Window.Textures[this.asignment[id]].ScaleX = scaleX;
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleX(double scaleX, int frames, Func<double, double> easing = null)
+        {
+            if (frames == 0)
+                return this.ScaleX(scaleX);
+
+            if (frames < 0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+        {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                var texture = this.Window.Textures[this.asignment[id]];
+                delay.SetDelayAction(story);
+                this.AnimateScale(story, texture, scaleX, texture.ScaleY, frames, easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// 拡大または縮小するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="scaleX">X 軸方向の拡大率。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent ScaleX(double scaleX, double seconds, Func<double, double> easing = null)
+        {
+            if (seconds == 0.0)
+                return this.ScaleX(scaleX);
+
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+                var texture = this.Window.Textures[this.asignment[id]];
+                delay.SetDelayAction(story);
+                this.AnimateScale(story, texture, scaleX, texture.ScaleY, story.GetFrameCount(seconds), easing);
+                this.Window.AddStoryboard(story);
             });
 
             return this;
