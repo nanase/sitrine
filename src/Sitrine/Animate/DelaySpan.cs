@@ -96,24 +96,6 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 指定されたストーリーボードにウェイトイベントを指定します。
-        /// </summary>
-        /// <param name="story"></param>
-        public void SetDelayAction(Storyboard story)
-        {
-            if (story == null)
-                throw new ArgumentNullException("story");
-
-            var process = story.Process;
-
-            if (this.delaySeconds != 0.0)
-                process.Wait(this.delaySeconds);
-
-            if (this.delayFrames != 0)
-                process.WaitFrame(this.delayFrames);
-        }
-
-        /// <summary>
         /// このインスタンスの値がゼロに等しいかの真偽値を返します。
         /// </summary>
         /// <returns>ゼロの場合は true、それ以外の場合は false。</returns>
