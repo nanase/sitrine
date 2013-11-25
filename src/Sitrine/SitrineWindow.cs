@@ -56,7 +56,7 @@ namespace Sitrine
 
         private readonly SolidTexture foreground;
 
-        private Color backgroundColor = Color.Black;
+        private Color4 backgroundColor = Color4.Black;
         #endregion
 
         #region -- Public Properties --
@@ -88,7 +88,7 @@ namespace Sitrine
         /// <summary>
         /// ウィンドウの背景色を取得または設定します。
         /// </summary>
-        public Color BackgroundColor
+        public Color4 BackgroundColor
         {
             get
             {
@@ -104,15 +104,15 @@ namespace Sitrine
         /// <summary>
         /// ウィンドウの前景色を取得または設定します。
         /// </summary>
-        public Color ForegroundColor
+        public Color4 ForegroundColor
         {
             get
             {
-                return (Color)this.foreground.Color;
+                return this.foreground.Color;
             }
             set
             {
-                this.foreground.Color = (Color4)value;
+                this.foreground.Color = value;
             }
         }
         #endregion
