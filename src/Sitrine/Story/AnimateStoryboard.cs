@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using Sitrine.Animate;
+using Sitrine.Event;
 
 namespace Sitrine.Story
 {
@@ -60,17 +61,17 @@ namespace Sitrine.Story
         /// <summary>
         /// アクションを指定してこのストーリーボードにアニメーションイベントを構築します。
         /// </summary>
-        /// <param name="frame">アニメーションの継続時間。</param>
+        /// <param name="duration">アニメーションの継続時間。</param>
         /// <param name="easing">使用されるイージング関数。</param>
         /// <param name="initalizer">初期化処理で用いるイニシャライザ。</param>
         /// <param name="iterator">反復処理で用いるイテレータ。</param>
         /// <param name="finalizer">最終処理で用いるファイナライザ。</param>
-        public void BuildAnimation(int frame, Func<double, double> easing, Action initalizer, Action<float> iterator, Action finalizer)
+        public void BuildAnimation(DelaySpan duration, Func<double, double> easing, Action initalizer, Action<float> iterator, Action finalizer)
         {
-            if (frame == 0)
+            if (duration.IsZero())
                 return;
 
-            frame /= 2;
+            int frame = this.GetFrameCount(duration) / 2;
             easing = easing ?? EasingFunctions.Linear;
 
             if (initalizer != null)
