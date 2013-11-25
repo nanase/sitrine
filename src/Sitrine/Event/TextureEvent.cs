@@ -570,7 +570,7 @@ namespace Sitrine.Event
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
-        {
+                {
                     Trace.TraceWarning("Texture ID not found: " + id);
                     return;
                 }
@@ -769,7 +769,7 @@ namespace Sitrine.Event
             var delay = this.PopDelaySpan();
 
             this.Storyboard.AddAction(() =>
-        {
+            {
                 if (!this.asignment.ContainsKey(id))
                 {
                     Trace.TraceWarning("Texture ID not found: " + id);
@@ -837,7 +837,7 @@ namespace Sitrine.Event
 
             this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() =>
-        {
+            {
                 if (!this.asignment.ContainsKey(id))
                 {
                     Trace.TraceWarning("Texture ID not found: " + id);
@@ -1514,15 +1514,15 @@ namespace Sitrine.Event
                 });
         }
 
-        private void AnimatePosition(AnimateStoryboard story, Texture.Texture texture, PointF to, int frame, Func<double, double> easing = null)
+        private void AnimatePosition(AnimateStoryboard story, Texture.Texture texture, Vector2d to, int frame, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "position";
 
-            PointF from = new PointF();
+            Vector2d from = new Vector2d();
             bool noCompile = false;
 
-            float dx = 0f, dy = 0f;
+            double dx = 0.0, dy = 0.0;
 
             story.BuildAnimation(frame, easing,
                 () =>
@@ -1536,7 +1536,7 @@ namespace Sitrine.Event
                 },
                 f =>
                 {
-                    texture.Position = new PointF(from.X + dx * f, from.Y + dy * f);
+                    texture.Position = new Vector2d(from.X + dx * f, from.Y + dy * f);
                 },
                 () =>
                 {
