@@ -750,29 +750,61 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// テクスチャの回転角を度 (degree) で指定します。
+        /// 回転するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Angle(double angle)
+        public TextureEvent Angle(double angle, int frames, Func<double, double> easing = null)
         {
-            return this.Angle((float)angle);
-        }
-        #endregion
+            if (frames == 0)
+                return this;
 
-        #region Position
+            if (frames < 0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+        {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, frames, easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+
         /// <summary>
-        /// テクスチャの表示位置を設定します。
+        /// 回転するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="position">表示位置。</param>
+        /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(PointF position)
+        public TextureEvent Angle(double angle, double seconds, Func<double, double> easing = null)
         {
-            int id = this.AssignID;
+            if (seconds == 0.0)
+                return this;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            if (seconds < 0.0)
+                throw new ArgumentOutOfRangeException("duration");
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
             this.Storyboard.AddAction(() =>
             {
                 if (!this.asignment.ContainsKey(id))
@@ -781,11 +813,16 @@ namespace Sitrine.Event
                     return;
                 }
 
-                this.Window.Textures[this.asignment[id]].Position = position;
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                delay.SetDelayAction(story);
+                this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, story.GetFrameCount(seconds), easing);
+                this.Window.AddStoryboard(story);
             });
 
             return this;
         }
+        #endregion
 
         /// <summary>
         /// テクスチャの表示位置を設定します。
@@ -1240,7 +1277,37 @@ namespace Sitrine.Event
             }
         }
 
-        private void AnimateScale(AnimateStoryboard story, Texture.Texture texture, float scaleX, float scaleY, int frame, Func<double, double> easing = null)
+        private void AnimateAngle(AnimateStoryboard story, Texture.Texture texture, double angle, int frame, Func<double, double> easing = null)
+        {
+            story.TargetObject = texture;
+            story.TargetProperty = "angle";
+
+            double fromAngle = 0.0;
+            bool noCompile = false;
+
+            double dr = 0.0;
+
+            story.BuildAnimation(frame, easing,
+                () =>
+                {
+                    noCompile = texture.NoCompile;
+                    texture.NoCompile = true;
+                    fromAngle = texture.RotateZ;
+
+                    dr = (angle - fromAngle);
+                },
+                f =>
+                {
+                    texture.RotateZ = fromAngle + dr * f;
+                },
+                () =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
+        }
+
+        private void AnimateScale(AnimateStoryboard story, Texture.Texture texture, double scaleX, double scaleY, int frame, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "scale";
