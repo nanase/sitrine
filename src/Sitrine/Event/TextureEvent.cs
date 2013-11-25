@@ -426,7 +426,7 @@ namespace Sitrine.Event
         /// <param name="scaleX">X 軸方向の拡大率。</param>
         /// <param name="scaleY">Y 軸方向の拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scaleX, float scaleY)
+        public TextureEvent ScaleXY(double scaleX, double scaleY)
         {
             int id = this.AssignID;
 
@@ -456,10 +456,10 @@ namespace Sitrine.Event
         /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scaleX, float scaleY, int frames, Func<double, double> easing = null)
+        public TextureEvent ScaleXY(double scaleX, double scaleY, int frames, Func<double, double> easing = null)
         {
             if (frames == 0)
-                return this.Scale(scaleX, scaleY);
+                return this.ScaleXY(scaleX, scaleY);
 
             if (frames < 0)
                 throw new ArgumentOutOfRangeException("duration");
@@ -494,10 +494,10 @@ namespace Sitrine.Event
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scaleX, float scaleY, double seconds, Func<double, double> easing = null)
+        public TextureEvent ScaleXY(double scaleX, double scaleY, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
-                return this.Scale(scaleX, scaleY);
+                return this.ScaleXY(scaleX, scaleY);
 
             if (seconds < 0.0)
                 throw new ArgumentOutOfRangeException("duration");
