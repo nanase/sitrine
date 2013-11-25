@@ -1419,6 +1419,38 @@ namespace Sitrine.Event
             }
         }
 
+        private void AnimateAlpha(AnimateStoryboard story, Texture.Texture texture, float alpha, int frame, Func<double, double> easing = null)
+        {
+            story.TargetObject = texture;
+            story.TargetProperty = "color";
+
+            float fromAlpha = 0.0f;
+            bool noCompile = false;
+
+            float da = 0.0f;
+
+            story.BuildAnimation(frame, easing,
+                () =>
+                {
+                    noCompile = texture.NoCompile;
+                    texture.NoCompile = true;
+                    fromAlpha = texture.Color.A;
+
+                    da = (alpha - fromAlpha);
+                },
+                f =>
+                {
+                    var c = texture.Color;
+                    c.A = (fromAlpha + da * f).Clamp(1.0f, 0.0f);
+                    texture.Color = c;
+                },
+                () =>
+                {
+                    if (!noCompile)
+                        texture.NoCompile = false;
+                });
+        }
+
         private void AnimateAngle(AnimateStoryboard story, Texture.Texture texture, double angle, int frame, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
