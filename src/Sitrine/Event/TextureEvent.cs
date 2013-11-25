@@ -1291,7 +1291,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Hide()
         {
-            return this.Alpha(0.0f);
+            return this.Alpha(0.0);
         }
         #endregion
 
