@@ -138,6 +138,12 @@ namespace Sitrine.Event
             this.delayspan = new DelaySpan();
             return ds;
         }
+
+        protected void SetDelayToStory()
+        {
+            this.Storyboard.SetDelay(this.delayspan);
+            this.delayspan = new DelaySpan();
+        }
         #endregion
     }
 }
