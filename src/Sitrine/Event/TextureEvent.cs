@@ -730,7 +730,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Angle(float angle)
+        public TextureEvent Angle(double angle)
         {
             int id = this.AssignID;
 
