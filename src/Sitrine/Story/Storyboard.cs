@@ -179,6 +179,16 @@ namespace Sitrine
             return (int)Math.Round(this.UpdateFrequency * seconds);
         }
 
+        /// <summary>
+        /// 指定されたディレイ時間をストーリーボードでのフレーム時間に変換します。
+        /// </summary>
+        /// <param name="delay">ディレイ時間。</param>
+        /// <returns>フレーム時間。</returns>
+        public int GetFrameCount(DelaySpan delay)
+        {
+            return delay.DelayFrames + this.GetFrameCount(delay.DelaySeconds);
+        }
+
         public void AddResource(IDisposable disposableResource)
         {
             this.disposableResources.Add(disposableResource);
