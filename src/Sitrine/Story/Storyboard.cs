@@ -206,6 +206,21 @@ namespace Sitrine
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        /// <summary>
+        /// 指定されたディレイ時間だけウェイト命令を追加します。
+        /// </summary>
+        /// <param name="delay">ディレイ時間。</param>
+        public void SetDelay(DelaySpan delay)
+        {
+            var process = this.Process;
+
+            if (delay.DelaySeconds != 0.0)
+                process.Wait(delay.DelaySeconds);
+
+            if (delay.DelayFrames != 0)
+                process.WaitFrame(delay.DelayFrames);
+        }
         #endregion
 
         #region -- Public Static Methods --
