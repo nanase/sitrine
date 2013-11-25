@@ -23,9 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.Drawing;
 using OpenTK.Graphics;
-using Sitrine.Animate;
 using Sitrine.Story;
 using Sitrine.Utils;
 
@@ -99,7 +97,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateForeground(color, frames, easing);
+                this.AnimateForeground(story, color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -159,7 +157,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateBackground(color, frames, easing);
+                this.AnimateBackground(story, color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -189,7 +187,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateBackground(color, story.GetFrameCount(seconds), easing);
+                this.AnimateForeground(story, color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -246,112 +244,64 @@ namespace Sitrine.Event
         #endregion
         #endregion
 
-        class AnimateStoryboard : RenderStoryboard, IExclusiveStory
+        #region -- Private Methods --
+        private void AnimateForeground(AnimateStoryboard story, Color4 to, int frame, Func<double, double> easing = null)
         {
-            #region -- Private Fields --
-            private object targetObject;
-            private string targetPropery;
-            #endregion
+            story.TargetObject = this.Window;
+            story.TargetProperty = "foreground";
 
-            #region -- Public Properties --
-            public object TargetObject
-            {
-                get { return this.targetObject; }
-            }
+            Color4 from = new Color4();
 
-            public string TargetProperty
-            {
-                get { return this.targetPropery; }
-            }
-            #endregion
+            float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            #region -- Constructors --
-            public AnimateStoryboard(SitrineWindow window)
-                : base(window)
-            {
-            }
-            #endregion
-
-            #region -- Public Methods --
-            public void AnimateForeground(Color to, int duration, Func<double, double> easing = null)
-            {
-                if (duration == 0)
-                    return;
-
-                duration /= 2;
-                easing = easing ?? EasingFunctions.Linear;
-
-                this.targetObject = this.Window;
-                this.targetPropery = "foreground";
-
-                Color4 from = new Color4();
-
-                float dr = 0f, dg = 0f, db = 0f, da = 0f;
-
-                Process.Invoke(() =>
+            story.BuildAnimation(frame, easing,
+                () =>
                 {
                     from = this.Window.ForegroundColor;
 
-                    dr = (to.R / 255f - from.R);
-                    dg = (to.G / 255f - from.G);
-                    db = (to.B / 255f - from.B);
-                    da = (to.A / 255f - from.A);
-                });
-
-                for (int i = 0, j = 1; i < duration; i++)
+                    dr = (to.R - from.R);
+                    dg = (to.G - from.G);
+                    db = (to.B - from.B);
+                    da = (to.A - from.A);
+                },
+                f =>
                 {
-                    Process.WaitFrame(1);
-                    Process.Invoke(() =>
-                    {
-                        float f = (float)easing(j++ / (double)duration);
-                        this.Window.ForegroundColor = (Color)new Color4((from.R + dr * f).Clamp(1f, 0f),
-                                                                        (from.G + dg * f).Clamp(1f, 0f),
-                                                                        (from.B + db * f).Clamp(1f, 0f),
-                                                                        (from.A + da * f).Clamp(1f, 0f));
-                    });
-                }
-            }
+                    this.Window.ForegroundColor = new Color4((from.R + dr * f).Clamp(1f, 0f),
+                                                             (from.G + dg * f).Clamp(1f, 0f),
+                                                             (from.B + db * f).Clamp(1f, 0f),
+                                                             (from.A + da * f).Clamp(1f, 0f));
+                },
+                null);
+        }
 
-            public void AnimateBackground(Color to, int duration, Func<double, double> easing = null)
-            {
-                if (duration == 0)
-                    return;
+        private void AnimateBackground(AnimateStoryboard story, Color4 to, int frame, Func<double, double> easing = null)
+        {
+            story.TargetObject = this.Window;
+            story.TargetProperty = "background";
 
-                duration /= 2;
-                easing = easing ?? EasingFunctions.Linear;
+            Color4 from = new Color4();
 
-                this.targetObject = this.Window;
-                this.targetPropery = "background";
+            float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-                Color4 from = new Color4();
-
-                float dr = 0f, dg = 0f, db = 0f, da = 0f;
-
-                Process.Invoke(() =>
+            story.BuildAnimation(frame, easing,
+                () =>
                 {
                     from = this.Window.BackgroundColor;
 
-                    dr = (to.R / 255f - from.R);
-                    dg = (to.G / 255f - from.G);
-                    db = (to.B / 255f - from.B);
-                    da = (to.A / 255f - from.A);
-                });
-
-                for (int i = 0, j = 1; i < duration; i++)
+                    dr = (to.R - from.R);
+                    dg = (to.G - from.G);
+                    db = (to.B - from.B);
+                    da = (to.A - from.A);
+                },
+                f =>
                 {
-                    Process.WaitFrame(1);
-                    Process.Invoke(() =>
-                    {
-                        float f = (float)easing(j++ / (double)duration);
-                        this.Window.BackgroundColor = (Color)new Color4((from.R + dr * f).Clamp(1f, 0f),
-                                                                        (from.G + dg * f).Clamp(1f, 0f),
-                                                                        (from.B + db * f).Clamp(1f, 0f),
-                                                                        (from.A + da * f).Clamp(1f, 0f));
-                    });
-                }
-            }
-            #endregion
+                    this.Window.BackgroundColor = new Color4((from.R + dr * f).Clamp(1f, 0f),
+                                                             (from.G + dg * f).Clamp(1f, 0f),
+                                                             (from.B + db * f).Clamp(1f, 0f),
+                                                             (from.A + da * f).Clamp(1f, 0f));
+                },
+                null);
         }
-
+        #endregion
     }
 }
