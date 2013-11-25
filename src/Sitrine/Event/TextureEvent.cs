@@ -824,16 +824,30 @@ namespace Sitrine.Event
         }
         #endregion
 
+        #region Position
         /// <summary>
         /// テクスチャの表示位置を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="x">表示位置の X 座標値。</param>
-        /// <param name="y">表示位置の Y 座標値。</param>
+        /// <param name="position">表示位置。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(float x, float y)
+        public TextureEvent Position(Vector2d position)
         {
-            return this.Position(new PointF(x, y));
+            int id = this.AssignID;
+
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() =>
+        {
+                if (!this.asignment.ContainsKey(id))
+                {
+                    Trace.TraceWarning("Texture ID not found: " + id);
+                    return;
+                }
+
+                this.Window.Textures[this.asignment[id]].Position = position;
+            });
+
+            return this;
         }
 
         /// <summary>
@@ -845,7 +859,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Position(double x, double y)
         {
-            return this.Position(new PointF((float)x, (float)y));
+            return this.Position(new Vector2d(x, y));
         }
 
         /// <summary>
@@ -856,7 +870,7 @@ namespace Sitrine.Event
         /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(PointF position, int frames, Func<double, double> easing = null)
+        public TextureEvent Position(Vector2d position, int frames, Func<double, double> easing = null)
         {
             if (frames == 0)
                 return this;
@@ -893,7 +907,7 @@ namespace Sitrine.Event
         /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(PointF position, double seconds, Func<double, double> easing = null)
+        public TextureEvent Position(Vector2d position, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
