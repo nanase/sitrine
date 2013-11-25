@@ -189,6 +189,10 @@ namespace Sitrine
             return delay.DelayFrames + this.GetFrameCount(delay.DelaySeconds);
         }
 
+        /// <summary>
+        /// 破棄可能なオブジェクトをストーリーボードに登録し、ストーリーボードの終了時に同時に破棄するよう指定します。
+        /// </summary>
+        /// <param name="disposableResource">破棄可能なオブジェクト。</param>
         public void AddResource(IDisposable disposableResource)
         {
             this.disposableResources.Add(disposableResource);
