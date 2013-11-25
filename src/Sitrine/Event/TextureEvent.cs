@@ -1486,10 +1486,10 @@ namespace Sitrine.Event
             story.TargetObject = texture;
             story.TargetProperty = "scale";
 
-            float fromX = 0f, fromY = 0f;
+            double fromX = 0.0, fromY = 0.0;
             bool noCompile = false;
 
-            float dx = 0f, dy = 0f;
+            double dx = 0.0, dy = 0.0;
 
             story.BuildAnimation(frame, easing,
                 () =>
