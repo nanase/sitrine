@@ -935,6 +935,34 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// 指定された位置へ移動するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">表示位置の X 座標値。</param>
+        /// <param name="y">表示位置の Y 座標値。</param>
+        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Position(double x, double y, int frames, Func<double, double> easing = null)
+        {
+            return this.Position(new Vector2d(x, y), frames, easing);
+        }
+
+        /// <summary>
+        /// 指定された位置へ移動するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="x">表示位置の X 座標値。</param>
+        /// <param name="y">表示位置の Y 座標値。</param>
+        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Position(double x, double y, double seconds, Func<double, double> easing = null)
+        {
+            return this.Position(new Vector2d(x, y), seconds, easing);
+        }
         #endregion
 
         #region Alpha
