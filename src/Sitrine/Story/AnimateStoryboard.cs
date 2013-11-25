@@ -66,7 +66,7 @@ namespace Sitrine.Story
         /// <param name="initalizer">初期化処理で用いるイニシャライザ。</param>
         /// <param name="iterator">反復処理で用いるイテレータ。</param>
         /// <param name="finalizer">最終処理で用いるファイナライザ。</param>
-        public void BuildAnimation(DelaySpan duration, Func<double, double> easing, Action initalizer, Action<float> iterator, Action finalizer)
+        public void Build(DelaySpan duration, Func<double, double> easing, Action initalizer, Action<float> iterator, Action finalizer)
         {
             if (duration.IsZero())
                 return;

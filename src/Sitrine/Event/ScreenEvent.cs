@@ -252,7 +252,7 @@ namespace Sitrine.Event
 
             float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            story.BuildAnimation(duration, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     from = this.Window.ForegroundColor;
@@ -281,7 +281,7 @@ namespace Sitrine.Event
 
             float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            story.BuildAnimation(frame, easing,
+            story.Build(frame, easing,
                 () =>
                 {
                     from = this.Window.BackgroundColor;

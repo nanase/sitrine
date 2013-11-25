@@ -1429,7 +1429,7 @@ namespace Sitrine.Event
 
             float da = 0.0f;
 
-            story.BuildAnimation(frame, easing,
+            story.Build(frame, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1461,7 +1461,7 @@ namespace Sitrine.Event
 
             double dr = 0.0;
 
-            story.BuildAnimation(frame, easing,
+            story.Build(frame, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1491,7 +1491,7 @@ namespace Sitrine.Event
 
             double dx = 0.0, dy = 0.0;
 
-            story.BuildAnimation(frame, easing,
+            story.Build(frame, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1524,7 +1524,7 @@ namespace Sitrine.Event
 
             double dx = 0.0, dy = 0.0;
 
-            story.BuildAnimation(frame, easing,
+            story.Build(frame, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1555,7 +1555,7 @@ namespace Sitrine.Event
 
             float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            story.BuildAnimation(frame, easing,
+            story.Build(frame, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
