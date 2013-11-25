@@ -246,7 +246,7 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Private Methods --
-        private void AnimateForeground(AnimateStoryboard story, Color4 to, int frame, Func<double, double> easing = null)
+        private void AnimateForeground(AnimateStoryboard story, Color4 to, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = this.Window;
             story.TargetProperty = "foreground";
@@ -255,7 +255,7 @@ namespace Sitrine.Event
 
             float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            story.BuildAnimation(frame, easing,
+            story.BuildAnimation(duration, easing,
                 () =>
                 {
                     from = this.Window.ForegroundColor;
