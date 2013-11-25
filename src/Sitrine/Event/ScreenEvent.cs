@@ -52,7 +52,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent ForegroundColor(Color value)
+        public ScreenEvent ForegroundColor(Color4 value)
         {
             this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.ForegroundColor = value);
@@ -66,7 +66,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="value">設定される値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent BackgroundColor(Color value)
+        public ScreenEvent BackgroundColor(Color4 value)
         {
             this.PopDelaySpan().SetDelayAction(this.Storyboard);
             this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
