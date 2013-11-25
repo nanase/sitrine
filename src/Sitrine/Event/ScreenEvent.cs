@@ -43,7 +43,7 @@ namespace Sitrine.Event
         #endregion
 
         #region -- Public Methods --
-        #region Setter
+        #region ForegroundColor
         /// <summary>
         /// 前景色を設定します。
         /// このメソッドは遅延実行されます。
@@ -58,22 +58,6 @@ namespace Sitrine.Event
             return this;
         }
 
-        /// <summary>
-        /// 背景色を設定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="value">設定される値。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent BackgroundColor(Color4 value)
-        {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
-            this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
-
-            return this;
-        }
-        #endregion
-
-        #region Action
         /// <summary>
         /// 前景色を指定された色までアニメーション表示します。
         /// このメソッドは遅延実行されます。
@@ -130,6 +114,23 @@ namespace Sitrine.Event
                 this.AnimateForeground(story, color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
+
+            return this;
+        }
+
+        #endregion
+
+        #region BackgroundColor
+        /// <summary>
+        /// 背景色を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="value">設定される値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public ScreenEvent BackgroundColor(Color4 value)
+        {
+            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
 
             return this;
         }
@@ -193,6 +194,7 @@ namespace Sitrine.Event
 
             return this;
         }
+        #endregion
 
         /// <summary>
         /// 前景色をフェードインし、完全透明にします。
@@ -241,7 +243,6 @@ namespace Sitrine.Event
         {
             return this.ForegroundColor(new Color4(0, 0, 0, 255), seconds, easing);
         }
-        #endregion
         #endregion
 
         #region -- Private Methods --
