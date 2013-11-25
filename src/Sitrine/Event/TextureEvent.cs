@@ -1013,7 +1013,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Alpha(byte alpha)
         {
-            return this.Alpha(alpha / 255.0f);
+            return this.Alpha(alpha / 255.0);
         }
         #endregion
 
