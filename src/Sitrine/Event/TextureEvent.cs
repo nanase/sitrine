@@ -388,46 +388,9 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="scale">拡大率。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scale)
-        {
-            return this.Scale(scale, scale);
-        }
-
-        /// <summary>
-        /// テクスチャの縦横の拡大率を指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scale">拡大率。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Scale(double scale)
         {
-            return this.Scale((float)scale, (float)scale);
-        }
-
-        /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scale">拡大率。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scale, int frames, Func<double, double> easing = null)
-        {
-            return this.Scale(scale, scale, frames, easing);
-        }
-
-        /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scale">拡大率。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(float scale, double seconds, Func<double, double> easing = null)
-        {
-            return this.Scale(scale, scale, seconds, easing);
+            return this.Scale(scale, scale);
         }
 
         /// <summary>
@@ -440,7 +403,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Scale(double scale, int frames, Func<double, double> easing = null)
         {
-            return this.Scale((float)scale, (float)scale, frames, easing);
+            return this.Scale(scale, scale, frames, easing);
         }
 
         /// <summary>
@@ -453,7 +416,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Scale(double scale, double seconds, Func<double, double> easing = null)
         {
-            return this.Scale((float)scale, (float)scale, seconds, easing);
+            return this.Scale(scale, scale, seconds, easing);
         }
 
         /// <summary>
@@ -482,18 +445,6 @@ namespace Sitrine.Event
             });
 
             return this;
-        }
-
-        /// <summary>
-        /// テクスチャの縦横の拡大率を指定します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(double scaleX, double scaleY)
-        {
-            return this.Scale((float)scaleX, (float)scaleY);
         }
 
         /// <summary>
