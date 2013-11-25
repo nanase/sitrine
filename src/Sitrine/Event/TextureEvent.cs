@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using OpenTK;
 using OpenTK.Graphics;
 using Sitrine.Animate;
 using Sitrine.Story;
@@ -347,7 +348,7 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="position">基点の座標値。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Base(PointF position)
+        public TextureEvent Base(Vector2d position)
         {
             int id = this.AssignID;
 
