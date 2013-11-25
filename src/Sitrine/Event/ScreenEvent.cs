@@ -84,7 +84,7 @@ namespace Sitrine.Event
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateForegroundColor(Color color, int frames, Func<double, double> easing = null)
+        public ScreenEvent ForegroundColor(Color4 color, int frames, Func<double, double> easing = null)
         {
             if (frames == 0)
                 return this;
@@ -114,7 +114,7 @@ namespace Sitrine.Event
         /// <param name="seconds">アニメーションが行われる秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateForegroundColor(Color color, double seconds, Func<double, double> easing = null)
+        public ScreenEvent ForegroundColor(Color4 color, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -129,7 +129,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 delay.SetDelayAction(story);
-                story.AnimateForeground(color, story.GetFrameCount(seconds), easing);
+                this.AnimateForeground(story, color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -144,7 +144,7 @@ namespace Sitrine.Event
         /// <param name="frames">アニメーションが行われるフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateBackgroundColor(Color color, int frames, Func<double, double> easing = null)
+        public ScreenEvent BackgroundColor(Color4 color, int frames, Func<double, double> easing = null)
         {
             if (frames == 0)
                 return this;
@@ -174,7 +174,7 @@ namespace Sitrine.Event
         /// <param name="seconds">アニメーションが行われる秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent AnimateBackgroundColor(Color color, double seconds, Func<double, double> easing = null)
+        public ScreenEvent BackgroundColor(Color4 color, double seconds, Func<double, double> easing = null)
         {
             if (seconds == 0.0)
                 return this;
@@ -205,7 +205,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent FadeIn(int frames, Func<double, double> easing = null)
         {
-            return this.AnimateForegroundColor(Color.FromArgb(0, Color.Black), frames, easing);
+            return this.ForegroundColor(new Color4(0, 0, 0, 0), frames, easing);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent FadeIn(double seconds, Func<double, double> easing = null)
         {
-            return this.AnimateForegroundColor(Color.FromArgb(0, Color.Black), seconds, easing);
+            return this.ForegroundColor(new Color4(0, 0, 0, 0), seconds, easing);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent FadeOut(int frames, Func<double, double> easing = null)
         {
-            return this.AnimateForegroundColor(Color.Black, frames, easing);
+            return this.ForegroundColor(new Color4(0, 0, 0, 255), frames, easing);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent FadeOut(double seconds, Func<double, double> easing = null)
         {
-            return this.AnimateForegroundColor(Color.Black, seconds, easing);
+            return this.ForegroundColor(new Color4(0, 0, 0, 255), seconds, easing);
         }
         #endregion
         #endregion
