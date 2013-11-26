@@ -101,7 +101,7 @@ namespace Sitrine.Event
                 this.Listen(callback, this.okKeys);
             else
             {
-                this.PopDelaySpan().SetDelayAction(this.Storyboard);
+                this.SetDelayToStory();
                 this.Storyboard.AddAction(() => this.Listen(callback, this.okKeys));
             }
 
@@ -120,7 +120,7 @@ namespace Sitrine.Event
                 this.Listen(callback, this.cancelKeys);
             else
             {
-                this.PopDelaySpan().SetDelayAction(this.Storyboard);
+                this.SetDelayToStory();
                 this.Storyboard.AddAction(() => this.Listen(callback, this.cancelKeys));
             }
 
@@ -146,13 +146,12 @@ namespace Sitrine.Event
                 this.Listen(callback, keys);
             else
             {
-                this.PopDelaySpan().SetDelayAction(this.Storyboard);
+                this.SetDelayToStory();
                 this.Storyboard.AddAction(() => this.Listen(callback, keys));
             }
 
             return this;
         }
-
         #endregion
         #endregion
 
