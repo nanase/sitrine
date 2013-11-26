@@ -912,16 +912,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="to">変化後の色。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Color(Color4 color, int frames, Func<double, double> easing = null)
+        public TextureEvent Color(Color4 color, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
-                return this;
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
+            if (duration.IsZero())
+                return this.Color(color);
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -937,7 +934,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 story.SetDelay(delay);
-                this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, frames, easing);
+                this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
