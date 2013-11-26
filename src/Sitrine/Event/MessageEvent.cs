@@ -83,7 +83,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Position(Vector2d value)
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.texture.Position = value);
 
             return this;
@@ -109,7 +109,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Color(Color4 value)
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.texture.Color = value);
 
             return this;
@@ -123,7 +123,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Interval(int value)
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.texture.Interval = value);
 
             return this;
@@ -137,7 +137,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent ProgressCount(int value)
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.texture.ProgressCount = value);
 
             return this;
@@ -153,7 +153,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MessageEvent Show(string text)
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 this.texture.Draw(text);
