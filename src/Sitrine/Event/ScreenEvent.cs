@@ -150,7 +150,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent FadeOut(DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.ForegroundColor(new Color4(0, 0, 0, 255), seconds, easing);
+            return this.ForegroundColor(new Color4(0, 0, 0, 255), duration, easing);
         }
         #endregion
 
