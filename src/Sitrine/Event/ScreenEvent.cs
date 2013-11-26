@@ -106,36 +106,6 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
-        /// <param name="frames">アニメーションが行われるフレーム時間。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent BackgroundColor(Color4 color, int frames, Func<double, double> easing = null)
-        {
-            if (frames == 0)
-                return this;
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("frames");
-
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                this.AnimateBackground(story, color, frames, easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 背景色を指定された色までアニメーション表示します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="color">アニメーション完了時の色。</param>
         /// <param name="seconds">アニメーションが行われる秒数。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
@@ -166,36 +136,12 @@ namespace Sitrine.Event
         /// 前景色をフェードインし、完全透明にします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="frames">アニメーションが行われるフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent FadeIn(int frames, Func<double, double> easing = null)
+        public ScreenEvent FadeIn(DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.ForegroundColor(new Color4(0, 0, 0, 0), frames, easing);
-        }
-
-        /// <summary>
-        /// 前景色をフェードインし、完全透明にします。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="seconds">アニメーションが行われる秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent FadeIn(double seconds, Func<double, double> easing = null)
-        {
-            return this.ForegroundColor(new Color4(0, 0, 0, 0), seconds, easing);
-        }
-
-        /// <summary>
-        /// 前景色をフェードアウトし、完全不透明にします。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="frames">アニメーションが行われるフレーム時間。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent FadeOut(int frames, Func<double, double> easing = null)
-        {
-            return this.ForegroundColor(new Color4(0, 0, 0, 255), frames, easing);
+            return this.ForegroundColor(new Color4(0, 0, 0, 0), duration, easing);
         }
 
         /// <summary>
