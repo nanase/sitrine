@@ -106,16 +106,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="color">アニメーション完了時の色。</param>
-        /// <param name="seconds">アニメーションが行われる秒数。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent BackgroundColor(Color4 color, double seconds, Func<double, double> easing = null)
+        public ScreenEvent BackgroundColor(Color4 color, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("seconds");
+            if (duration.IsZero())
+                return this.ForegroundColor(color);
 
             var delay = this.PopDelaySpan();
 
@@ -123,8 +120,8 @@ namespace Sitrine.Event
             {
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                delay.SetDelayAction(story);
-                this.AnimateForeground(story, color, story.GetFrameCount(seconds), easing);
+                story.SetDelay(delay);
+                this.AnimateBackground(story, color, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
