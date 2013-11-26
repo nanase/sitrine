@@ -300,18 +300,6 @@ namespace Sitrine.Event
         {
             return this.Color(new Color4(255, 255, 255, 255), frames, easing);
         }
-
-        /// <summary>
-        /// テクスチャを指定された秒数でフェードインします。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent FadeIn(double seconds, Func<double, double> easing = null)
-        {
-            return this.Color(new Color4(255, 255, 255, 255), seconds, easing);
-        }
         #endregion
 
         #region FadeOut
@@ -325,18 +313,6 @@ namespace Sitrine.Event
         public TextureEvent FadeOut(int frames, Func<double, double> easing = null)
         {
             return this.Color(new Color4(0, 0, 0, 0), frames, easing);
-        }
-
-        /// <summary>
-        /// テクスチャを指定された秒数でフェードアウトします。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent FadeOut(double seconds, Func<double, double> easing = null)
-        {
-            return this.Color(new Color4(0, 0, 0, 0), seconds, easing);
         }
         #endregion
 
@@ -407,19 +383,6 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scale">拡大率。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(double scale, double seconds, Func<double, double> easing = null)
-        {
-            return this.Scale(scale, scale, seconds, easing);
-        }
-
-        /// <summary>
         /// テクスチャの縦横の拡大率を指定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
@@ -479,44 +442,6 @@ namespace Sitrine.Event
 
                 delay.SetDelayAction(story);
                 this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, frames, easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleXY(double scaleX, double scaleY, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this.ScaleXY(scaleX, scaleY);
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -586,43 +511,6 @@ namespace Sitrine.Event
         }
 
         /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleX(double scaleX, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this.ScaleX(scaleX);
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                var texture = this.Window.Textures[this.asignment[id]];
-                delay.SetDelayAction(story);
-                this.AnimateScale(story, texture, scaleX, texture.ScaleY, story.GetFrameCount(seconds), easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
         /// テクスチャの Y 軸方向の拡大率を指定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
@@ -683,44 +571,6 @@ namespace Sitrine.Event
 
             return this;
         }
-
-        /// <summary>
-        /// 拡大または縮小するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="scaleY"Y 軸方向の拡大率。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleY(double scaleY, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this.ScaleY(scaleY);
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-                var texture = this.Window.Textures[this.asignment[id]];
-                delay.SetDelayAction(story);
-                this.AnimateScale(story, texture, texture.ScaleY, scaleY, story.GetFrameCount(seconds), easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
         #endregion
 
         #region Angle
@@ -780,43 +630,6 @@ namespace Sitrine.Event
 
                 delay.SetDelayAction(story);
                 this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, frames, easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 回転するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Angle(double angle, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -903,43 +716,6 @@ namespace Sitrine.Event
         /// 指定された位置へ移動するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="position">移動先の位置座標。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(Vector2d position, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("duration");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                this.AnimatePosition(story, this.Window.Textures[this.asignment[id]], position, story.GetFrameCount(seconds), easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された位置へ移動するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
         /// <param name="x">表示位置の X 座標値。</param>
         /// <param name="y">表示位置の Y 座標値。</param>
         /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
@@ -948,20 +724,6 @@ namespace Sitrine.Event
         public TextureEvent Position(double x, double y, int frames, Func<double, double> easing = null)
         {
             return this.Position(new Vector2d(x, y), frames, easing);
-        }
-
-        /// <summary>
-        /// 指定された位置へ移動するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="x">表示位置の X 座標値。</param>
-        /// <param name="y">表示位置の Y 座標値。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(double x, double y, double seconds, Func<double, double> easing = null)
-        {
-            return this.Position(new Vector2d(x, y), seconds, easing);
         }
         #endregion
 
@@ -1058,62 +820,12 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="alpha">変更後の透明度。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Alpha(float alpha, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("seconds");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                this.AnimateAlpha(story, this.Window.Textures[this.asignment[id]], alpha, story.GetFrameCount(seconds), easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 透明度を変更するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="alpha">変更後の透明度。</param>
         /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Alpha(double alpha, int frames, Func<double, double> easing = null)
         {
             return this.Alpha((float)alpha, frames, easing);
-        }
-
-        /// <summary>
-        /// 透明度を変更するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="alpha">変更後の透明度。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Alpha(double alpha, double seconds, Func<double, double> easing = null)
-        {
-            return this.Alpha((float)alpha, seconds, easing);
         }
         #endregion
 
@@ -1227,43 +939,6 @@ namespace Sitrine.Event
 
                 delay.SetDelayAction(story);
                 this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, frames, easing);
-                this.Window.AddStoryboard(story);
-            });
-
-            return this;
-        }
-
-        /// <summary>
-        /// 指定された色へ変化するアニメーションを開始します。
-        /// このメソッドは遅延実行されます。
-        /// </summary>
-        /// <param name="to">変化後の色。</param>
-        /// <param name="seconds">アニメーションが完了するまでの秒数。</param>
-        /// <param name="easing">適用するイージング関数。</param>
-        /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Color(Color4 color, double seconds, Func<double, double> easing = null)
-        {
-            if (seconds == 0.0)
-                return this;
-
-            if (seconds < 0.0)
-                throw new ArgumentOutOfRangeException("seconds");
-
-            int id = this.AssignID;
-            var delay = this.PopDelaySpan();
-
-            this.Storyboard.AddAction(() =>
-            {
-                if (!this.asignment.ContainsKey(id))
-                {
-                    Trace.TraceWarning("Texture ID not found: " + id);
-                    return;
-                }
-
-                AnimateStoryboard story = new AnimateStoryboard(this.Window);
-
-                delay.SetDelayAction(story);
-                this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, story.GetFrameCount(seconds), easing);
                 this.Window.AddStoryboard(story);
             });
 
