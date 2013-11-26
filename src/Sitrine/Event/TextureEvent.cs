@@ -682,16 +682,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="position">移動先の位置座標。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(Vector2d position, int frames, Func<double, double> easing = null)
+        public TextureEvent Position(Vector2d position, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
-                return this;
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
+            if (duration.IsZero())
+                return this.Position(position);
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -707,7 +704,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 story.SetDelay(delay);
-                this.AnimatePosition(story, this.Window.Textures[this.asignment[id]], position, frames, easing);
+                this.AnimatePosition(story, this.Window.Textures[this.asignment[id]], position, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -720,12 +717,12 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="x">表示位置の X 座標値。</param>
         /// <param name="y">表示位置の Y 座標値。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Position(double x, double y, int frames, Func<double, double> easing = null)
+        public TextureEvent Position(double x, double y, DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.Position(new Vector2d(x, y), frames, easing);
+            return this.Position(new Vector2d(x, y), duration, easing);
         }
         #endregion
 
