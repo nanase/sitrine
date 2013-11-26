@@ -57,7 +57,7 @@ namespace Sitrine.Event
         {
             this.AssignID = id;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (this.Window.Music.Layer.ContainsKey(id))
@@ -78,7 +78,7 @@ namespace Sitrine.Event
         {
             int id = this.AssignID;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(id))
@@ -122,7 +122,7 @@ namespace Sitrine.Event
 
             int id = this.AssignID;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(id))
@@ -171,7 +171,7 @@ namespace Sitrine.Event
 
             int id = this.AssignID;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(id))
@@ -197,7 +197,7 @@ namespace Sitrine.Event
             if (String.IsNullOrWhiteSpace(file))
                 throw new ArgumentNullException("file");
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(file));
 
             return this;
@@ -217,7 +217,7 @@ namespace Sitrine.Event
             if (!stream.CanRead)
                 throw new NotSupportedException();
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.Window.Music.Preset.Load(stream));
 
             return this;
@@ -230,7 +230,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent ClearPreset()
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(this.Window.Music.Preset.Clear);
 
             return this;
@@ -245,7 +245,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent PlayAll()
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 foreach (var item in this.Window.Music.Layer.Values)
@@ -264,7 +264,7 @@ namespace Sitrine.Event
         {
             int id = this.AssignID;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(id))
@@ -283,7 +283,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent StopAll()
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 foreach (var item in this.Window.Music.Layer.Values)
@@ -301,7 +301,7 @@ namespace Sitrine.Event
         {
             int id = this.AssignID;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(id))
@@ -326,7 +326,7 @@ namespace Sitrine.Event
             if (handles == null)
                 throw new ArgumentNullException("handles");
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
 
             return this;
@@ -345,7 +345,7 @@ namespace Sitrine.Event
             if (!HandleParser.TryParse(code, out handles))
                 throw new UnableToParseHandleException();
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.Window.Music.Master.PushHandle(handles));
 
             return this;
@@ -361,7 +361,7 @@ namespace Sitrine.Event
             if (handles == null)
                 throw new ArgumentNullException("handles");
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Window.Music.Master.PushHandle(handles);
 
             return this;
@@ -379,7 +379,7 @@ namespace Sitrine.Event
             if (!HandleParser.TryParse(code, out handles))
                 throw new UnableToParseHandleException();
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Window.Music.Master.PushHandle(handles);
 
             return this;
@@ -397,7 +397,7 @@ namespace Sitrine.Event
         {
             int id = this.AssignID;
 
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() =>
             {
                 if (!this.Window.Music.Layer.ContainsKey(id))
