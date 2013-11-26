@@ -29,7 +29,6 @@ using System.Drawing;
 using System.IO;
 using OpenTK;
 using OpenTK.Graphics;
-using Sitrine.Animate;
 using Sitrine.Story;
 using Sitrine.Texture;
 using Sitrine.Utils;
