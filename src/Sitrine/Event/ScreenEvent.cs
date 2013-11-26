@@ -95,7 +95,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public ScreenEvent BackgroundColor(Color4 value)
         {
-            this.PopDelaySpan().SetDelayAction(this.Storyboard);
+            this.SetDelayToStory();
             this.Storyboard.AddAction(() => this.Window.BackgroundColor = value);
 
             return this;
