@@ -366,7 +366,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Scale(double scale)
         {
-            return this.Scale(scale, scale);
+            return this.ScaleXY(scale, scale);
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace Sitrine.Event
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public TextureEvent Scale(double scale, int frames, Func<double, double> easing = null)
         {
-            return this.Scale(scale, scale, frames, easing);
+            return this.ScaleXY(scale, scale, frames, easing);
         }
 
         /// <summary>
