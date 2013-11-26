@@ -606,16 +606,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="angle">Z 軸方向の回転角度。単位は 度 (degree)。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Angle(double angle, int frames, Func<double, double> easing = null)
+        public TextureEvent Angle(double angle, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
-                return this;
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
+            if (duration.IsZero())
+                return this.Angle(angle);
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -631,7 +628,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 story.SetDelay(delay);
-                this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, frames, easing);
+                this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
