@@ -785,16 +785,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="alpha">変更後の透明度。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Alpha(float alpha, int frames, Func<double, double> easing = null)
+        public TextureEvent Alpha(float alpha, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
+            if (duration.IsZero())
                 return this.Alpha(alpha);
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -810,7 +807,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 story.SetDelay(delay);
-                this.AnimateAlpha(story, this.Window.Textures[this.asignment[id]], alpha, frames, easing);
+                this.AnimateAlpha(story, this.Window.Textures[this.asignment[id]], alpha, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -822,12 +819,12 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="alpha">変更後の透明度。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Alpha(double alpha, int frames, Func<double, double> easing = null)
+        public TextureEvent Alpha(double alpha, DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.Alpha((float)alpha, frames, easing);
+            return this.Alpha((float)alpha, duration, easing);
         }
         #endregion
 
