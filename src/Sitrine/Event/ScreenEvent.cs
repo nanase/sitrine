@@ -145,10 +145,10 @@ namespace Sitrine.Event
         /// 前景色をフェードアウトし、完全不透明にします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="seconds">アニメーションが行われる秒数。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public ScreenEvent FadeOut(double seconds, Func<double, double> easing = null)
+        public ScreenEvent FadeOut(DelaySpan duration, Func<double, double> easing = null)
         {
             return this.ForegroundColor(new Color4(0, 0, 0, 255), seconds, easing);
         }
