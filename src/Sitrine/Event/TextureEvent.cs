@@ -440,7 +440,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                delay.SetDelayAction(story);
+                story.SetDelay(delay);
                 this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -502,7 +502,8 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
                 var texture = this.Window.Textures[this.asignment[id]];
-                delay.SetDelayAction(story);
+
+                story.SetDelay(delay);
                 this.AnimateScale(story, texture, scaleX, texture.ScaleY, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -564,7 +565,8 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
                 var texture = this.Window.Textures[this.asignment[id]];
-                delay.SetDelayAction(story);
+
+                story.SetDelay(delay);
                 this.AnimateScale(story, texture, texture.ScaleX, scaleY, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -628,7 +630,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                delay.SetDelayAction(story);
+                story.SetDelay(delay);
                 this.AnimateAngle(story, this.Window.Textures[this.asignment[id]], angle, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -704,7 +706,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                delay.SetDelayAction(story);
+                story.SetDelay(delay);
                 this.AnimatePosition(story, this.Window.Textures[this.asignment[id]], position, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -807,7 +809,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                delay.SetDelayAction(story);
+                story.SetDelay(delay);
                 this.AnimateAlpha(story, this.Window.Textures[this.asignment[id]], alpha, frames, easing);
                 this.Window.AddStoryboard(story);
             });
@@ -937,7 +939,7 @@ namespace Sitrine.Event
 
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
-                delay.SetDelayAction(story);
+                story.SetDelay(delay);
                 this.AnimateColor(story, this.Window.Textures[this.asignment[id]], color, frames, easing);
                 this.Window.AddStoryboard(story);
             });
