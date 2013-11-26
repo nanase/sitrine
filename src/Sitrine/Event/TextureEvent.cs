@@ -374,12 +374,12 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scale">拡大率。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent Scale(double scale, int frames, Func<double, double> easing = null)
+        public TextureEvent Scale(double scale, DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.ScaleXY(scale, scale, frames, easing);
+            return this.ScaleXY(scale, scale, duration, easing);
         }
 
         /// <summary>
@@ -416,16 +416,13 @@ namespace Sitrine.Event
         /// </summary>
         /// <param name="scaleX">X 軸方向の拡大率。</param>
         /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleXY(double scaleX, double scaleY, int frames, Func<double, double> easing = null)
+        public TextureEvent ScaleXY(double scaleX, double scaleY, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
+            if (duration.IsZero())
                 return this.ScaleXY(scaleX, scaleY);
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -441,7 +438,7 @@ namespace Sitrine.Event
                 AnimateStoryboard story = new AnimateStoryboard(this.Window);
 
                 story.SetDelay(delay);
-                this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, frames, easing);
+                this.AnimateScale(story, this.Window.Textures[this.asignment[id]], scaleX, scaleY, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -478,16 +475,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scaleX">X 軸方向の拡大率。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleX(double scaleX, int frames, Func<double, double> easing = null)
+        public TextureEvent ScaleX(double scaleX, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
+            if (duration.IsZero())
                 return this.ScaleX(scaleX);
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -504,7 +498,7 @@ namespace Sitrine.Event
                 var texture = this.Window.Textures[this.asignment[id]];
 
                 story.SetDelay(delay);
-                this.AnimateScale(story, texture, scaleX, texture.ScaleY, frames, easing);
+                this.AnimateScale(story, texture, scaleX, texture.ScaleY, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
@@ -541,16 +535,13 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="scaleY">Y 軸方向の拡大率。</param>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent ScaleY(double scaleY, int frames, Func<double, double> easing = null)
+        public TextureEvent ScaleY(double scaleY, DelaySpan duration, Func<double, double> easing = null)
         {
-            if (frames == 0)
+            if (duration.IsZero())
                 return this.ScaleY(scaleY);
-
-            if (frames < 0)
-                throw new ArgumentOutOfRangeException("duration");
 
             int id = this.AssignID;
             var delay = this.PopDelaySpan();
@@ -567,7 +558,7 @@ namespace Sitrine.Event
                 var texture = this.Window.Textures[this.asignment[id]];
 
                 story.SetDelay(delay);
-                this.AnimateScale(story, texture, texture.ScaleX, scaleY, frames, easing);
+                this.AnimateScale(story, texture, texture.ScaleX, scaleY, duration, easing);
                 this.Window.AddStoryboard(story);
             });
 
