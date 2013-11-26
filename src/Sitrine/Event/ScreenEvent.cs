@@ -184,7 +184,7 @@ namespace Sitrine.Event
                 null);
         }
 
-        private void AnimateBackground(AnimateStoryboard story, Color4 to, int frame, Func<double, double> easing = null)
+        private void AnimateBackground(AnimateStoryboard story, Color4 to, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = this.Window;
             story.TargetProperty = "background";
@@ -193,7 +193,7 @@ namespace Sitrine.Event
 
             float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            story.Build(frame, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     from = this.Window.BackgroundColor;
