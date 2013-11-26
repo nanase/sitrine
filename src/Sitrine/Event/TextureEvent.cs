@@ -1096,7 +1096,7 @@ namespace Sitrine.Event
             }
         }
 
-        private void AnimateAlpha(AnimateStoryboard story, Texture.Texture texture, float alpha, int frame, Func<double, double> easing = null)
+        private void AnimateAlpha(AnimateStoryboard story, Texture.Texture texture, float alpha, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "color";
@@ -1106,7 +1106,7 @@ namespace Sitrine.Event
 
             float da = 0.0f;
 
-            story.Build(frame, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1128,7 +1128,7 @@ namespace Sitrine.Event
                 });
         }
 
-        private void AnimateAngle(AnimateStoryboard story, Texture.Texture texture, double angle, int frame, Func<double, double> easing = null)
+        private void AnimateAngle(AnimateStoryboard story, Texture.Texture texture, double angle, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "angle";
@@ -1138,7 +1138,7 @@ namespace Sitrine.Event
 
             double dr = 0.0;
 
-            story.Build(frame, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1158,7 +1158,7 @@ namespace Sitrine.Event
                 });
         }
 
-        private void AnimateScale(AnimateStoryboard story, Texture.Texture texture, double scaleX, double scaleY, int frame, Func<double, double> easing = null)
+        private void AnimateScale(AnimateStoryboard story, Texture.Texture texture, double scaleX, double scaleY, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "scale";
@@ -1168,7 +1168,7 @@ namespace Sitrine.Event
 
             double dx = 0.0, dy = 0.0;
 
-            story.Build(frame, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1191,7 +1191,7 @@ namespace Sitrine.Event
                 });
         }
 
-        private void AnimatePosition(AnimateStoryboard story, Texture.Texture texture, Vector2d to, int frame, Func<double, double> easing = null)
+        private void AnimatePosition(AnimateStoryboard story, Texture.Texture texture, Vector2d to, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "position";
@@ -1201,7 +1201,7 @@ namespace Sitrine.Event
 
             double dx = 0.0, dy = 0.0;
 
-            story.Build(frame, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
@@ -1222,7 +1222,7 @@ namespace Sitrine.Event
                 });
         }
 
-        private void AnimateColor(AnimateStoryboard story, Texture.Texture texture, Color4 to, int frame, Func<double, double> easing = null)
+        private void AnimateColor(AnimateStoryboard story, Texture.Texture texture, Color4 to, DelaySpan duration, Func<double, double> easing = null)
         {
             story.TargetObject = texture;
             story.TargetProperty = "color";
@@ -1232,7 +1232,7 @@ namespace Sitrine.Event
 
             float dr = 0f, dg = 0f, db = 0f, da = 0f;
 
-            story.Build(frame, easing,
+            story.Build(duration, easing,
                 () =>
                 {
                     noCompile = texture.NoCompile;
