@@ -895,7 +895,7 @@ namespace Sitrine.Event
         /// 指定された色へ変化するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="to">変化後の色。</param>
+        /// <param name="color">変化後の色。</param>
         /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
@@ -929,7 +929,7 @@ namespace Sitrine.Event
         /// 指定された色へ変化するアニメーションを開始します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="to">変化後の色。</param>
+        /// <param name="color">変化後の色。</param>
         /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
