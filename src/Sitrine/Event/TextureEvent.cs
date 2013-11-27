@@ -141,7 +141,6 @@ namespace Sitrine.Event
 
             return this;
         }
-
         #endregion
 
         #region CreateSpriteAnimation
@@ -292,12 +291,12 @@ namespace Sitrine.Event
         /// テクスチャを指定されたフレーム時間でフェードインします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent FadeIn(int frames, Func<double, double> easing = null)
+        public TextureEvent FadeIn(DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.Color(new Color4(255, 255, 255, 255), frames, easing);
+            return this.Color(new Color4(255, 255, 255, 255), duration, easing);
         }
         #endregion
 
