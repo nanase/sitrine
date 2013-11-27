@@ -924,6 +924,67 @@ namespace Sitrine.Event
 
             return this;
         }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="to">変化後の色。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Color(Color color, DelaySpan duration, Func<double, double> easing = null)
+        {
+            return this.Color((Color4)color, duration, easing);
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="red">反射光の R 成分。</param>
+        /// <param name="green">反射光の G 成分。</param>
+        /// <param name="blue">反射光の B 成分。</param>
+        /// <param name="alpha">反射光の A 成分。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Color(byte red, byte green, byte blue, byte alpha, DelaySpan duration, Func<double, double> easing = null)
+        {
+            return this.Color(new Color4(red, green, blue, alpha), duration, easing);
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="red">反射光の R 成分。</param>
+        /// <param name="green">反射光の G 成分。</param>
+        /// <param name="blue">反射光の B 成分。</param>
+        /// <param name="alpha">反射光の A 成分。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Color(float red, float green, float blue, float alpha, DelaySpan duration, Func<double, double> easing = null)
+        {
+            return this.Color(new Color4(red, green, blue, alpha), duration, easing);
+        }
+
+        /// <summary>
+        /// 指定された色へ変化するアニメーションを開始します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="red">反射光の R 成分。</param>
+        /// <param name="green">反射光の G 成分。</param>
+        /// <param name="blue">反射光の B 成分。</param>
+        /// <param name="alpha">反射光の A 成分。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public TextureEvent Color(double red, double green, double blue, double alpha, DelaySpan duration, Func<double, double> easing = null)
+        {
+            return this.Color(new Color4((float)red, (float)green, (float)blue, (float)alpha), duration, easing);
+        }
         #endregion
 
         #region Show
