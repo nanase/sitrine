@@ -305,12 +305,12 @@ namespace Sitrine.Event
         /// テクスチャを指定されたフレーム時間でフェードアウトします。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="frames">アニメーションが完了するまでのフレーム時間。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
         /// <param name="easing">適用するイージング関数。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public TextureEvent FadeOut(int frames, Func<double, double> easing = null)
+        public TextureEvent FadeOut(DelaySpan duration, Func<double, double> easing = null)
         {
-            return this.Color(new Color4(0, 0, 0, 0), frames, easing);
+            return this.Color(new Color4(0, 0, 0, 0), duration, easing);
         }
         #endregion
 
