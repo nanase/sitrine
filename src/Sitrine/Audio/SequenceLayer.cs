@@ -74,7 +74,7 @@ namespace Sitrine.Audio
 
             this.preset = preset;
             this.master = master;
-            this.targetParts = (targetParts == null) ? new int[0] : targetParts.ToArray();
+            this.targetParts = (targetParts == null) ? Enumerable.Range(0, 23).ToArray(): targetParts.ToArray();
         }
         #endregion
 
