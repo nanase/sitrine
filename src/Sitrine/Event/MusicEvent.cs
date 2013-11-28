@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Sitrine.Audio;
+using Sitrine.Story;
 using ux.Component;
 
 namespace Sitrine.Event
@@ -409,6 +410,44 @@ namespace Sitrine.Event
             return this;
         }
         #endregion
+
+        #region Modurate
+        public MusicEvent Modurate(Func<float, IEnumerable<Handle>> funcion, DelaySpan duration, Func<double, double> easing = null)
+        {
+            if (duration.IsZero())
+            {
+                this.Window.Music.Master.PushHandle(funcion(1.0f));
+                return this;
+            }
+
+            int id = this.AssignID;
+            var delay = this.PopDelaySpan();
+
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
+
+                AnimateStoryboard story = new AnimateStoryboard(this.Window);
+
+                story.SetDelay(delay);
+                this.AnimateModurate(story, funcion, duration, easing);
+                this.Window.AddStoryboard(story);
+            });
+
+            return this;
+        }
+        #endregion
+        #endregion
+
+        #region -- Private Methods --
+        private void AnimateModurate(AnimateStoryboard story, Func<float, IEnumerable<Handle>> funcion, DelaySpan duration, Func<double, double> easing = null)
+        {
+            story.TargetObject = this.Window;
+            story.TargetProperty = "foreground";
+
+            story.Build(duration, easing, null, f => this.Window.Music.Master.PushHandle(funcion(f)), null);
+        }
         #endregion
     }
 }
