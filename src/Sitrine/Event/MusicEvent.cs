@@ -412,6 +412,14 @@ namespace Sitrine.Event
         #endregion
 
         #region Modurate
+        /// <summary>
+        /// 0.0 から 1.0 までの値を受け取るファンクションを用いて、任意のハンドルを送信します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="funcion">0.0 から 1.0 までの浮動小数点を受け取り、単一または複数のハンドルを返却するファンクション。</param>
+        /// <param name="duration">アニメーションが行われる時間。</param>
+        /// <param name="easing">適用するイージング関数。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent Modurate(Func<float, IEnumerable<Handle>> funcion, DelaySpan duration, Func<double, double> easing = null)
         {
             if (duration.IsZero())
