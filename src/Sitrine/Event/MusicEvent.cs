@@ -438,6 +438,33 @@ namespace Sitrine.Event
         }
         #endregion
 
+        #region Tick
+        /// <summary>
+        /// ティック位置を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="factor">ティック位置を設定します。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MusicEvent Tick(long tick)
+        {
+            if (tick < 0L)
+                throw new ArgumentOutOfRangeException("tick");
+
+            int id = this.AssignID;
+
+            this.SetDelayToStory();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
+
+                this.Window.Music.Layer[id].Tick = tick;
+            });
+
+            return this;
+        }
+        #endregion
+
         #region Modurate
         /// <summary>
         /// 0.0 から 1.0 までの値を受け取るファンクションを用いて、任意のハンドルを送信します。
