@@ -50,11 +50,16 @@ namespace Sitrine.Audio
         {
             get
             {
-                return (this.sequencer == null) ? false : this.sequencer.Looping;
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                return this.sequencer.Looping;
             }
             set
             {
-                if (this.sequencer != null)
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
                     this.sequencer.Looping = value;
             }
         }
