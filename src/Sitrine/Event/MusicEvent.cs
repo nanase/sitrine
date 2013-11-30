@@ -387,7 +387,7 @@ namespace Sitrine.Event
         }
         #endregion
 
-        #region Setting
+        #region Loop
         /// <summary>
         /// ループの可否を設定します。
         /// このメソッドは遅延実行されます。
