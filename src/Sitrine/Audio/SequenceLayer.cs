@@ -43,6 +43,9 @@ namespace Sitrine.Audio
         #endregion
 
         #region -- Public Properties --
+        /// <summary>
+        /// シーケンサが終端に達したとき、自動的にループ位置まで巻き戻るかの真偽値を取得または設定します。
+        /// </summary>
         public bool Looping
         {
             get
