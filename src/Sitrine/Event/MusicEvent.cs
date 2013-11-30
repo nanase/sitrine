@@ -411,6 +411,33 @@ namespace Sitrine.Event
         }
         #endregion
 
+        #region TempoFactor
+        /// <summary>
+        /// テンポに乗算される値を設定します。
+        /// このメソッドは遅延実行されます。
+        /// </summary>
+        /// <param name="factor">テンポに乗算される 0.0 より大きい値。</param>
+        /// <returns>このイベントのオブジェクトを返します。</returns>
+        public MusicEvent TempoFactor(double factor)
+        {
+            if (factor <= 0.0)
+                throw new ArgumentOutOfRangeException("factor");
+
+            int id = this.AssignID;
+
+            this.SetDelayToStory();
+            this.Storyboard.AddAction(() =>
+            {
+                if (!this.Window.Music.Layer.ContainsKey(id))
+                    Trace.TraceError("Layer '{0}' does not exist.", id);
+
+                this.Window.Music.Layer[id].TempoFactor = factor;
+            });
+
+            return this;
+        }
+        #endregion
+
         #region Modurate
         /// <summary>
         /// 0.0 から 1.0 までの値を受け取るファンクションを用いて、任意のハンドルを送信します。
