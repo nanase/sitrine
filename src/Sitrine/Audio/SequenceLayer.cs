@@ -60,7 +60,7 @@ namespace Sitrine.Audio
                 if (this.sequencer == null)
                     throw new InvalidOperationException();
 
-                    this.sequencer.Looping = value;
+                this.sequencer.Looping = value;
             }
         }
 
