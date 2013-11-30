@@ -84,6 +84,27 @@ namespace Sitrine.Audio
                 this.sequencer.TempoFactor = value;
             }
         }
+
+        /// <summary>
+        /// 現在シーケンサが演奏しているティック位置を取得または設定します。
+        /// </summary>
+        public long Tick
+        {
+            get
+            {
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                return this.sequencer.Tick;
+            }
+            set
+            {
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                this.sequencer.Tick = value;
+            }
+        }
         #endregion
 
         #region -- Constructor --
