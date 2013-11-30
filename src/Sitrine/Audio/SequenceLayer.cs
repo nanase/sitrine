@@ -63,6 +63,27 @@ namespace Sitrine.Audio
                     this.sequencer.Looping = value;
             }
         }
+
+        /// <summary>
+        /// テンポに乗算される係数を取得または設定します。
+        /// </summary>
+        public double TempoFactor
+        {
+            get
+            {
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                return this.sequencer.TempoFactor;
+            }
+            set
+            {
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                this.sequencer.TempoFactor = value;
+            }
+        }
         #endregion
 
         #region -- Constructor --
