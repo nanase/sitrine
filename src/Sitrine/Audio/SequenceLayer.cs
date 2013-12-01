@@ -105,6 +105,27 @@ namespace Sitrine.Audio
                 this.sequencer.Tick = value;
             }
         }
+
+        /// <summary>
+        /// ループが開始されるティック位置を取得または設定します。
+        /// </summary>
+        public long LoopBeginTick
+        {
+            get
+            {
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                return this.sequencer.LoopBeginTick;
+            }
+            set
+            {
+                if (this.sequencer == null)
+                    throw new InvalidOperationException();
+
+                this.sequencer.LoopBeginTick = value;
+            }
+        }
         #endregion
 
         #region -- Constructor --
