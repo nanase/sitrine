@@ -39,6 +39,7 @@ namespace Sitrine.Audio
         private int interval = 5;
         private double tempoFactor = 1.0;
         private double tickTime;
+        private long loopBeginTick = 0L;
 
         private int eventIndex = 0;
 
@@ -76,6 +77,18 @@ namespace Sitrine.Audio
                         this.reqRewind = true;
                     }
                 }
+            }
+        }
+
+        public long LoopBeginTick
+        {
+            get { return this.loopBeginTick; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException("value");
+
+                this.loopBeginTick = value;
             }
         }
 
@@ -124,6 +137,7 @@ namespace Sitrine.Audio
             this.info = info;
 
             this.tick = -info.Resolution;
+            this.loopBeginTick = info.LoopBeginTick;
 
             this.RecalcTickTime();
         }
@@ -218,7 +232,7 @@ namespace Sitrine.Audio
                             this.SequenceEnd(this, new EventArgs());
 
                         if (this.Looping)
-                            this.Tick = this.info.LoopBeginTick;
+                            this.Tick = this.loopBeginTick;
                         else
                             break;
                     }
