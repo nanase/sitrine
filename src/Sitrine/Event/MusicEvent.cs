@@ -443,7 +443,7 @@ namespace Sitrine.Event
         /// ティック位置を設定します。
         /// このメソッドは遅延実行されます。
         /// </summary>
-        /// <param name="factor">ティック位置を設定します。</param>
+        /// <param name="factor">ティック位置。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
         public MusicEvent Tick(long tick)
         {
