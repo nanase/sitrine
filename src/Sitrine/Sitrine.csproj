@@ -35,7 +35,7 @@
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Library\OpenTK\OpenTK.dll</HintPath>
+      <HintPath>..\..\lib\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,8 +44,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
-    <Reference Include="uxCore">
-      <HintPath>..\..\..\ux\bin\uxCore.dll</HintPath>
+    <Reference Include="ux, Version=0.2.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ux.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -107,19 +108,18 @@
     <Compile Include="WindowOptions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="OpenTK.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Content Include="..\..\lib\OpenAL32.dll">
+      <Link>OpenAL32.dll</Link>
+    </Content>
+    <Content Include="..\..\lib\wrap_oal.dll">
+      <Link>wrap_oal.dll</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="OpenAL32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wrap_oal.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="..\..\lib\OpenTK.dll.config">
+      <Link>OpenTK.dll.config</Link>
+    </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
