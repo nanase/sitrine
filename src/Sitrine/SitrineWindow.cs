@@ -140,8 +140,12 @@ namespace Sitrine
             this.reservedStories = new List<Storyboard>();
             this.removingStories = new List<Storyboard>();
 
-            this.debugText = new DebugText(options.DebugTextOptions, this);
-            Trace.Listeners.Add(new DebugTextListener(this.debugText));
+            if (options.DebugTextOptions != null)
+            {
+                this.debugText = new DebugText(options.DebugTextOptions, this);
+                Trace.Listeners.Add(new DebugTextListener(this.debugText));
+            }
+
             Trace.WriteLine("Window", "Init");
         }
         #endregion
@@ -188,7 +192,8 @@ namespace Sitrine
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            this.debugText.Update(0.0);
+            if (this.debugText != null)
+                this.debugText.Update(0.0);
 
             this.music.Play();
         }
@@ -198,7 +203,9 @@ namespace Sitrine
             this.music.Stop();
             this.music.Dispose();
             this.textures.Dispose();
-            this.debugText.Dispose();
+
+            if (this.debugText != null)
+                this.debugText.Dispose();
         }
 
         protected override void OnResize(EventArgs e)
@@ -235,7 +242,9 @@ namespace Sitrine
 
             this.textures.Render();
             this.foreground.Render();
-            this.debugText.Render();
+
+            if (this.debugText != null)
+                this.debugText.Render();
 
             this.SwapBuffers();
         }
@@ -268,7 +277,8 @@ namespace Sitrine
 
             this.DequeueStory();
 
-            this.debugText.Update(e.Time);
+            if (this.debugText != null)
+                this.debugText.Update(e.Time);
         }
         #endregion
 
