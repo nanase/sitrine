@@ -65,27 +65,27 @@ namespace Sitrine
         /// <summary>
         /// テクスチャイベントを取得します。
         /// </summary>
-        public TextureEvent Texture { get { return new TextureEvent(this, this.Window); } }
+        public TextureEvent Texture { get; private set; }
 
         /// <summary>
         /// プロセスイベントを取得します。
         /// </summary>
-        public ProcessEvent Process { get { return new ProcessEvent(this, this.Window); } }
+        public ProcessEvent Process { get; private set; }
 
         /// <summary>
         /// キーボードイベントを取得します。
         /// </summary>
-        public KeyboardEvent Keyboard { get { return new KeyboardEvent(this, this.Window); } }
+        public KeyboardEvent Keyboard { get; private set; }
 
         /// <summary>
         /// ミュージックイベントを取得します。
         /// </summary>
-        public MusicEvent Music { get { return new MusicEvent(this, this.Window); } }
+        public MusicEvent Music { get; private set; }
 
         /// <summary>
         /// スクリーンイベントを取得します。
         /// </summary>
-        public ScreenEvent Screen { get { return new ScreenEvent(this, this.Window); } }
+        public ScreenEvent Screen { get; private set; }
         #endregion
 
         /// <summary>
@@ -150,6 +150,12 @@ namespace Sitrine
             this.Window = window;
             this.disposableResources = new List<IDisposable>();
             this.waitTime = 0;
+
+            this.Keyboard = new KeyboardEvent(this, window);
+            this.Music = new MusicEvent(this, window);
+            this.Process = new ProcessEvent(this, window);
+            this.Screen = new ScreenEvent(this, window);
+            this.Texture = new TextureEvent(this, window);
 
             Trace.WriteLine("Storyboard", "Init");
         }
