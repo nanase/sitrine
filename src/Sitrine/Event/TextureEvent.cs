@@ -1119,18 +1119,17 @@ namespace Sitrine.Event
         #region -- Private Methods --
         private void AsignmentTexture(int id, Texture.Texture texture)
         {
-            int key;
-
             if (this.asignment.ContainsKey(id))
             {
-                key = this.asignment[id];
+                // Re-asignment
+                int key = this.asignment[id];
                 this.Window.Textures.Remove(key, true);
                 this.Window.Textures.Add(key, texture);
             }
             else
             {
-                key = this.Window.Textures.AddLast(texture);
-                this.asignment.Add(id, key);
+                this.Window.Textures.Add(id, texture);
+                this.asignment.Add(id, id);
             }
         }
 
