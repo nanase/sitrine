@@ -28,6 +28,8 @@ using System.Threading.Tasks;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using ux;
+using ux.Utils.Midi;
+using ux.Utils.Midi.Sequencer;
 
 namespace Sitrine.Audio
 {
@@ -49,6 +51,7 @@ namespace Sitrine.Audio
         private float[] fbuf;
 
         private Master master;
+        private Selector selector;
         private Preset preset;
 
         private Dictionary<int, SequenceLayer> layer;
@@ -87,9 +90,10 @@ namespace Sitrine.Audio
             this.samplingRate = options.SamplingRate;
             this.updateInterval = options.UpdateInterval;
 
-            this.context = new AudioContext();
-            this.master = new Master(options.SamplingRate, 23);
-            this.preset = new Preset();
+            this.context = new AudioContext();            
+            this.selector = new PolyphonicSelector(options.SamplingRate);
+            this.master = this.selector.Master;
+            this.preset = this.selector.Preset;
             this.layer = new Dictionary<int, SequenceLayer>();
 
             this.source = AL.GenSource();
@@ -137,10 +141,10 @@ namespace Sitrine.Audio
         /// レイヤを追加します。
         /// </summary>
         /// <param name="id">キーとなる ID。</param>
-        /// <param name="tagetParts">通過させるハンドルのパート。</param>
-        public void AddLayer(int id, IEnumerable<int> tagetParts = null)
+        /// <param name="targetChannels">通過させる MIDI のチャネル。</param>
+        public void AddLayer(int id, IEnumerable<int> targetChannels = null)
         {
-            this.layer[id] = new SequenceLayer(this.preset, this.master, tagetParts);
+            this.layer[id] = new SequenceLayer(this.preset, this.master, this.selector, targetChannels);
         }
         #endregion
 

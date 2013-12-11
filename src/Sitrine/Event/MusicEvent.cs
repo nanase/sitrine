@@ -29,6 +29,7 @@ using System.IO;
 using Sitrine.Audio;
 using Sitrine.Story;
 using ux.Component;
+using ux.Utils;
 
 namespace Sitrine.Event
 {
@@ -52,9 +53,9 @@ namespace Sitrine.Event
         /// このメソッドは遅延実行されます。
         /// </summary>
         /// <param name="id">割り当てるレイヤーID。</param>
-        /// <param name="targetParts">通過させるパート。</param>
+        /// <param name="targetChannels">通過させる MIDI のチャネル。</param>
         /// <returns>このイベントのオブジェクトを返します。</returns>
-        public MusicEvent AddLayer(int id, IEnumerable<int> targetParts = null)
+        public MusicEvent AddLayer(int id, IEnumerable<int> targetChannels = null)
         {
             this.AssignID = id;
 
@@ -64,7 +65,7 @@ namespace Sitrine.Event
                 if (this.Window.Music.Layer.ContainsKey(id))
                     Trace.TraceWarning("Add layer '{0}', but it already exists.", id);
 
-                this.Window.Music.AddLayer(id, targetParts);
+                this.Window.Music.AddLayer(id, targetChannels);
             });
 
             return this;
@@ -130,7 +131,7 @@ namespace Sitrine.Event
                     Trace.TraceError("Layer '{0}' does not exist.", id);
 
                 this.Window.Music.Layer[id].Load(file);
-                this.Window.Music.Layer[id].Looping = looping;
+                this.Window.Music.Layer[id].Sequencer.Looping = looping;
             });
 
             return this;
@@ -179,7 +180,7 @@ namespace Sitrine.Event
                     Trace.TraceError("Layer '{0}' does not exist.", id);
 
                 this.Window.Music.Layer[id].Load(stream);
-                this.Window.Music.Layer[id].Looping = looping;
+                this.Window.Music.Layer[id].Sequencer.Looping = looping;
             });
 
             return this;
@@ -404,7 +405,7 @@ namespace Sitrine.Event
                 if (!this.Window.Music.Layer.ContainsKey(id))
                     Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[id].Looping = looping;
+                this.Window.Music.Layer[id].Sequencer.Looping = looping;
             });
 
             return this;
@@ -431,7 +432,7 @@ namespace Sitrine.Event
                 if (!this.Window.Music.Layer.ContainsKey(id))
                     Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[id].TempoFactor = factor;
+                this.Window.Music.Layer[id].Sequencer.TempoFactor = factor;
             });
 
             return this;
@@ -458,7 +459,7 @@ namespace Sitrine.Event
                 if (!this.Window.Music.Layer.ContainsKey(id))
                     Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[id].LoopBeginTick = tick;
+                this.Window.Music.Layer[id].Sequencer.LoopBeginTick = tick;
             });
 
             return this;
@@ -485,7 +486,7 @@ namespace Sitrine.Event
                 if (!this.Window.Music.Layer.ContainsKey(id))
                     Trace.TraceError("Layer '{0}' does not exist.", id);
 
-                this.Window.Music.Layer[id].Tick = tick;
+                this.Window.Music.Layer[id].Sequencer.Tick = tick;
             });
 
             return this;
