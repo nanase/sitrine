@@ -48,31 +48,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ux.dll</HintPath>
     </Reference>
+    <Reference Include="ux.Utils, Version=0.2.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ux.Utils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animate\DelaySpan.cs" />
     <Compile Include="Animate\EasingFunctions.cs" />
-    <Compile Include="Audio\Converter\HandleConverter.cs" />
-    <Compile Include="Audio\Converter\HandleItem.cs" />
-    <Compile Include="Audio\Converter\Preset\Preset.cs" />
-    <Compile Include="Audio\Converter\SequenceInfo.cs" />
-    <Compile Include="Audio\Converter\SmfContainer.cs" />
-    <Compile Include="Audio\Converter\Preset\DrumPreset.cs" />
-    <Compile Include="Audio\Converter\Event\Event.cs" />
-    <Compile Include="Audio\HandleParser.cs" />
-    <Compile Include="Audio\HandleStore.cs" />
-    <Compile Include="Audio\SequenceLayer.cs" />
-    <Compile Include="Audio\Utils\Extensions.cs" />
-    <Compile Include="Audio\Converter\Preset\HandleCreator.cs" />
-    <Compile Include="Audio\Converter\Event\MetaEvent.cs" />
-    <Compile Include="Audio\Converter\Event\MidiEvent.cs" />
     <Compile Include="Audio\MusicOptions.cs" />
     <Compile Include="Audio\MusicPlayer.cs" />
-    <Compile Include="Audio\Converter\Preset\PresetReader.cs" />
-    <Compile Include="Audio\Converter\Preset\ProgramPreset.cs" />
-    <Compile Include="Audio\Sequencer.cs" />
-    <Compile Include="Audio\Converter\Event\SystemExclusiveEvent.cs" />
-    <Compile Include="Audio\Converter\Track.cs" />
     <Compile Include="Story\AnimateStoryboard.cs" />
     <Compile Include="Texture\BitmapTexture.cs" />
     <Compile Include="Texture\SolidTexture.cs" />
